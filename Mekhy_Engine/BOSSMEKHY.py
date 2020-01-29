@@ -1,10 +1,11 @@
 import KillerEyes
+import AncientRoar
 import HypnoticChords
 import HawkPerception
-import AncientRoar
+import DragonSummoner
 import RainbowHeart
 
 def MainLoop():
-    HawkPerception.GazeRefresh()
-    KillerEyes.GraphicsRefresh(AncientRoar.ExpressionState, HawkPerception.GazeX, HawkPerception.GazeY)
-    RainbowHeart.ArduinoRefresh(AncientRoar.ExpressionState)
+    gazelog = open("gazelog.txt", "r").readlines()
+    KillerEyes.GraphicsRefresh(DragonSummoner.ExpressionState, int(gazelog[0]), int(gazelog[1]))
+    RainbowHeart.ArduinoRefresh(DragonSummoner.ExpressionState)
