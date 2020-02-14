@@ -6,6 +6,5 @@ import DragonSummoner
 import RainbowHeart
 
 def MainLoop():
-    gazelog = open("gazelog.txt", "r").readlines()
-    KillerEyes.GraphicsRefresh(DragonSummoner.ExpressionState, int(gazelog[0]), int(gazelog[1]))
+    KillerEyes.GraphicsRefresh(DragonSummoner.ExpressionState)
     RainbowHeart.ArduinoRefresh(DragonSummoner.ExpressionState)
