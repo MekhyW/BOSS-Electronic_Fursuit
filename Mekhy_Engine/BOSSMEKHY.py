@@ -1,10 +1,12 @@
-import KillerEyes
-import AncientRoar
+import RageEyes
+import AlphaRoar
 import HypnoticChords
-import HawkPerception
-import DragonSummoner
+import MachineSummoner
 import RainbowHeart
 
 def MainLoop():
-    KillerEyes.GraphicsRefresh(DragonSummoner.ExpressionState)
-    RainbowHeart.ArduinoRefresh(DragonSummoner.ExpressionState)
+    RageEyes.GraphicsRefresh(MachineSummoner.ExpressionState)
+    RainbowHeart.ArduinoRefresh(MachineSummoner.ExpressionState)
+
+while True:
+    MainLoop()
