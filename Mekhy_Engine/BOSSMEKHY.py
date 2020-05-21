@@ -4,9 +4,6 @@ import HypnoticChords
 import MachineSummoner
 import RainbowHeart
 
-def MainLoop():
+while True:
     RageEyes.GraphicsRefresh(MachineSummoner.ExpressionState)
     RainbowHeart.ArduinoRefresh(MachineSummoner.ExpressionState)
-
-while True:
-    MainLoop()
