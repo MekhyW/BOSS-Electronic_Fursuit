@@ -1,9 +1,10 @@
-import RageEyes
-import AlphaRoar
-import HypnoticChords
-import MachineSummoner
-import RainbowHeart
+import VoiceMod
+import Displays
+import SoundEffects
+import HotwordActivator
+import TelegramBot
+import LEDsAndServos
 
 while True:
-    RageEyes.GraphicsRefresh(MachineSummoner.ExpressionState)
-    RainbowHeart.ArduinoRefresh(MachineSummoner.ExpressionState)
+    Displays.GraphicsRefresh(HotwordActivator.ExpressionState)
+    LEDsAndServos.ArduinoRefresh(HotwordActivator.ExpressionState)

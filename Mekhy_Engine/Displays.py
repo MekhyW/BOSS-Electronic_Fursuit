@@ -1,12 +1,10 @@
 import os
 import math
-import random
 import time
 import pygame
 pygame.mixer.init()
 pygame.init()
 Display = pygame.display.set_mode((1600, 480))
-from AncientRoar import *
 frametime = 0
 
 class EyesSprite(pygame.sprite.Sprite):
