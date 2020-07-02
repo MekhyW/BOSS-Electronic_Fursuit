@@ -3,8 +3,25 @@ import Displays
 import SoundEffects
 import HotwordActivator
 import TelegramBot
-import LEDsAndServos
+import serial
+import time
+import numpy
+import sounddevice
+import struct
+import sys
+volume = 0
+AORTA = serial.Serial('COM0', 9600)
+CAROTID = serial.Serial('COM0', 9600)
 
-while True:
+def MainLoop(indata, outdata, frames, time, status):
+    global volume
+    volume = (numpy.linalg.norm(indata)*6.375*0.5) + (volume*0.5)
+    volume = int(volume)
+    print(volume)
     Displays.GraphicsRefresh(HotwordActivator.ExpressionState)
-    LEDsAndServos.ArduinoRefresh(HotwordActivator.ExpressionState)
+    AORTA.write("{}-{}\n".format(HotwordActivator.ExpressionState, volume).encode())
+    CAROTID.write("{}\n".format(HotwordActivator.ExpressionState).encode())
+
+with sounddevice.Stream(callback=MainLoop):
+    HotwordActivator.StartDetector(sys.argv[1:])
+    sounddevice.sleep(99999)

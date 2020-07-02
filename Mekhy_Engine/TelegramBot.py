@@ -11,6 +11,7 @@ from gtts import gTTS
 import requests
 import os
 import random
+import math
 import time
 firstpass = True
 start_time = time.time()
@@ -35,6 +36,7 @@ def handle(msg):
                 SoundEffects.PlayOnDemand(filename)
             elif msg['text'] == 'Speak':
                 mekhybot.sendMessage(chat_id, '>>>Reply to THIS message with what you want me to speak\n(Almost any language works!)')
+                current_keyboard = 'none'
             elif msg['text'] == 'Refsheet':
                 mekhybot.sendMessage(chat_id, '>>>7 Files Detected 0w0\nLaunching Images....')
                 for doc in os.listdir("FursonaRefs"):
@@ -49,6 +51,18 @@ def handle(msg):
             elif msg['text'] == 'Turn me off':
                 mekhybot.sendMessage(chat_id, '>>>System Shutdown initiated.....\nI hope we meet again! :P')
                 os.system("poweroff")
+            elif msg['text'] == 'Running time':
+                s = time.time() - start_time
+                if s >= 3600:
+                    mekhybot.sendMessage(chat_id, 'Suit active for: {} Hours + {} Minutes'.format(int(math.floor(s/3600)), str((s - (3600 * math.floor(s/3600)))/60)[:4]))
+                else:
+                    mekhybot.sendMessage(chat_id, 'Suit active for: {} Minutes'.format(str(s/60)[:4]))
+            elif msg['text'] == 'Contact Me(khy)':
+                mekhybot.sendMessage(chat_id, 'Want to message me? Or Report a problem?\n🔵 Telegram: @MekhyW\n')
+                mekhybot.sendMessage(chat_id, '\nGet in touch with what I´m doing\n🐦 Twitter: https://twitter.com/MekhyW\n')
+                mekhybot.sendMessage(chat_id, '\nCheck out my other projects!\n⚛️ GitHub: https://github.com/MekhyW\n')
+                mekhybot.sendMessage(chat_id, '\nDo you use aminoapps?\n🐾 Furry Amino: Mekhy W.!\n')
+                mekhybot.sendMessage(chat_id, '\nAre you a business or sponsor?\n💌 Email: mefkhytheroboticist@gmail.com')
             elif msg['text'] == 'Stop sound':
                 mekhybot.sendMessage(chat_id, '>>>OK')
                 SoundEffects.StopSound()
@@ -84,7 +98,7 @@ def handle(msg):
             elif msg['text'] == '😍':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: OHHH Somebody hold me')
                 HotwordActivator.SetExpressionState(12)
-            elif msg['text'] == 'Hypnotic 🌈':
+            elif msg['text'] == 'Hypno 🌈':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Look at me if u dare bitch')
                 HotwordActivator.SetExpressionState(13)
             elif msg['text'] == 'Sound Effect':
@@ -146,16 +160,13 @@ def handle(msg):
         elif content_type == 'document':
             mekhybot.sendMessage(chat_id, 'Sorry, I cannot read images and documents.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Set Mood"), KeyboardButton(text="Sound Effect")], [KeyboardButton(text="Speak")], [KeyboardButton(text="Refsheet"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Set Mood"), KeyboardButton(text="Sound Effect")], [KeyboardButton(text="Speak")], [KeyboardButton(text="Refsheet"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")], [KeyboardButton(text="Running time"), KeyboardButton(text="Contact Me(khy)")]])
             mekhybot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypnotic 🌈")]])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
             mekhybot.sendMessage(chat_id, '>>>Which mood?', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose SFX':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="AWOOO!"), KeyboardButton(text="*amgy*"), KeyboardButton(text="Woof! Woof!"), KeyboardButton(text="*cry*")], [KeyboardButton(text="Huff"), KeyboardButton(text="*snif snif*"), KeyboardButton(text="Racc noises"), KeyboardButton(text="Fart"), KeyboardButton(text="Stomach growl")]])
             mekhybot.sendMessage(chat_id, '>>>Which SFX?', reply_markup=command_keyboard)
 MessageLoop(mekhybot, handle).run_as_thread()
 print('Listening in 3...')
-
-while 1:
-    time.sleep(2)
