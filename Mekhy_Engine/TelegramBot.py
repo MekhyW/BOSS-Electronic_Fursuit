@@ -1,5 +1,5 @@
 import SoundEffects
-#import HotwordActivator
+import HotwordActivator
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
