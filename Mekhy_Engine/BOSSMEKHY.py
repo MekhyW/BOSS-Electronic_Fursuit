@@ -10,8 +10,8 @@ import sounddevice
 import struct
 import sys
 volume = 0
-AORTA = serial.Serial('COM0', 9600)
-CAROTID = serial.Serial('COM0', 9600)
+AORTA = serial.Serial('/dev/ttyUSB0', 9600)
+CAROTID = serial.Serial('/dev/ttyUSB1', 9600)
 
 def MainLoop(indata, outdata, frames, time, status):
     global volume

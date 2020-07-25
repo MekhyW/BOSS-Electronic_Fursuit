@@ -133,12 +133,17 @@ def handle(msg):
             elif msg['text'] == '⬅️(Back to commands)':
                 current_keyboard = 'Main'
             else:
-                mekhybot.sendMessage(chat_id, msg['text'])
+                try:
+                    requests.get("{}".format(msg['text']))
+                    mekhybot.sendMessage(chat_id, 'Valid link received!\n>>>Forwarding to @MekhyW...OK')
+                    mekhybot.sendMessage(780875868, msg['text'])
+                except:
+                    mekhybot.sendMessage(chat_id, msg['text'])
         elif content_type == 'photo':
             mekhybot.sendMessage(chat_id, 'Sorry, I can´t interpret images')
         elif content_type == 'voice':
             print(msg['voice']['file_id'])
-            mekhybot.sendMessage(chat_id, '>>>Voice Received!')
+            mekhybot.sendMessage(chat_id, 'Voice Received!\n>>>(Sorry, this is not implemented yet)')
             f = requests.get("https://api.telegram.org/bot{}/getFile?file_id={}".format(Token, msg['voice']['file_id'])).text
             file_path = f.split(",")[4].split(":")[1].replace('"', '').replace('}', '')
             file_name = file_path.split("/")[1]
@@ -161,7 +166,7 @@ def handle(msg):
             mekhybot.sendMessage(chat_id, 'Sorry, I cannot read images and documents.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Set Mood"), KeyboardButton(text="Sound Effect")], [KeyboardButton(text="Speak")], [KeyboardButton(text="Refsheet"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")], [KeyboardButton(text="Running time"), KeyboardButton(text="Contact Me(khy)")]])
-            mekhybot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio-', reply_markup=command_keyboard)
+            mekhybot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
             mekhybot.sendMessage(chat_id, '>>>Which mood?', reply_markup=command_keyboard)

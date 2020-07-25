@@ -4,7 +4,7 @@ import time
 import pygame
 pygame.mixer.init()
 pygame.init()
-Display = pygame.display.set_mode((1600, 480))
+Display = pygame.display.set_mode((1600, 600))
 frametime = 0
 
 class EyesSprite(pygame.sprite.Sprite):
