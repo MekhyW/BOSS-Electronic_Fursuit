@@ -37,12 +37,9 @@ def handle(msg):
             elif msg['text'] == 'Speak':
                 mekhybot.sendMessage(chat_id, '>>>Reply to THIS message with what you want me to speak\n(Almost any language works!)')
                 current_keyboard = 'none'
-            elif msg['text'] == 'Refsheet':
-                mekhybot.sendMessage(chat_id, '>>>7 Files Detected 0w0\nLaunching Images....')
-                for doc in os.listdir("FursonaRefs"):
-                    opened = open("FursonaRefs/{}".format(doc), 'rb')
-                    mekhybot.sendPhoto(chat_id, opened)
-                mekhybot.sendMessage(chat_id, 'Success!')
+            elif msg['text'] == 'Refsheet / Stickers':
+                mekhybot.sendMessage(chat_id, 'Stickers --> https://t.me/addstickers/MekhyW')
+                mekhybot.sendMessage(chat_id, 'Refsheet --> https://drive.google.com/file/d/183HI8yI62wDwE15cJITKPWQnvxRwtpmz/view?usp=sharing')
             elif msg['text'] == 'Pronouns':
                 mekhybot.sendMessage(chat_id, 'Please call me a He or They!\nI am Male ♂️ and Bisexual 🏳️‍🌈⚥')
             elif msg['text'] == 'Reboot':
@@ -58,11 +55,11 @@ def handle(msg):
                 else:
                     mekhybot.sendMessage(chat_id, 'Suit active for: {} Minutes'.format(str(s/60)[:4]))
             elif msg['text'] == 'Contact Me(khy)':
+                mekhybot.sendMessage(chat_id, '\nAre you a business or sponsor?\n💌 Email: felipe_catapano@yahoo.com.br')
                 mekhybot.sendMessage(chat_id, 'Want to message me? Or Report a problem?\n🔵 Telegram: @MekhyW\n')
                 mekhybot.sendMessage(chat_id, '\nGet in touch with what I´m doing\n🐦 Twitter: https://twitter.com/MekhyW\n')
                 mekhybot.sendMessage(chat_id, '\nCheck out my other projects!\n⚛️ GitHub: https://github.com/MekhyW\n')
                 mekhybot.sendMessage(chat_id, '\nDo you use aminoapps?\n🐾 Furry Amino: Mekhy W.!\n')
-                mekhybot.sendMessage(chat_id, '\nAre you a business or sponsor?\n💌 Email: mefkhytheroboticist@gmail.com')
             elif msg['text'] == 'Stop sound':
                 mekhybot.sendMessage(chat_id, '>>>OK')
                 SoundEffects.StopSound()
@@ -143,15 +140,7 @@ def handle(msg):
             mekhybot.sendMessage(chat_id, 'Sorry, I can´t interpret images')
         elif content_type == 'voice':
             print(msg['voice']['file_id'])
-            mekhybot.sendMessage(chat_id, 'Voice Received!\n>>>(Sorry, this is not implemented yet)')
-            f = requests.get("https://api.telegram.org/bot{}/getFile?file_id={}".format(Token, msg['voice']['file_id'])).text
-            file_path = f.split(",")[4].split(":")[1].replace('"', '').replace('}', '')
-            file_name = file_path.split("/")[1]
-            r = requests.get("https://api.telegram.org/file/bot{}/{}".format(Token, file_path), allow_redirects=True)
-            open(file_name, 'wb').write(r.content)
-            #convert OGA file to something readable
-            #SoundEffects.PlayOnDemand()
-            #mekhybot.sendMessage(chat_id, '>>>Playing.....\n\nInvoke /stopsound to make me stop òwó') 
+            mekhybot.sendMessage(chat_id, 'Sorry, I can´t play voice messages')
         elif content_type == 'audio':
             print(msg['audio']['file_id'])
             mekhybot.sendMessage(chat_id, '>>>Audio Received!')
@@ -165,7 +154,7 @@ def handle(msg):
         elif content_type == 'document':
             mekhybot.sendMessage(chat_id, 'Sorry, I cannot read images and documents.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Set Mood"), KeyboardButton(text="Sound Effect")], [KeyboardButton(text="Speak")], [KeyboardButton(text="Refsheet"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")], [KeyboardButton(text="Running time"), KeyboardButton(text="Contact Me(khy)")]])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Set Mood"), KeyboardButton(text="Sound Effect")], [KeyboardButton(text="Speak")], [KeyboardButton(text="Refsheet / Stickers"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")], [KeyboardButton(text="Running time"), KeyboardButton(text="Contact Me(khy)")]])
             mekhybot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])

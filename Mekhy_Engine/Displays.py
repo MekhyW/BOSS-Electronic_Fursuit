@@ -4,8 +4,9 @@ import time
 import pygame
 pygame.mixer.init()
 pygame.init()
-Display = pygame.display.set_mode((1600, 600))
+Display = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
 frametime = 0
+currentframe = 0
 
 class EyesSprite(pygame.sprite.Sprite):
     def __init__(self):
@@ -61,6 +62,7 @@ class EyesSprite(pygame.sprite.Sprite):
         self.rect = pygame.Rect(0, 0, 1600, 480)
     def update(self, ExpressionState):
         global frametime
+        global currentframe
         if(time.clock() - frametime > 0.034): #30 FPS
             def imageAssign(i):
                 switcher = {
@@ -86,6 +88,7 @@ class EyesSprite(pygame.sprite.Sprite):
                 self.index = 0
             self.image = arr[self.index]
             frametime = time.clock()
+            currentframe = self.index
             Display.blit(self.image, self.image.get_rect())
 
 my_sprite = EyesSprite()

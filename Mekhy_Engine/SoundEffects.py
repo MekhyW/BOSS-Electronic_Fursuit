@@ -4,6 +4,7 @@ import os
 import pygame
 pygame.mixer.init()
 pygame.init()
+pygame.mixer.Sound('sfx_WINDOWSXPBOOT.wav').play()
 sfx_howl1 = pygame.mixer.Sound('sfx_howl1.wav')
 sfx_howl2 = pygame.mixer.Sound('sfx_howl2.wav')
 sfx_howl3 = pygame.mixer.Sound('sfx_howl3.wav')

@@ -12,6 +12,7 @@ import sys
 volume = 0
 AORTA = serial.Serial('/dev/ttyUSB0', 9600)
 CAROTID = serial.Serial('/dev/ttyUSB1', 9600)
+RASPI = serial.Serial('/dev/???', 9600)
 
 def MainLoop(indata, outdata, frames, time, status):
     global volume
@@ -21,6 +22,7 @@ def MainLoop(indata, outdata, frames, time, status):
     Displays.GraphicsRefresh(HotwordActivator.ExpressionState)
     AORTA.write("{}-{}\n".format(HotwordActivator.ExpressionState, volume).encode())
     CAROTID.write("{}\n".format(HotwordActivator.ExpressionState).encode())
+    RASPI.write("{}-{}\n".format(HotwordActivator.ExpressionState, Displays.currentframe).encode())
 
 with sounddevice.Stream(callback=MainLoop):
     HotwordActivator.StartDetector(sys.argv[1:])
