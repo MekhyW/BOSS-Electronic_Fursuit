@@ -2,7 +2,8 @@ import math
 import random
 import os
 import pygame
-pygame.mixer.init()
+import wave
+pygame.mixer.init(frequency=wave.open('sfx_WINDOWSXPBOOT.wav').getframerate())
 pygame.init()
 pygame.mixer.Sound('sfx_WINDOWSXPBOOT.wav').play()
 sfx_howl1 = pygame.mixer.Sound('sfx_howl1.wav')

@@ -164,3 +164,6 @@ def handle(msg):
             mekhybot.sendMessage(chat_id, '>>>Which SFX?', reply_markup=command_keyboard)
 MessageLoop(mekhybot, handle).run_as_thread()
 print('Listening in 3...')
+
+#while True:
+#    pass
