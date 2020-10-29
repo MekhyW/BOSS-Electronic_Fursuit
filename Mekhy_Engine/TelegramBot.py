@@ -69,7 +69,7 @@ def handle(msg):
                 mekhybot.sendMessage(chat_id, '>>>Mood Reverted back to Neutral')
                 HotwordActivator.SetExpressionState(random.randint(0, 3))
             elif msg['text'] == '😡':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: Congratufuckinlations u made me PISSED')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: Congrats u made me PISSED')
                 HotwordActivator.SetExpressionState(4)
             elif msg['text'] == 'Zzz':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Nighty night')
