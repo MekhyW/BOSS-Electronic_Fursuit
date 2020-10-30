@@ -1,10 +1,12 @@
 import SoundEffects
 import HotwordActivator
+import VoiceMod
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 Token = '1201452483:AAErTkoil0EDAyfprtCz6W0VC5AFEvVnTLQ'
 mekhybot = telepot.Bot(Token)
+ChatIDmekhy = 780875868
 from googletrans import Translator
 translator = Translator()
 from gtts import gTTS
@@ -41,13 +43,19 @@ def handle(msg):
                 mekhybot.sendMessage(chat_id, 'Stickers --> https://t.me/addstickers/MekhyW')
                 mekhybot.sendMessage(chat_id, 'Refsheet --> https://drive.google.com/file/d/183HI8yI62wDwE15cJITKPWQnvxRwtpmz/view?usp=sharing')
             elif msg['text'] == 'Pronouns':
-                mekhybot.sendMessage(chat_id, 'Please call me a He or They!\nI am Male ♂️ and Bisexual 🏳️‍🌈⚥')
+                mekhybot.sendMessage(chat_id, 'Please call me a He or They!\nI am Male ♂️ and Bisexual 🏳️‍🌈⚥\n\nDon´t be afraid to come chat with me, I don´t bite ^w^')
             elif msg['text'] == 'Reboot':
-                mekhybot.sendMessage(chat_id, '>>>System Reboot initiated.....')
-                os.system("reboot")
+                if chat_id==ChatIDmekhy:
+                    mekhybot.sendMessage(chat_id, '>>>System Reboot initiated.....')
+                    os.system("reboot")
+                else:
+                    mekhybot.sendMessage(chat_id, 'This command can only be used by myself!')
             elif msg['text'] == 'Turn me off':
-                mekhybot.sendMessage(chat_id, '>>>System Shutdown initiated.....\nI hope we meet again! :P')
-                os.system("poweroff")
+                if chat_id==ChatIDmekhy:
+                    mekhybot.sendMessage(chat_id, '>>>System Shutdown initiated.....')
+                    os.system("poweroff")
+                else:
+                    mekhybot.sendMessage(chat_id, 'This command can only be used by myself!')
             elif msg['text'] == 'Running time':
                 s = time.time() - start_time
                 if s >= 3600:
@@ -59,7 +67,8 @@ def handle(msg):
                 mekhybot.sendMessage(chat_id, 'Want to message me? Or Report a problem?\n🔵 Telegram: @MekhyW\n')
                 mekhybot.sendMessage(chat_id, '\nGet in touch with what I´m doing\n🐦 Twitter: https://twitter.com/MekhyW\n')
                 mekhybot.sendMessage(chat_id, '\nCheck out my other projects!\n⚛️ GitHub: https://github.com/MekhyW\n')
-                mekhybot.sendMessage(chat_id, '\nDo you use aminoapps?\n🐾 Furry Amino: Mekhy W.!\n')
+                mekhybot.sendMessage(chat_id, '\nDo you use aminoapps?\n🐾 Furry Amino: https://aminoapps.com/c/furry-amino/page/user/mekhy-w/n5b4_0pkHofQnPLM61bxDWWDZ7KGxxj2Ym\n')
+                mekhybot.sendMessage(chat_id, '\nWant a match with a like?\n⚪ Howlr: Mekhy W.!\n')
             elif msg['text'] == 'Stop sound':
                 mekhybot.sendMessage(chat_id, '>>>OK')
                 SoundEffects.StopSound()
@@ -127,20 +136,25 @@ def handle(msg):
             elif msg['text'] == 'Stomach growl':
                 mekhybot.sendMessage(chat_id, '>>>Growling...')
                 SoundEffects.PlaySound(9)
+            elif msg['text'] == 'Change Voice':
+                current_keyboard = 'Choose Voice'
+            elif msg['text'] in ('Mekhy', 'Baby Mekhy', 'No Effects', 'Mute'):
+                mekhybot.sendMessage(chat_id, '>>>Voice Set to: {}'.format(msg['text']))
+                VoiceMod.SetVoice(msg['text'])
             elif msg['text'] == '⬅️(Back to commands)':
                 current_keyboard = 'Main'
             else:
                 try:
                     requests.get("{}".format(msg['text']))
                     mekhybot.sendMessage(chat_id, 'Valid link received!\n>>>Forwarding to @MekhyW...OK')
-                    mekhybot.sendMessage(780875868, msg['text'])
+                    mekhybot.sendMessage(ChatIDmekhy, msg['text'])
                 except:
                     mekhybot.sendMessage(chat_id, msg['text'])
-        elif content_type == 'photo':
-            mekhybot.sendMessage(chat_id, 'Sorry, I can´t interpret images')
         elif content_type == 'voice':
             print(msg['voice']['file_id'])
-            mekhybot.sendMessage(chat_id, 'Sorry, I can´t play voice messages')
+            mekhybot.sendMessage(chat_id, 'Sorry, I still cannot play voice messages.\nPlease forward to @MekhyW')
+        elif content_type == 'video':
+            mekhybot.sendMessage(chat_id, 'Sorry, I still cannot play video sounds.\nPlease forward to @MekhyW')
         elif content_type == 'audio':
             print(msg['audio']['file_id'])
             mekhybot.sendMessage(chat_id, '>>>Audio Received!')
@@ -151,10 +165,18 @@ def handle(msg):
             open(file_name, 'wb').write(r.content)
             SoundEffects.PlayOnDemand(file_name)
             mekhybot.sendMessage(chat_id, '>>>Playing.....\n\nInvoke /stopsound to make me stop òwó')
+        elif content_type == 'photo':
+            mekhybot.sendMessage(chat_id, 'Sorry, I still cannot interpret images.\nPlease forward to @MekhyW')
         elif content_type == 'document':
-            mekhybot.sendMessage(chat_id, 'Sorry, I cannot read images and documents.\nPlease forward to @MekhyW')
+            mekhybot.sendMessage(chat_id, 'Sorry, I still cannot read images and documents.\nPlease forward to @MekhyW')
+        elif content_type == 'location':
+            mekhybot.sendMessage(chat_id, 'Sorry, I still cannot read location data.\nPlease forward to @MekhyW')
+        elif content_type == 'sticker':
+            mekhybot.sendMessage(chat_id, 'Sorry, I still cannot interpret stickers.\nPlease forward to @MekhyW')
+        elif content_type == 'contact':
+            mekhybot.sendMessage(chat_id, 'Sorry, I still cannot use contacts.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Set Mood"), KeyboardButton(text="Sound Effect")], [KeyboardButton(text="Speak")], [KeyboardButton(text="Refsheet / Stickers"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")], [KeyboardButton(text="Running time"), KeyboardButton(text="Contact Me(khy)")]])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Set Mood")], [KeyboardButton(text="Sound Effect"), KeyboardButton(text="Speak")], [KeyboardButton(text="Change Voice")], [KeyboardButton(text="Refsheet / Stickers"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")], [KeyboardButton(text="Running time"), KeyboardButton(text="Contact Me(khy)")]])
             mekhybot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
@@ -162,6 +184,9 @@ def handle(msg):
         elif current_keyboard == 'Choose SFX':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="AWOOO!"), KeyboardButton(text="*amgy*"), KeyboardButton(text="Woof! Woof!"), KeyboardButton(text="*cry*")], [KeyboardButton(text="Huff"), KeyboardButton(text="*snif snif*"), KeyboardButton(text="Racc noises"), KeyboardButton(text="Fart"), KeyboardButton(text="Stomach growl")]])
             mekhybot.sendMessage(chat_id, '>>>Which SFX?', reply_markup=command_keyboard)
+        elif current_keyboard == 'Choose Voice':
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Mekhy")], [KeyboardButton(text="Baby Mekhy")], [KeyboardButton(text="No Effects")], [KeyboardButton(text="Mute")]])
+            mekhybot.sendMessage(chat_id, '>>>What voice?', reply_markup=command_keyboard)
 MessageLoop(mekhybot, handle).run_as_thread()
 print('Listening in 3...')
 
