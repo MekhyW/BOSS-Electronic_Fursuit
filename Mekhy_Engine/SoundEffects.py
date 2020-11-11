@@ -2,8 +2,7 @@ import math
 import random
 import os
 import pygame
-import wave
-pygame.mixer.init(frequency=wave.open('sfx_WINDOWSXPBOOT.wav').getframerate())
+pygame.mixer.init()
 pygame.init()
 pygame.mixer.Sound('sfx_WINDOWSXPBOOT.wav').play()
 sfx_howl1 = pygame.mixer.Sound('sfx_howl1.wav')
@@ -33,7 +32,7 @@ sfx_growl1 = pygame.mixer.Sound('sfx_growl1.wav')
 sfx_growl2 = pygame.mixer.Sound('sfx_growl2.wav')
 sfx_growl3 = pygame.mixer.Sound('sfx_growl3.wav')
 for x in os.listdir():
-    if '.mp3' in x or '.xm' in x:
+    if '.mp3' in x or '.xm' in x or '.mp4' in x:
         os.remove(x)
 
 def StopSound():

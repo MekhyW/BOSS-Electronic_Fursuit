@@ -10,8 +10,10 @@ ChatIDmekhy = 780875868
 from googletrans import Translator
 translator = Translator()
 from gtts import gTTS
+from pytube import YouTube
 import requests
 import os
+import subprocess
 import random
 import math
 import time
@@ -29,6 +31,30 @@ def handle(msg):
         if content_type == 'text':
             if msg['text'] == '/start':
                 mekhybot.sendMessage(chat_id, 'Welcome!')
+            elif 'reply_to_message' in msg and msg['reply_to_message']['text'] == '>>>Reply to THIS message with any song name to search and play\n\nExample: bohemian rhapsody':
+                mekhybot.sendMessage(chat_id, '>>>Finding song with query "{}"...'.format(msg['text']))
+                topic = msg['text']
+                count = 0
+                lst = str(requests.get('https://www.youtube.com/results?q=' + topic).content).split('"')
+                for i in lst:
+                    count+=1
+                    if i == 'WEB_PAGE_TYPE_WATCH':
+                        break
+                if lst[count-5] == "/results":
+                    raise Exception("No video found.")
+                mekhybot.sendMessage(chat_id, '>>>Song found!')
+                mekhybot.sendMessage(chat_id, '>>>Downloading...')
+                video = YouTube("https://www.youtube.com"+lst[count-5]).streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
+                video.download()
+                mekhybot.sendMessage(chat_id, '>>>Conversion process...')
+                default_filename = video.default_filename
+                new_filename = default_filename.split(".")[0] + ".mp3"
+                subprocess.call(["ffmpeg", "-i", default_filename, new_filename])
+                mekhybot.sendMessage(chat_id, 'Done!\n>>>Playing now')
+                SoundEffects.PlayOnDemand(new_filename)
+            elif msg['text'] == 'Play Song':
+                mekhybot.sendMessage(chat_id, '>>>Reply to THIS message with any song name to search and play\n\nExample: bohemian rhapsody')
+                current_keyboard = 'none'
             elif 'reply_to_message' in msg and msg['reply_to_message']['text'] == '>>>Reply to THIS message with what you want me to speak\n(Almost any language works!)':
                 mekhybot.sendMessage(chat_id, '>>>Speaking...')
                 msgToSpeak = msg['text'].replace('/speak ', '')
@@ -176,7 +202,7 @@ def handle(msg):
         elif content_type == 'contact':
             mekhybot.sendMessage(chat_id, 'Sorry, I still cannot use contacts.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Set Mood")], [KeyboardButton(text="Sound Effect"), KeyboardButton(text="Speak")], [KeyboardButton(text="Change Voice")], [KeyboardButton(text="Refsheet / Stickers"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")], [KeyboardButton(text="Running time"), KeyboardButton(text="Contact Me(khy)")]])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Sound Effect"), KeyboardButton(text="Speak")], [KeyboardButton(text="Change Voice")], [KeyboardButton(text="Refsheet / Stickers"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")], [KeyboardButton(text="Running time"), KeyboardButton(text="Contact Me(khy)")]])
             mekhybot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
