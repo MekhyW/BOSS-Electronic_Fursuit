@@ -25,45 +25,45 @@ class EyesSprite(pygame.sprite.Sprite):
         self.sillyimages = []
         self.heartimages = []
         self.hypnoticimages = []
-        files = os.listdir('.')
+        files = os.listdir('EYES')
         files.sort()
         for filename in files:
             tag = filename.split("_")[0]
             if tag == 'trueneutral':
-                self.trueneutralimages.append(pygame.image.load(filename))
+                self.trueneutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'happyneutral':
-                self.happyneutralimages.append(pygame.image.load(filename))
+                self.happyneutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'dubiousneutral':
-                self.dubiousneutralimages.append(pygame.image.load(filename))
+                self.dubiousneutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'boredneutral':
-                self.boredneutralimages.append(pygame.image.load(filename))
+                self.boredneutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'aggressive':
-                self.aggressiveimages.append(pygame.image.load(filename))
+                self.aggressiveimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'sleeping':
-                self.sleepingimages.append(pygame.image.load(filename))
+                self.sleepingimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'cheerful':
-                self.cheerfulimages.append(pygame.image.load(filename))
+                self.cheerfulimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'embarrassed':
-                self.embarrassedimages.append(pygame.image.load(filename))
+                self.embarrassedimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'questionmark':
-                self.questionmarkimages.append(pygame.image.load(filename))
+                self.questionmarkimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'crying':
-                self.cryingimages.append(pygame.image.load(filename))
+                self.cryingimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'shocked':
-                self.shockedimages.append(pygame.image.load(filename))
+                self.shockedimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'silly':
-                self.sillyimages.append(pygame.image.load(filename))
+                self.sillyimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'heart':
-                self.heartimages.append(pygame.image.load(filename))
+                self.heartimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'hypnotic':
-                self.hypnoticimages.append(pygame.image.load(filename))
+                self.hypnoticimages.append(pygame.image.load(os.path.join('EYES', filename)))
         self.index = 0
         self.image = self.images[0][self.index]
         self.rect = pygame.Rect(0, 0, 1600, 480)
     def update(self, ExpressionState):
         global frametime
         global currentframe
-        if(time.clock() - frametime > 0.034): #30 FPS
+        if(time.clock() - frametime > 0.017): #60 FPS
             def imageAssign(i):
                 switcher = {
                     0: self.trueneutralimages,
