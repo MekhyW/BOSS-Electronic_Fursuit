@@ -11,10 +11,7 @@ currentframe = 0
 class EyesSprite(pygame.sprite.Sprite):
     def __init__(self):
         super(EyesSprite, self).__init__()
-        self.trueneutralimages = []
-        self.happyneutralimages = []
-        self.dubiousneutralimages = []
-        self.boredneutralimages = []
+        self.neutralimages = []
         self.aggressiveimages = []
         self.sleepingimages = []
         self.cheerfulimages = []
@@ -29,14 +26,8 @@ class EyesSprite(pygame.sprite.Sprite):
         files.sort()
         for filename in files:
             tag = filename.split("_")[0]
-            if tag == 'trueneutral':
-                self.trueneutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'happyneutral':
-                self.happyneutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'dubiousneutral':
-                self.dubiousneutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'boredneutral':
-                self.boredneutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
+            if tag == 'neutral':
+                self.neutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'aggressive':
                 self.aggressiveimages.append(pygame.image.load(os.path.join('EYES', filename)))
             elif tag == 'sleeping':
@@ -66,20 +57,17 @@ class EyesSprite(pygame.sprite.Sprite):
         if(time.clock() - frametime > 0.017): #60 FPS
             def imageAssign(i):
                 switcher = {
-                    0: self.trueneutralimages,
-                    1: self.happyneutralimages,
-                    2: self.dubiousneutralimages,
-                    3: self.boredneutralimages,
-                    4: self.aggressiveimages,
-                    5: self.sleepingimages,
-                    6: self.cheerfulimages,
-                    7: self.embarrassedimages,
-                    8: self.questionmarkimages,
-                    9: self.cryingimages,
-                    10: self.shockedimages,
-                    11: self.sillyimages,
-                    12: self.heartimages,
-                    13: self.hypnoticimages
+                    0: self.neutralimages,
+                    1: self.aggressiveimages,
+                    2: self.sleepingimages,
+                    3: self.cheerfulimages,
+                    4: self.embarrassedimages,
+                    5: self.questionmarkimages,
+                    6: self.cryingimages,
+                    7: self.shockedimages,
+                    8: self.sillyimages,
+                    9: self.heartimages,
+                    10: self.hypnoticimages
                 }
                 return switcher.get(i, "Invalid Expression")
             arr = imageAssign(ExpressionState)
