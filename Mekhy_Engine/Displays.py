@@ -1,90 +1,80 @@
-import os
-import math
-import time
-import pygame
-pygame.mixer.init()
-pygame.init()
-Display = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
-frametime = 0
-currentframe = 0
+import pyglet
+ExpressionState_Local = 0  
+Video_Time = 0
+currenttime = 0
+window = pyglet.window.Window(fullscreen=True)  
+NeutralEyes = pyglet.media.load("Neutral Eyes_Right.mp4")
+AggressiveEyes = pyglet.media.load("Aggressive Eyes_Right.mp4")
+SleepingEyes = pyglet.media.load("Sleeping Eyes_Right.mp4")
+CryingEyes = pyglet.media.load("Crying Eyes_Right.mp4")
+CheerfulEyes = pyglet.media.load("Cheerful Eyes_Right.mp4")
+EmbarrasedEyes = pyglet.media.load("Embarrassed Eyes_Right.mp4")
+QuestionMarkEyes = pyglet.media.load("QuestionMark Eyes_Right.mp4")
+ShockedEyes = pyglet.media.load("Shocked Eyes_Right.mp4")
+SillyEyes = pyglet.media.load("Silly Eyes_Right.mp4")
+HeartEyes = pyglet.media.load("Heart Eyes_Right.mp4")
+HypnoticEyes = pyglet.media.load("Hypnotic Eyes_Right.mp4")
+player = pyglet.media.Player()
+source = pyglet.media.StreamingSource()
+player.queue(NeutralEyes) 
+player.play()
 
-class EyesSprite(pygame.sprite.Sprite):
-    def __init__(self):
-        super(EyesSprite, self).__init__()
-        self.neutralimages = []
-        self.aggressiveimages = []
-        self.sleepingimages = []
-        self.cheerfulimages = []
-        self.embarrassedimages = []
-        self.questionmarkimages = []
-        self.cryingimages = []
-        self.shockedimages = []
-        self.sillyimages = []
-        self.heartimages = []
-        self.hypnoticimages = []
-        files = os.listdir('EYES')
-        files.sort()
-        for filename in files:
-            tag = filename.split("_")[0]
-            if tag == 'neutral':
-                self.neutralimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'aggressive':
-                self.aggressiveimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'sleeping':
-                self.sleepingimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'cheerful':
-                self.cheerfulimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'embarrassed':
-                self.embarrassedimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'questionmark':
-                self.questionmarkimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'crying':
-                self.cryingimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'shocked':
-                self.shockedimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'silly':
-                self.sillyimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'heart':
-                self.heartimages.append(pygame.image.load(os.path.join('EYES', filename)))
-            elif tag == 'hypnotic':
-                self.hypnoticimages.append(pygame.image.load(os.path.join('EYES', filename)))
-        self.index = 0
-        self.image = self.images[0][self.index]
-        self.rect = pygame.Rect(0, 0, 1600, 480)
-    def update(self, ExpressionState):
-        global frametime
-        global currentframe
-        if(time.clock() - frametime > 0.017): #60 FPS
-            def imageAssign(i):
-                switcher = {
-                    0: self.neutralimages,
-                    1: self.aggressiveimages,
-                    2: self.sleepingimages,
-                    3: self.cheerfulimages,
-                    4: self.embarrassedimages,
-                    5: self.questionmarkimages,
-                    6: self.cryingimages,
-                    7: self.shockedimages,
-                    8: self.sillyimages,
-                    9: self.heartimages,
-                    10: self.hypnoticimages
-                }
-                return switcher.get(i, "Invalid Expression")
-            arr = imageAssign(ExpressionState)
-            self.index += 1
-            if self.index >= len(arr):
-                self.index = 0
-            self.image = arr[self.index]
-            frametime = time.clock()
-            currentframe = self.index
-            Display.blit(self.image, self.image.get_rect())
-
-my_sprite = EyesSprite()
-my_group = pygame.sprite.Group(my_sprite)
-
+@window.event 
+def on_draw():
+    global Video_Time
+    global currenttime 
+    window.clear() 
+    if player.source and player.source.video_format: 
+        player.get_texture().blit(0, 0)
+        currenttime = player.time
+    if player.time > Video_Time-0.5:
+        player.seek(0)
+        player.play() 
+          
 def GraphicsRefresh(ExpressionState):
-    my_group.update(ExpressionState)
-    pygame.display.update()
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            quit()
+    global ExpressionState_Local
+    global Video_Time
+    if ExpressionState != ExpressionState_Local:
+        if ExpressionState==0:
+            player.queue(NeutralEyes)
+            Video_Time = NeutralEyes.duration
+        elif ExpressionState==1:
+            player.queue(AggressiveEyes) 
+            Video_Time = AggressiveEyes.duration
+        elif ExpressionState==2:
+            player.queue(SleepingEyes)
+            Video_Time = SleepingEyes.duration
+        elif ExpressionState==3:
+            player.queue(CryingEyes)
+            Video_Time = CryingEyes.duration
+        elif ExpressionState==4:
+            player.queue(CheerfulEyes)
+            Video_Time = CheerfulEyes.duration
+        elif ExpressionState==5:
+            player.queue(EmbarrasedEyes)
+            Video_Time = EmbarrasedEyes.duration
+        elif ExpressionState==6:
+            player.queue(QuestionMarkEyes)
+            Video_Time = QuestionMarkEyes.duration
+        elif ExpressionState==7:
+            player.queue(ShockedEyes)
+            Video_Time = ShockedEyes.duration
+        elif ExpressionState==8:
+            player.queue(SillyEyes)
+            Video_Time = SillyEyes.duration
+        elif ExpressionState==9:
+            player.queue(HeartEyes)
+            Video_Time = HeartEyes.duration
+        elif ExpressionState==10:
+            player.queue(HypnoticEyes)
+            Video_Time = HypnoticEyes.duration
+        player.next_source() 
+        player.play()    
+    ExpressionState_Local = ExpressionState
+    pyglet.clock.tick()
+    for window in pyglet.app.windows:
+        window.switch_to()
+        window.dispatch_events()
+        window.dispatch_event('on_draw')
+        window.flip()
+    

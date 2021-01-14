@@ -32,7 +32,7 @@ sfx_growl1 = pygame.mixer.Sound('sfx_growl1.wav')
 sfx_growl2 = pygame.mixer.Sound('sfx_growl2.wav')
 sfx_growl3 = pygame.mixer.Sound('sfx_growl3.wav')
 for x in os.listdir():
-    if '.mp3' in x or '.xm' in x or '.mp4' in x:
+    if '.mp3' in x or '.xm' in x:
         os.remove(x)
 
 def StopSound():

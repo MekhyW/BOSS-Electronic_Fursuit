@@ -92,9 +92,8 @@ def handle(msg):
                 mekhybot.sendMessage(chat_id, '\nAre you a business or sponsor?\n💌 Email: felipe_catapano@yahoo.com.br')
                 mekhybot.sendMessage(chat_id, 'Want to message me? Or Report a problem?\n🔵 Telegram: @MekhyW\n')
                 mekhybot.sendMessage(chat_id, '\nGet in touch with what I´m doing\n🐦 Twitter: https://twitter.com/MekhyW\n')
-                mekhybot.sendMessage(chat_id, '\nCheck out my other projects!\n⚛️ GitHub: https://github.com/MekhyW\n')
-                mekhybot.sendMessage(chat_id, '\nDo you use aminoapps?\n🐾 Furry Amino: https://aminoapps.com/c/furry-amino/page/user/mekhy-w/n5b4_0pkHofQnPLM61bxDWWDZ7KGxxj2Ym\n')
                 mekhybot.sendMessage(chat_id, '\nWant a match with a like?\n⚪ Howlr: Mekhy W.!\n')
+                mekhybot.sendMessage(chat_id, '\nCheck out my other projects!\n⚛️ GitHub: https://github.com/MekhyW\n')
             elif msg['text'] == 'Stop sound':
                 mekhybot.sendMessage(chat_id, '>>>OK')
                 SoundEffects.StopSound()
