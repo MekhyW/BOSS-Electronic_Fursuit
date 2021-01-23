@@ -10,9 +10,6 @@ import sounddevice
 import struct
 import sys
 volume = 0
-AORTA = None
-CAROTID = None
-RASPI = None
 
 while True:
     try:
@@ -24,6 +21,9 @@ while True:
         print("failed")
 
 def MainLoop(indata, outdata, frames, time, status):
+    global AORTA
+    global CAROTID
+    global RASPI
     try:
         if(AORTA == None):
             AORTA = serial.Serial('/dev/ttyUSB0', 9600)
