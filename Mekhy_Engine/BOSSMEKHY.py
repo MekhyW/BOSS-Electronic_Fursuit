@@ -32,11 +32,11 @@ def MainLoop(indata, outdata, frames, time, status):
         if(RASPI == None):
             RASPI = serial.Serial('/dev/ttyTHS1', 9600)
         global volume
-        volume = int((numpy.linalg.norm(indata)*6.375*0.5) + (volume*0.5))
+        volume = int((numpy.linalg.norm(indata)*0.5) + (volume*0.5))
         Displays.GraphicsRefresh(HotwordActivator.ExpressionState)
         AORTA.write("{}-{}\n".format(HotwordActivator.ExpressionState, volume).encode())
         CAROTID.write("{}-{}\n".format(HotwordActivator.ExpressionState, volume).encode())
-        RASPI.write("{}-{}\n".format(HotwordActivator.ExpressionState, Displays.currenttime).encode())
+        RASPI.write("{}-{}\n".format(HotwordActivator.ExpressionState, Displays.currentframe).encode())
     except:
         print("failed")
         if(not(AORTA == None)):

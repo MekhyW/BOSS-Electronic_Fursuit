@@ -4,7 +4,7 @@ import VoiceMod
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
-Token = '1201452483:AAErTkoil0EDAyfprtCz6W0VC5AFEvVnTLQ'
+Token = 'MEKHYBOT_TOKEN_HERE'
 mekhybot = telepot.Bot(Token)
 ChatIDmekhy = 780875868
 from googletrans import Translator
@@ -93,6 +93,7 @@ def handle(msg):
                 mekhybot.sendMessage(chat_id, 'Want to message me? Or Report a problem?\n🔵 Telegram: @MekhyW\n')
                 mekhybot.sendMessage(chat_id, '\nGet in touch with what I´m doing\n🐦 Twitter: https://twitter.com/MekhyW\n')
                 mekhybot.sendMessage(chat_id, '\nWant a match with a like?\n⚪ Howlr: Mekhy W.!\n')
+                mekhybot.sendMessage(chat_id, '\nDo you use LinkedIn?\n🟦 LinkedIn: https://www.linkedin.com/in/felipe-catapano/\n')
                 mekhybot.sendMessage(chat_id, '\nCheck out my other projects!\n⚛️ GitHub: https://github.com/MekhyW\n')
             elif msg['text'] == 'Stop sound':
                 mekhybot.sendMessage(chat_id, '>>>OK')
