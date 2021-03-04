@@ -1,10 +1,10 @@
 import SoundEffects
-import HotwordActivator
+import BOSSMEKHY
 import VoiceMod
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
-Token = 'MEKHYBOT_TOKEN_HERE'
+Token = 'BOT_TOKEN_HERE'
 mekhybot = telepot.Bot(Token)
 ChatIDmekhy = 780875868
 from googletrans import Translator
@@ -102,37 +102,37 @@ def handle(msg):
                 current_keyboard = 'Choose Mood'
             elif msg['text'] == 'Neutral':
                 mekhybot.sendMessage(chat_id, '>>>Mood Reverted back to Neutral')
-                HotwordActivator.SetExpressionState(random.randint(0, 3))
+                BOSSMEKHY.SetExpressionState(random.randint(0, 3))
             elif msg['text'] == '😡':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Congrats u made me PISSED')
-                HotwordActivator.SetExpressionState(4)
+                BOSSMEKHY.SetExpressionState(4)
             elif msg['text'] == 'Zzz':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Nighty night')
-                HotwordActivator.SetExpressionState(5)
+                BOSSMEKHY.SetExpressionState(5)
             elif msg['text'] == '😊':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: A Happy boye')
-                HotwordActivator.SetExpressionState(6)
+                BOSSMEKHY.SetExpressionState(6)
             elif msg['text'] == '>w<':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: omg look he blushing')
-                HotwordActivator.SetExpressionState(7)
+                BOSSMEKHY.SetExpressionState(7)
             elif msg['text'] == '?w?':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: ??uhh..')
-                HotwordActivator.SetExpressionState(8)
+                BOSSMEKHY.SetExpressionState(8)
             elif msg['text'] == '😢':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: All around me are familiar faces')
-                HotwordActivator.SetExpressionState(9)
+                BOSSMEKHY.SetExpressionState(9)
             elif msg['text'] == '😱':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: BRUH')
-                HotwordActivator.SetExpressionState(10)
+                BOSSMEKHY.SetExpressionState(10)
             elif msg['text'] == '🤪':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: 🥔')
-                HotwordActivator.SetExpressionState(11)
+                BOSSMEKHY.SetExpressionState(11)
             elif msg['text'] == '😍':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: OHHH Somebody hold me')
-                HotwordActivator.SetExpressionState(12)
+                BOSSMEKHY.SetExpressionState(12)
             elif msg['text'] == 'Hypno 🌈':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Look at me if u dare bitch')
-                HotwordActivator.SetExpressionState(13)
+                BOSSMEKHY.SetExpressionState(13)
             elif msg['text'] == 'Sound Effect':
                 current_keyboard = 'Choose SFX'
             elif msg['text'] == 'AWOOO!':
