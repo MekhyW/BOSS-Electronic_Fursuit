@@ -1,10 +1,10 @@
 import SoundEffects
-import BOSSMEKHY
+import Expression
 import VoiceMod
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
-Token = 'BOT_TOKEN_HERE'
+Token = ''
 mekhybot = telepot.Bot(Token)
 ChatIDmekhy = 780875868
 from googletrans import Translator
@@ -102,37 +102,37 @@ def handle(msg):
                 current_keyboard = 'Choose Mood'
             elif msg['text'] == 'Neutral':
                 mekhybot.sendMessage(chat_id, '>>>Mood Reverted back to Neutral')
-                BOSSMEKHY.SetExpressionState(random.randint(0, 3))
+                Expression.SetExpressionState(random.randint(0, 3))
             elif msg['text'] == '😡':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Congrats u made me PISSED')
-                BOSSMEKHY.SetExpressionState(4)
+                Expression.SetExpressionState(4)
             elif msg['text'] == 'Zzz':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Nighty night')
-                BOSSMEKHY.SetExpressionState(5)
+                Expression.SetExpressionState(5)
             elif msg['text'] == '😊':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: A Happy boye')
-                BOSSMEKHY.SetExpressionState(6)
+                Expression.SetExpressionState(6)
             elif msg['text'] == '>w<':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: omg look he blushing')
-                BOSSMEKHY.SetExpressionState(7)
+                Expression.SetExpressionState(7)
             elif msg['text'] == '?w?':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: ??uhh..')
-                BOSSMEKHY.SetExpressionState(8)
+                Expression.SetExpressionState(8)
             elif msg['text'] == '😢':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: All around me are familiar faces')
-                BOSSMEKHY.SetExpressionState(9)
+                Expression.SetExpressionState(9)
             elif msg['text'] == '😱':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: BRUH')
-                BOSSMEKHY.SetExpressionState(10)
+                Expression.SetExpressionState(10)
             elif msg['text'] == '🤪':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: 🥔')
-                BOSSMEKHY.SetExpressionState(11)
+                Expression.SetExpressionState(11)
             elif msg['text'] == '😍':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: OHHH Somebody hold me')
-                BOSSMEKHY.SetExpressionState(12)
+                Expression.SetExpressionState(12)
             elif msg['text'] == 'Hypno 🌈':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Look at me if u dare bitch')
-                BOSSMEKHY.SetExpressionState(13)
+                Expression.SetExpressionState(13)
             elif msg['text'] == 'Sound Effect':
                 current_keyboard = 'Choose SFX'
             elif msg['text'] == 'AWOOO!':
@@ -214,7 +214,6 @@ def handle(msg):
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Mekhy")], [KeyboardButton(text="Baby Mekhy")], [KeyboardButton(text="No Effects")], [KeyboardButton(text="Mute")]])
             mekhybot.sendMessage(chat_id, '>>>What voice?', reply_markup=command_keyboard)
 MessageLoop(mekhybot, handle).run_as_thread()
-print('Listening in 3...')
 
 #while True:
 #    pass
