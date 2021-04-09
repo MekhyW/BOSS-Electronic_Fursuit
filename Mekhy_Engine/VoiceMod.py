@@ -13,7 +13,7 @@ def SetVoice(voice):
     if voice == 'Mekhy':
         os.system("gnome-terminal -x play '|rec --buffer 512 -d pitch {} bass {}'".format(Pitch, Bass))
     elif voice == 'Baby Mekhy':
-        os.system("gnome-terminal -x play '|rec --buffer 512 -d pitch {} bass {}'".format(abs(Pitch), Bass))
+        os.system("gnome-terminal -x play '|rec --buffer 512 -d pitch {} bass {}'".format(abs(Pitch*2), Bass))
     elif voice == 'No Effects':
         os.system("gnome-terminal -x play '|rec --buffer 512 -d'")
     elif voice == 'Mute':
