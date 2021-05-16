@@ -102,37 +102,37 @@ def handle(msg):
                 current_keyboard = 'Choose Mood'
             elif msg['text'] == 'Neutral':
                 mekhybot.sendMessage(chat_id, '>>>Mood Reverted back to Neutral')
-                Expression.SetExpressionState(random.randint(0, 3))
+                Expression.SetExpressionState(0)
             elif msg['text'] == '😡':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Congrats u made me PISSED')
-                Expression.SetExpressionState(4)
+                Expression.SetExpressionState(1)
             elif msg['text'] == 'Zzz':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Nighty night')
-                Expression.SetExpressionState(5)
+                Expression.SetExpressionState(2)
             elif msg['text'] == '😊':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: A Happy boye')
-                Expression.SetExpressionState(6)
+                Expression.SetExpressionState(4)
             elif msg['text'] == '>w<':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: omg look he blushing')
-                Expression.SetExpressionState(7)
+                Expression.SetExpressionState(5)
             elif msg['text'] == '?w?':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: ??uhh..')
-                Expression.SetExpressionState(8)
+                Expression.SetExpressionState(6)
             elif msg['text'] == '😢':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: All around me are familiar faces')
-                Expression.SetExpressionState(9)
+                Expression.SetExpressionState(3)
             elif msg['text'] == '😱':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: BRUH')
-                Expression.SetExpressionState(10)
+                Expression.SetExpressionState(7)
             elif msg['text'] == '🤪':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: 🥔')
-                Expression.SetExpressionState(11)
+                Expression.SetExpressionState(8)
             elif msg['text'] == '😍':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: OHHH Somebody hold me')
-                Expression.SetExpressionState(12)
+                Expression.SetExpressionState(9)
             elif msg['text'] == 'Hypno 🌈':
                 mekhybot.sendMessage(chat_id, '>>>Mood Set to: Look at me if u dare bitch')
-                Expression.SetExpressionState(13)
+                Expression.SetExpressionState(10)
             elif msg['text'] == 'Sound Effect':
                 current_keyboard = 'Choose SFX'
             elif msg['text'] == 'AWOOO!':

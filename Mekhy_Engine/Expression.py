@@ -1,4 +1,4 @@
-ExpressionState = 1
+ExpressionState = 0
 
 def SetExpressionState(x):
     global ExpressionState

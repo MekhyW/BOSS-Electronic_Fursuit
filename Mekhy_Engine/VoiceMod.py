@@ -1,3 +1,6 @@
+import gi
+gi.require_version('Wnck', '3.0')
+from gi.repository import Wnck
 import os
 Pitch = -350
 Bass = 20
@@ -18,3 +21,8 @@ def SetVoice(voice):
         os.system("gnome-terminal -x play '|rec --buffer 512 -d'")
     elif voice == 'Mute':
         os.system("gnome-terminal -x play '|rec --buffer 512 -d vol 0'")
+    screen = Wnck.Screen.get_default()
+    screen.force_update()
+    for window in screen.get_windows():
+        if "Terminal" in window.get_name():
+            window.minimize()
