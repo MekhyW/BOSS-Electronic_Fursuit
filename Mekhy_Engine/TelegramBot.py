@@ -65,11 +65,6 @@ def handle(msg):
             elif msg['text'] == 'Speak':
                 mekhybot.sendMessage(chat_id, '>>>Reply to THIS message with what you want me to speak\n(Almost any language works!)')
                 current_keyboard = 'none'
-            elif msg['text'] == 'Refsheet / Stickers':
-                mekhybot.sendMessage(chat_id, 'Stickers --> https://t.me/addstickers/MekhyW')
-                mekhybot.sendMessage(chat_id, 'Refsheet --> https://drive.google.com/file/d/183HI8yI62wDwE15cJITKPWQnvxRwtpmz/view?usp=sharing')
-            elif msg['text'] == 'Pronouns':
-                mekhybot.sendMessage(chat_id, 'Please call me a He or They!\nI am Male ♂️ and Bisexual 🏳️‍🌈⚥\n\nDon´t be afraid to come chat with me, I don´t bite ^w^')
             elif msg['text'] == 'Reboot':
                 if chat_id==ChatIDmekhy:
                     mekhybot.sendMessage(chat_id, '>>>System Reboot initiated.....')
@@ -88,13 +83,6 @@ def handle(msg):
                     mekhybot.sendMessage(chat_id, 'Suit active for: {} Hours + {} Minutes'.format(int(math.floor(s/3600)), str((s - (3600 * math.floor(s/3600)))/60)[:4]))
                 else:
                     mekhybot.sendMessage(chat_id, 'Suit active for: {} Minutes'.format(str(s/60)[:4]))
-            elif msg['text'] == 'Contact Me(khy)':
-                mekhybot.sendMessage(chat_id, '\nAre you a business or sponsor?\n💌 Email: felipe_catapano@yahoo.com.br')
-                mekhybot.sendMessage(chat_id, 'Want to message me? Or Report a problem?\n🔵 Telegram: @MekhyW\n')
-                mekhybot.sendMessage(chat_id, '\nGet in touch with what I´m doing\n🐦 Twitter: https://twitter.com/MekhyW\n')
-                mekhybot.sendMessage(chat_id, '\nWant a match with a like?\n⚪ Howlr: Mekhy W.!\n')
-                mekhybot.sendMessage(chat_id, '\nDo you use LinkedIn?\n🟦 LinkedIn: https://www.linkedin.com/in/felipe-catapano/\n')
-                mekhybot.sendMessage(chat_id, '\nCheck out my other projects!\n⚛️ GitHub: https://github.com/MekhyW\n')
             elif msg['text'] == 'Stop sound':
                 mekhybot.sendMessage(chat_id, '>>>OK')
                 SoundEffects.StopSound()
@@ -104,64 +92,35 @@ def handle(msg):
                 mekhybot.sendMessage(chat_id, '>>>Mood Reverted back to Neutral')
                 Expression.SetExpressionState(0)
             elif msg['text'] == '😡':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: Congrats u made me PISSED')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: 😡')
                 Expression.SetExpressionState(1)
             elif msg['text'] == 'Zzz':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: Nighty night')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: Zzz')
                 Expression.SetExpressionState(2)
             elif msg['text'] == '😊':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: A Happy boye')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: 😊')
                 Expression.SetExpressionState(4)
             elif msg['text'] == '>w<':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: omg look he blushing')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: >w<')
                 Expression.SetExpressionState(5)
             elif msg['text'] == '?w?':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: ??uhh..')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: ?w?')
                 Expression.SetExpressionState(6)
             elif msg['text'] == '😢':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: All around me are familiar faces')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: 😢')
                 Expression.SetExpressionState(3)
             elif msg['text'] == '😱':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: BRUH')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: 😱')
                 Expression.SetExpressionState(7)
             elif msg['text'] == '🤪':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: 🥔')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: 🤪')
                 Expression.SetExpressionState(8)
             elif msg['text'] == '😍':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: OHHH Somebody hold me')
+                mekhybot.sendMessage(chat_id, '>>>Mood Set to: 😍')
                 Expression.SetExpressionState(9)
             elif msg['text'] == 'Hypno 🌈':
-                mekhybot.sendMessage(chat_id, '>>>Mood Set to: Look at me if u dare bitch')
+                mekhybot.sendMessage(chat_id, 'Hypno 🌈')
                 Expression.SetExpressionState(10)
-            elif msg['text'] == 'Sound Effect':
-                current_keyboard = 'Choose SFX'
-            elif msg['text'] == 'AWOOO!':
-                mekhybot.sendMessage(chat_id, '>>>Howling...')
-                SoundEffects.PlaySound(1)
-            elif msg['text'] == '*amgy*':
-                mekhybot.sendMessage(chat_id, '>>>Snarling...')
-                SoundEffects.PlaySound(2)
-            elif msg['text'] == 'Woof! Woof!':
-                mekhybot.sendMessage(chat_id, '>>>Woofing...')
-                SoundEffects.PlaySound(3)
-            elif msg['text'] == '*cry*':
-                mekhybot.sendMessage(chat_id, '>>>Crying...')
-                SoundEffects.PlaySound(4)
-            elif msg['text'] == 'Huff':
-                mekhybot.sendMessage(chat_id, '>>>Huffing...')
-                SoundEffects.PlaySound(5)
-            elif msg['text'] == '*snif snif*':
-                mekhybot.sendMessage(chat_id, '>>>Sniffing...')
-                SoundEffects.PlaySound(6)
-            elif msg['text'] == 'Racc noises':
-                mekhybot.sendMessage(chat_id, '>>>Chittering...')
-                SoundEffects.PlaySound(7)
-            elif msg['text'] == 'Fart':
-                mekhybot.sendMessage(chat_id, '>>>Farting...')
-                SoundEffects.PlaySound(8)
-            elif msg['text'] == 'Stomach growl':
-                mekhybot.sendMessage(chat_id, '>>>Growling...')
-                SoundEffects.PlaySound(9)
             elif msg['text'] == 'Change Voice':
                 current_keyboard = 'Choose Voice'
             elif msg['text'] in ('Mekhy', 'Baby Mekhy', 'No Effects', 'Mute'):
@@ -202,14 +161,11 @@ def handle(msg):
         elif content_type == 'contact':
             mekhybot.sendMessage(chat_id, 'Sorry, I still cannot use contacts.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Sound Effect"), KeyboardButton(text="Speak")], [KeyboardButton(text="Change Voice")], [KeyboardButton(text="Refsheet / Stickers"), KeyboardButton(text="Pronouns")], [KeyboardButton(text="Stop sound"), KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")], [KeyboardButton(text="Running time"), KeyboardButton(text="Contact Me(khy)")]])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop sound")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
             mekhybot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
             mekhybot.sendMessage(chat_id, '>>>Which mood?', reply_markup=command_keyboard)
-        elif current_keyboard == 'Choose SFX':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="AWOOO!"), KeyboardButton(text="*amgy*"), KeyboardButton(text="Woof! Woof!"), KeyboardButton(text="*cry*")], [KeyboardButton(text="Huff"), KeyboardButton(text="*snif snif*"), KeyboardButton(text="Racc noises"), KeyboardButton(text="Fart"), KeyboardButton(text="Stomach growl")]])
-            mekhybot.sendMessage(chat_id, '>>>Which SFX?', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Voice':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Mekhy")], [KeyboardButton(text="Baby Mekhy")], [KeyboardButton(text="No Effects")], [KeyboardButton(text="Mute")]])
             mekhybot.sendMessage(chat_id, '>>>What voice?', reply_markup=command_keyboard)

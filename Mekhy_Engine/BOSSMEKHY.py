@@ -4,6 +4,8 @@ import VoiceMod
 import Displays
 import SoundEffects
 import serial
+AORTA = None
+CAROTID = None
 
 while True:
     try:
@@ -11,6 +13,7 @@ while True:
             AORTA = serial.Serial('/dev/ttyUSB0', 9600)
         if(CAROTID == None):
             CAROTID = serial.Serial('/dev/ttyUSB1', 9600)
+        break
     except:
         print("failed")
 
