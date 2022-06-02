@@ -1,10 +1,18 @@
 #include <Servo.h>
 #include <ros.h>
 #include <std_msgs/UInt16.h>
-#define LeftEyebrowPin 10
-#define RightEyebrowPin 11
+#define LeftEyebrowPin 0
+#define RightEyebrowPin 0
+#define LeftEarPanPin 0
+#define LeftEarPanTilt 0
+#define RightEarPanPin 0
+#define RightEarPanTilt 0
 Servo LeftEyebrow;
 Servo RightEyebrow;
+Servo LeftEarPan;
+Servo LeftEarTilt;
+Servo RightEarPan;
+Servo RightEarTilt;
 int ExpressionState = 0;
 
 void expressionCallback(std_msgs::UInt16& value){
