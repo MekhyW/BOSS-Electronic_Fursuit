@@ -4,10 +4,12 @@ from gi.repository import Wnck
 import os
 Pitch = -350
 Bass = 20
-#os.system('pacmd set-default-source "alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono"')
-#os.system("pactl load-module module-echo-cancel")
-#os.system('pacmd set-default-sink "alsa_output.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-stereo"')
-os.system("lxterminal -e play '|rec --buffer 128 -d pitch {} bass {}'".format(Pitch, Bass))
+
+def StartSox():
+    #os.system('pacmd set-default-source "alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono"')
+    #os.system("pactl load-module module-echo-cancel")
+    #os.system('pacmd set-default-sink "alsa_output.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-stereo"')
+    os.system("lxterminal -e play '|rec --buffer 128 -d pitch {} bass {}'".format(Pitch, Bass))
 
 def SetVoice(voice):
     global Pitch
