@@ -1,37 +1,18 @@
-import Expression
 import TelegramBot
 import VoiceMod
 import Displays
 import SoundEffects
-import serial
-AORTA = None
-CAROTID = None
+import rospy
+from std_msgs.msg import UInt16, String
+
+rospy.init_node('BOSSMEKHY')
+expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
+voice_pub = rospy.Publisher('/voice', String, queue_size=10)
 
 while True:
     try:
-        if(AORTA == None):
-            AORTA = serial.Serial('/dev/ttyUSB0', 9600)
-        if(CAROTID == None):
-            CAROTID = serial.Serial('/dev/ttyUSB1', 9600)
-        break
-    except:
-        print("failed")
-
-while True:
-    try:
-        if(AORTA == None):
-            AORTA = serial.Serial('/dev/ttyUSB0', 9600)
-        if(CAROTID == None):
-            CAROTID = serial.Serial('/dev/ttyUSB1', 9600)
-        Displays.GraphicsRefresh(Expression.ExpressionState)
-        AORTA.write("{}\n".format(Expression.ExpressionState).encode())
-        CAROTID.write("{}\n".format(Expression.ExpressionState).encode())
-    except:
-        print("failed")
-        if(not(AORTA == None)):
-            AORTA.close()
-            AORTA = None
-        if(not(CAROTID == None)):
-            CAROTID.close()
-            CAROTID = None
+        Displays.GraphicsRefresh(TelegramBot.ExpressionState)
+        expression_pub.publish(TelegramBot.ExpressionState)
+    except Exception as e:
+        print(e)
 

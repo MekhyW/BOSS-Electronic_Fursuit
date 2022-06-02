@@ -1,10 +1,17 @@
 #include <Servo.h>
+#include <ros.h>
+#include <std_msgs/UInt16.h>
 #define LeftEyebrowPin 10
 #define RightEyebrowPin 11
 Servo LeftEyebrow;
 Servo RightEyebrow;
 int ExpressionState = 0;
-byte inputarray[10];
+
+void expressionCallback(std_msgs::UInt16& value){
+  ExpressionState = value.data;
+}
+ros::NodeHandle nodehandle;
+ros::Subscriber<std_msgs::UInt16> sub_expression("expression", &expressionCallback);
 
 void setup() {
   Serial.begin(9600);
@@ -13,21 +20,6 @@ void setup() {
 }
 
 void loop() {
-  for (int x = 0; x < sizeof(inputarray) / sizeof(inputarray[0]); x++){
-    inputarray[x] = 0;
-  }
-  Serial.flush();
-  if(Serial.available()){
-    Serial.readBytesUntil('\n', inputarray, sizeof(inputarray));
-    while(Serial.available() > 0){
-      Serial.read();
-    }
-    if(inputarray[1] == 0){
-      ExpressionState = inputarray[0]-48;
-    } else {
-      ExpressionState = (10*(inputarray[0]-48)) + (inputarray[1]-48);
-    }
-  }
   switch(ExpressionState){
     case 0:
       LeftEyebrow.write(75);
@@ -74,4 +66,5 @@ void loop() {
       break;
   }
   Serial.println(ExpressionState);
+  nodehandle.spinOnce();
 }

@@ -1,4 +1,6 @@
 #include <Adafruit_NeoPixel.h>
+#include <ros.h>
+#include <std_msgs/UInt16.h>
 #define LED_PIN 39
 #define LED_COUNT 42
 Adafruit_NeoPixel GearsStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
@@ -15,30 +17,15 @@ uint32_t orange = GearsStrip.Color(255, 128, 0);
 uint32_t green = GearsStrip.Color(0, 255, 0);
 int ExpressionState = 0;
 int Effect = 1;
-byte inputarray[10];
 
-void GetData(){
-  for (int x = 0; x < sizeof(inputarray) / sizeof(inputarray[0]); x++){
-    inputarray[x] = 0;
+void expressionCallback(std_msgs::UInt16& value){
+  if (value.data != ExpressionState) {
+     Effect = random(1, 6);
   }
-  Serial.flush();
-  if(Serial.available()){
-    Serial.readBytesUntil('\n', inputarray, sizeof(inputarray));
-    while(Serial.available() > 0){
-      Serial.read();
-    }
-    int ExpressionStateLocal = 0;
-    if(inputarray[1] == 0){
-      ExpressionStateLocal = inputarray[0]-48;
-    } else {
-      ExpressionStateLocal = (10*(inputarray[0]-48)) + (inputarray[1]-48);
-    }
-    if(ExpressionStateLocal != ExpressionState){
-      ExpressionState = ExpressionStateLocal;
-      Effect = random(1, 6);
-    }
-  }
+  ExpressionState = value.data;
 }
+ros::NodeHandle nodehandle;
+ros::Subscriber<std_msgs::UInt16> sub_expression("expression", &expressionCallback);
 
 void colorSparkle(uint32_t color) {
   GearsStrip.setBrightness(Color_Brightness*2);
@@ -172,7 +159,6 @@ void setup() {
 }
 
 void loop() {
-  GetData();
   switch(ExpressionState){
     case 0:
       GearsStrip.setBrightness(Color_Brightness/3);
@@ -364,4 +350,5 @@ void loop() {
       break;
   }
   Serial.println(ExpressionState);
+  nodehandle.spinOnce();
 }
