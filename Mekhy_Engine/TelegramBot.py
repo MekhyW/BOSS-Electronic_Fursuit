@@ -123,7 +123,7 @@ def handle(msg):
                 ExpressionState = 10
             elif msg['text'] == 'Change Voice':
                 current_keyboard = 'Choose Voice'
-            elif msg['text'] in ('Mekhy', 'Baby Mekhy', 'No Effects', 'Mute'):
+            elif msg['text'] in ('Mekhy', 'Baby', 'No Effects', 'Mute'):
                 fursuitbot.sendMessage(chat_id, '>>>Voice Set to: {}'.format(msg['text']))
                 VoiceMod.SetVoice(msg['text'])
             elif msg['text'] == '⬅️(Back to commands)':

@@ -31,6 +31,8 @@ def GraphicsDraw(video, file):
     for window in screen.get_windows():
         if "Eye" in window.get_name():
             window.maximize()
+        elif "Terminal" in window.get_name():
+            window.minimize()
 
 def GraphicsClose(video):
     video.release()
