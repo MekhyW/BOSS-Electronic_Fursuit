@@ -7,13 +7,13 @@ def SetVoice(voice):
     global Bass
     os.system("killall play")
     if voice == 'Mekhy':
-        os.system("lxterminal -e play '|rec --buffer 512 -d pitch {} bass {}'".format(Pitch, Bass))
+        os.system("lxterminal -e play '|rec --buffer 128 -d pitch {} bass {}'".format(Pitch, Bass))
     elif voice == 'Baby':
-        os.system("lxterminal -e play '|rec --buffer 512 -d pitch {}'".format(abs(Pitch*2)))
+        os.system("lxterminal -e play '|rec --buffer 128 -d pitch {}'".format(abs(Pitch*2)))
     elif voice == 'No Effects':
-        os.system("lxterminal -e play '|rec --buffer 512 -d'")
+        os.system("lxterminal -e play '|rec --buffer 128 -d'")
     elif voice == 'Mute':
-        os.system("lxterminal -e play '|rec --buffer 512 -d vol 0'")
+        os.system("lxterminal -e play '|rec --buffer 128 -d vol 0'")
 
 os.system('pacmd set-default-source "alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.analog-mono"')
 os.system("pactl load-module module-echo-cancel")
