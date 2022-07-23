@@ -1,3 +1,4 @@
+import WiFi
 import TelegramBot
 import VoiceMod
 import VoiceAnalyser
@@ -13,6 +14,8 @@ os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyA
 rospy.init_node('BOSSMEKHY')
 expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
 voice_pub = rospy.Publisher('/voice_volume', float32, queue_size=10)
+WiFi.ConnectWifi()
+TelegramBot.StartBot()
 
 while True:
     try:

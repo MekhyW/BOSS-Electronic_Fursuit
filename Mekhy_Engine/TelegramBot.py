@@ -174,7 +174,5 @@ def handle(msg):
             fursuitbot.sendMessage(mekhyID, traceback.format_exc())
             fursuitbot.sendMessage(mekhyID, str(msg))
 
-MessageLoop(fursuitbot, handle).run_as_thread()
-
-#while True:
-#    pass
+def StartBot():
+    MessageLoop(fursuitbot, handle).run_as_thread()
