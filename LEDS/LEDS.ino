@@ -75,7 +75,6 @@ void colorFade(uint32_t color){
       GearsStrip.setBrightness(k);
       GearsStrip.show();
       delay(25);
-      Serial.println(k);
     }
     for(int k = Color_Brightness*2; k > 0; k--) {
       int ExpressionStateLocal = ExpressionState;
@@ -87,7 +86,6 @@ void colorFade(uint32_t color){
       GearsStrip.setBrightness(k);
       GearsStrip.show();
       delay(25);
-      Serial.println(k);
     }
 }
 
@@ -153,7 +151,8 @@ void Rainbow(int wait) {
 }
 
 void setup() {
-  Serial.begin(9600);
+  nodehandle.getHardware()->setBaud(115200);
+  nodehandle.initNode();
   GearsStrip.begin();
   GearsStrip.show();
 }
@@ -349,6 +348,5 @@ void loop() {
       Rainbow(10);
       break;
   }
-  Serial.println(ExpressionState);
   nodehandle.spinOnce();
 }

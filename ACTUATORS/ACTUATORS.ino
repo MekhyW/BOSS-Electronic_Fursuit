@@ -22,7 +22,8 @@ ros::NodeHandle nodehandle;
 ros::Subscriber<std_msgs::UInt16> sub_expression("expression", &expressionCallback);
 
 void setup() {
-  Serial.begin(9600);
+  nodehandle.getHardware()->setBaud(115200);
+  nodehandle.initNode();
   LeftEyebrow.attach(LeftEyebrowPin);
   RightEyebrow.attach(RightEyebrowPin);
 }
@@ -73,6 +74,5 @@ void loop() {
       RightEyebrow.write(60);
       break;
   }
-  Serial.println(ExpressionState);
   nodehandle.spinOnce();
 }
