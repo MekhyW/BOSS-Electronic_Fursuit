@@ -49,7 +49,6 @@ void colorStrobe(uint32_t color){
   GearsStrip.setBrightness(Color_Brightness);
   for(int j = 0; j < 10; j++) {
     int ExpressionStateLocal = ExpressionState;
-    GetData();
     if(ExpressionState != ExpressionStateLocal){
       break;
     }
@@ -67,7 +66,6 @@ void colorFade(uint32_t color){
     GearsStrip.setBrightness(Color_Brightness);
     for(int k = 0; k < Color_Brightness*2; k++) {
       int ExpressionStateLocal = ExpressionState;
-      GetData();
       if(ExpressionState != ExpressionStateLocal){
         break;
       }
@@ -78,7 +76,6 @@ void colorFade(uint32_t color){
     }
     for(int k = Color_Brightness*2; k > 0; k--) {
       int ExpressionStateLocal = ExpressionState;
-      GetData();
       if(ExpressionState != ExpressionStateLocal){
         break;
       }
@@ -93,7 +90,6 @@ void colorWipe(uint32_t color) {
   GearsStrip.setBrightness(Color_Brightness);
   for(uint16_t i=0; i<GearsStrip.numPixels(); i++) {
     int ExpressionStateLocal = ExpressionState;
-    GetData();
     if(ExpressionState != ExpressionStateLocal){
       break;
     }
@@ -103,7 +99,6 @@ void colorWipe(uint32_t color) {
   }
   for(uint16_t i=0; i<GearsStrip.numPixels(); i++) {
     int ExpressionStateLocal = ExpressionState;
-    GetData();
     if(ExpressionState != ExpressionStateLocal){
       break;
     }
@@ -123,7 +118,6 @@ void colorTheaterChase(uint32_t color) {
         GearsStrip.setPixelColor(c, color);
       }
       int ExpressionStateLocal = ExpressionState;
-      GetData();
       if(ExpressionState != ExpressionStateLocal){
         break;
       }
@@ -141,7 +135,6 @@ void Rainbow(int wait) {
       GearsStrip.setPixelColor(i, GearsStrip.gamma32(GearsStrip.ColorHSV(pixelHue)));
     }
     int ExpressionStateLocal = ExpressionState;
-    GetData();
     if(ExpressionState != ExpressionStateLocal){
       break;
     }
@@ -153,6 +146,7 @@ void Rainbow(int wait) {
 void setup() {
   nodehandle.getHardware()->setBaud(115200);
   nodehandle.initNode();
+  nodehandle.subscribe(sub_expression);
   GearsStrip.begin();
   GearsStrip.show();
 }
