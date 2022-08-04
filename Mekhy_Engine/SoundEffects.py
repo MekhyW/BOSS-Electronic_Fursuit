@@ -1,5 +1,3 @@
-import math
-import random
 import os
 import pygame
 pygame.mixer.init()

@@ -41,7 +41,7 @@ class Finder:
             return True # Connected
 
 
-def connectionTest(host='http://google.com'):
+def WiFiconnectionTest(host='http://google.com'):
     try:
         urllib.request.urlopen(host)
         return True
@@ -55,5 +55,5 @@ def ConnectWifi():
     F = Finder(server_name=server_name,
                password=password,
                interface=interface_name)
-    while not connectionTest():
-        F.run()
+    F.run()
+    return WiFiconnectionTest()
