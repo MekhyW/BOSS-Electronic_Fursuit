@@ -1,13 +1,16 @@
 import cv2
 import numpy as np
+import math
 cap = cv2.VideoCapture(0)
-target_point_x = 0
-target_point_y = 0
-target_point_z = 0
+target_point_x = 0 #mm
+target_point_y = 0 #mm
+target_point_z = 0 #mm
 net = cv2.dnn.readNet("yolov5.weights", "yolov5.cfg")
-avg_height_fursuit_head = 0
-avg_height_human_head = 0
+avg_height_fursuit_head = 305
+avg_height_human_head = 250
 focal_length = 3.67
+field_of_view = 78
+distance_from_sensor_to_displays = 300
 
 def unwrap_detection(input_image, output_data):
     class_ids = []
@@ -48,6 +51,13 @@ def depthFormula(object_size, label):
         depth = (focal_length * avg_height_human_head) / object_size
     return depth
 
+def xyFormula(depth, normalized_x, normalized_y, frame_width, frame_height):
+    alpha = normalized_x * (field_of_view / frame_width)
+    beta = normalized_y * (field_of_view / frame_height)
+    x = depth * math.tan(math.radians(alpha))
+    y = depth * math.tan(math.radians(beta)) - distance_from_sensor_to_displays
+    return x, y
+
 def calculateTargetPoint():
     global target_point_x
     global target_point_y
@@ -68,6 +78,8 @@ def calculateTargetPoint():
             max_box = boxes[box_id]
             label = class_ids[box_id]
     if max_box is not None:
-        target_point_x = (max_box[0] + (max_box[2] / 2)) - (frame.shape[1] / 2)
-        target_point_y = (max_box[1] + (max_box[3] / 2)) - (frame.shape[0] / 2)
         target_point_z = depthFormula(max_side, label)
+        normalized_x = (max_box[0] + (max_box[2] / 2)) - (frame.shape[1] / 2)
+        normalized_y = (max_box[1] + (max_box[3] / 2)) - (frame.shape[0] / 2)
+        target_point_x, target_point_y = xyFormula(normalized_x, normalized_y, frame.shape[1], frame.shape[0])
+        
