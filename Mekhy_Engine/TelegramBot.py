@@ -1,5 +1,5 @@
 import SoundEffects
-import VoiceMod
+import JackClient
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
@@ -123,9 +123,9 @@ def handle(msg):
                 ExpressionState = 10
             elif msg['text'] == 'Change Voice':
                 current_keyboard = 'Choose Voice'
-            elif msg['text'] in ('Mekhy', 'Baby', 'No Effects', 'Mute'):
+            elif msg['text'] in ('Mekhy', 'Clear', 'Mute'):
                 fursuitbot.sendMessage(chat_id, '>>>Voice Set to: {}'.format(msg['text']))
-                VoiceMod.SetVoice(msg['text'])
+                JackClient.JackVoicemodRoute(msg['text'])
             elif msg['text'] == '⬅️(Back to commands)':
                 current_keyboard = 'Main'
             else:
@@ -167,7 +167,7 @@ def handle(msg):
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
             fursuitbot.sendMessage(chat_id, '>>>Which mood?', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Voice':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Mekhy")], [KeyboardButton(text="Baby Mekhy")], [KeyboardButton(text="No Effects")], [KeyboardButton(text="Mute")]])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Mekhy")], [KeyboardButton(text="Clear")], [KeyboardButton(text="Mute")]])
             fursuitbot.sendMessage(chat_id, '>>>What voice?', reply_markup=command_keyboard)
     except:
         if 'ConnectionResetError' not in traceback.format_exc():

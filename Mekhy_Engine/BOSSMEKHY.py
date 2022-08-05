@@ -1,6 +1,6 @@
 import WiFi
 import TelegramBot
-import VoiceMod
+import JackClient
 import VoiceAnalyser
 import Displays
 import SoundEffects
@@ -19,7 +19,7 @@ voice_pub = rospy.Publisher('/voice_volume', float32, queue_size=10)
 
 def machine_vision_thread():
     while True:
-        MachineVision.MachineVision()
+        MachineVision.calculateTargetPoint()
 
 def display_thread():
     while True:
@@ -35,6 +35,8 @@ def ros_thread():
         finally:
             rospy.sleep(0.1)
 
+SoundEffects.PlayBootSound()
+JackClient.JackVoicemodRoute("Clear")
 if WiFi.ConnectWifi():
     TelegramBot.StartBot()
 machine_vision_thread = threading.Thread(target=machine_vision_thread)
