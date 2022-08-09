@@ -42,6 +42,7 @@ def unwrap_detection(input_image, output_data):
 def getCameraFrame():
     ret, frame = cap.read()
     frame = cv2.resize(frame, (800, 448))
+    cv2.waitKey(1)
     return frame
 
 def depthFormula(object_size, label):
