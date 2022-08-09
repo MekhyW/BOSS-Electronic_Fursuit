@@ -22,6 +22,71 @@ if updates:
 
 fursuitbot.sendMessage(mekhyID, 'I am online')
 
+def SetExpression(fursuitbot, chat_id, msg):
+    if msg['text'] == 'Neutral':
+        ExpressionState = 0
+    elif msg['text'] == '😡':
+        ExpressionState = 1
+    elif msg['text'] == 'Zzz':
+        ExpressionState = 2
+    elif msg['text'] == '😢':
+        ExpressionState = 3
+    elif msg['text'] == '😊':
+        ExpressionState = 4
+    elif msg['text'] == '>w<':
+        ExpressionState = 5
+    elif msg['text'] == '?w?':
+        ExpressionState = 6
+    elif msg['text'] == '😱':
+        ExpressionState = 7
+    elif msg['text'] == '🤪':
+        ExpressionState = 8
+    elif msg['text'] == '😍':
+        ExpressionState = 9
+    elif msg['text'] == 'Hypno 🌈':
+        ExpressionState = 10
+    fursuitbot.sendMessage(chat_id, '>>>Mood Set to: {}'.format(msg['text']))
+
+def PlaySongName(fursuitbot, chat_id, msg):
+    fursuitbot.sendMessage(chat_id, '>>>Finding song with query "{}"...'.format(msg['text']))
+    topic = msg['text']
+    count = 0
+    lst = str(requests.get('https://www.youtube.com/results?q=' + topic).content).split('"')
+    for i in lst:
+        count+=1
+        if i == 'WEB_PAGE_TYPE_WATCH':
+            break
+    if lst[count-5] == "/results":
+        raise Exception("No video found.")
+    fursuitbot.sendMessage(chat_id, '>>>Song found!')
+    fursuitbot.sendMessage(chat_id, '>>>Downloading...')
+    video = YouTube("https://www.youtube.com"+lst[count-5]).streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
+    video.download()
+    fursuitbot.sendMessage(chat_id, '>>>Conversion process...')
+    default_filename = video.default_filename
+    new_filename = default_filename.split(".")[0] + ".mp3"
+    subprocess.call(["ffmpeg", "-i", default_filename, new_filename])
+    fursuitbot.sendMessage(chat_id, 'Done!\n>>>Playing now')
+    SoundEffects.PlayOnDemand(new_filename)
+
+def TTS(fursuitbot, chat_id, msg):
+    fursuitbot.sendMessage(chat_id, '>>>Speaking...')
+    msgToSpeak = msg['text'].replace('/speak ', '')
+    language = translator.detect(msgToSpeak).lang
+    filename = "{}.mp3".format(msg['message_id'])
+    gTTS(text=msgToSpeak, lang=language, slow=False).save(filename)
+    SoundEffects.PlayOnDemand(filename)
+
+def PlayAudioFile(fursuitbot, chat_id, msg):
+    fursuitbot.sendMessage(chat_id, '>>>Audio Received!')
+    f = requests.get("https://api.telegram.org/bot{}/getFile?file_id={}".format(Token, msg['audio']['file_id'])).text
+    file_path = f.split(",")[4].split(":")[1].replace('"', '').replace('}', '')
+    file_name = file_path.split("/")[1]
+    r = requests.get("https://api.telegram.org/file/bot{}/{}".format(Token, file_path), allow_redirects=True)
+    open(file_name, 'wb').write(r.content)
+    SoundEffects.PlayOnDemand(file_name)
+    fursuitbot.sendMessage(chat_id, '>>>Playing.....\n\nInvoke /stopsound to make me stop òwó')
+
 def handle(msg):
     try:
         global ExpressionState
@@ -32,36 +97,12 @@ def handle(msg):
             if msg['text'] == '/start':
                 fursuitbot.sendMessage(chat_id, 'Welcome!')
             elif 'reply_to_message' in msg and msg['reply_to_message']['text'] == '>>>Reply to THIS message with any song name to search and play\n\nExample: bohemian rhapsody':
-                fursuitbot.sendMessage(chat_id, '>>>Finding song with query "{}"...'.format(msg['text']))
-                topic = msg['text']
-                count = 0
-                lst = str(requests.get('https://www.youtube.com/results?q=' + topic).content).split('"')
-                for i in lst:
-                    count+=1
-                    if i == 'WEB_PAGE_TYPE_WATCH':
-                        break
-                if lst[count-5] == "/results":
-                    raise Exception("No video found.")
-                fursuitbot.sendMessage(chat_id, '>>>Song found!')
-                fursuitbot.sendMessage(chat_id, '>>>Downloading...')
-                video = YouTube("https://www.youtube.com"+lst[count-5]).streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
-                video.download()
-                fursuitbot.sendMessage(chat_id, '>>>Conversion process...')
-                default_filename = video.default_filename
-                new_filename = default_filename.split(".")[0] + ".mp3"
-                subprocess.call(["ffmpeg", "-i", default_filename, new_filename])
-                fursuitbot.sendMessage(chat_id, 'Done!\n>>>Playing now')
-                SoundEffects.PlayOnDemand(new_filename)
+                PlaySongName(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Play Song':
-                fursuitbot.sendMessage(chat_id, '>>>Reply to THIS message with any song name to search and play\n\nExample: bohemian rhapsody')
+                fursuitbot.sendMessage(chat_id, '>>>Reply to THIS message with any song name to search and play\n\nExample: Bohemian Rhapsody')
                 current_keyboard = 'none'
             elif 'reply_to_message' in msg and msg['reply_to_message']['text'] == '>>>Reply to THIS message with what you want me to speak\n(Almost any language works!)':
-                fursuitbot.sendMessage(chat_id, '>>>Speaking...')
-                msgToSpeak = msg['text'].replace('/speak ', '')
-                language = translator.detect(msgToSpeak).lang
-                filename = "{}.mp3".format(msg['message_id'])
-                gTTS(text=msgToSpeak, lang=language, slow=False).save(filename)
-                SoundEffects.PlayOnDemand(filename)
+                TTS(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Speak':
                 fursuitbot.sendMessage(chat_id, '>>>Reply to THIS message with what you want me to speak\n(Almost any language works!)')
                 current_keyboard = 'none'
@@ -88,39 +129,8 @@ def handle(msg):
                 SoundEffects.StopSound()
             elif msg['text'] == 'Set Mood':
                 current_keyboard = 'Choose Mood'
-            elif msg['text'] == 'Neutral':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Reverted back to Neutral')
-                ExpressionState = 0
-            elif msg['text'] == '😡':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Set to: 😡')
-                ExpressionState = 1
-            elif msg['text'] == 'Zzz':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Set to: Zzz')
-                ExpressionState = 2
-            elif msg['text'] == '😢':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Set to: 😢')
-                ExpressionState = 3
-            elif msg['text'] == '😊':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Set to: 😊')
-                ExpressionState = 4
-            elif msg['text'] == '>w<':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Set to: >w<')
-                ExpressionState = 5
-            elif msg['text'] == '?w?':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Set to: ?w?')
-                ExpressionState = 6
-            elif msg['text'] == '😱':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Set to: 😱')
-                ExpressionState = 7
-            elif msg['text'] == '🤪':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Set to: 🤪')
-                ExpressionState = 8
-            elif msg['text'] == '😍':
-                fursuitbot.sendMessage(chat_id, '>>>Mood Set to: 😍')
-                ExpressionState = 9
-            elif msg['text'] == 'Hypno 🌈':
-                fursuitbot.sendMessage(chat_id, 'Hypno 🌈')
-                ExpressionState = 10
+            elif msg['text'] in ['Neutral', '😡', 'Zzz', '😢', '😊', '>w<', '?w?', '😱', '🤪', '😍', 'Hypno 🌈']:
+                SetExpression(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Change Voice':
                 current_keyboard = 'Choose Voice'
             elif msg['text'] in ('Mekhy', 'Clear', 'Mute'):
@@ -128,38 +138,10 @@ def handle(msg):
                 JackClient.JackVoicemodRoute(msg['text'])
             elif msg['text'] == '⬅️(Back to commands)':
                 current_keyboard = 'Main'
-            else:
-                try:
-                    requests.get("{}".format(msg['text']))
-                    fursuitbot.sendMessage(chat_id, 'Valid link received!\n>>>Forwarding to @MekhyW...OK')
-                    fursuitbot.sendMessage(mekhyID, msg['text'])
-                except:
-                    fursuitbot.sendMessage(chat_id, msg['text'])
-        elif content_type == 'voice':
-            print(msg['voice']['file_id'])
-            fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot play voice messages.\nPlease forward to @MekhyW')
-        elif content_type == 'video':
-            fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot play video sounds.\nPlease forward to @MekhyW')
         elif content_type == 'audio':
-            print(msg['audio']['file_id'])
-            fursuitbot.sendMessage(chat_id, '>>>Audio Received!')
-            f = requests.get("https://api.telegram.org/bot{}/getFile?file_id={}".format(Token, msg['audio']['file_id'])).text
-            file_path = f.split(",")[4].split(":")[1].replace('"', '').replace('}', '')
-            file_name = file_path.split("/")[1]
-            r = requests.get("https://api.telegram.org/file/bot{}/{}".format(Token, file_path), allow_redirects=True)
-            open(file_name, 'wb').write(r.content)
-            SoundEffects.PlayOnDemand(file_name)
-            fursuitbot.sendMessage(chat_id, '>>>Playing.....\n\nInvoke /stopsound to make me stop òwó')
-        elif content_type == 'photo':
-            fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret images.\nPlease forward to @MekhyW')
-        elif content_type == 'document':
-            fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot read images and documents.\nPlease forward to @MekhyW')
-        elif content_type == 'location':
-            fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot read location data.\nPlease forward to @MekhyW')
-        elif content_type == 'sticker':
-            fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret stickers.\nPlease forward to @MekhyW')
-        elif content_type == 'contact':
-            fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot use contacts.\nPlease forward to @MekhyW')
+            PlayAudioFile(fursuitbot, chat_id, msg)
+        elif content_type in ['photo', 'document', 'sticker', 'video_note', 'video', 'voice', 'location', 'contact', 'venue', 'contact', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
+            fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret that kind of input.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop sound")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
             fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
