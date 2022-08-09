@@ -9,6 +9,7 @@ import os
 import rospy
 from std_msgs.msg import UInt16, float32
 import threading
+import math
 
 os.system("lxterminal -e roscore")
 os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200")

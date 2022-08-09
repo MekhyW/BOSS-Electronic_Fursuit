@@ -4,7 +4,7 @@ import math
 cap = cv2.VideoCapture(0)
 target_point_x = 0 #mm
 target_point_y = 0 #mm
-target_point_z = 0 #mm
+target_point_z = math.inf #mm
 net = cv2.dnn.readNet("yolov5.weights", "yolov5.cfg")
 avg_height_fursuit_head = 305
 avg_height_human_head = 250
@@ -82,4 +82,6 @@ def calculateTargetPoint():
         normalized_x = (max_box[0] + (max_box[2] / 2)) - (frame.shape[1] / 2)
         normalized_y = (max_box[1] + (max_box[3] / 2)) - (frame.shape[0] / 2)
         target_point_x, target_point_y = xyFormula(normalized_x, normalized_y, frame.shape[1], frame.shape[0])
+    else:
+        target_point_x, target_point_y, target_point_z = 0, 0, math.inf
         
