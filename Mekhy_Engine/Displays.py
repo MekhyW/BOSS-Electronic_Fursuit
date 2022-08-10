@@ -10,13 +10,15 @@ display_rotation = 30
 left_eye_center = (340, 210)
 right_eye_center = (1125, 210)
 eye_neutral = cv2.imread('../Eyes/eye_neutral.png', cv2.COLOR_BGR2RGB)
-mask = cv2.imread('../Eyes/mask.png', cv2.COLOR_BGR2RGB)
+eye_sad = cv2.imread('../Eyes/eye_sad.png', cv2.COLOR_BGR2RGB)
+eye_happy = cv2.imread('../Eyes/eye_happy.png', cv2.COLOR_BGR2RGB)
+mask_neutral = cv2.imread('../Eyes/mask.png', cv2.COLOR_BGR2RGB)
+mask_sad = cv2.imread('../Eyes/mask_sad.png', cv2.COLOR_BGR2RGB)
+mask_happy = cv2.imread('../Eyes/mask_happy.png', cv2.COLOR_BGR2RGB)
 
-def composeEyes(expression, leftpos, rightpos):
-    if expression == 0:
-        eye = eye_neutral.copy()
+def composeEyes(eye, mask, leftpos, rightpos):
     eyes = np.zeros((mask.shape[0], mask.shape[1], 3), dtype=np.uint8)
-    eyes[:] = (255, 255, 255)
+    eyes[:] = eye[0, 0]
     eyes[leftpos[1]:leftpos[1]+eye.shape[0], leftpos[0]:leftpos[0]+eye.shape[1]] = eye
     eyes[rightpos[1]:rightpos[1]+eye.shape[0], rightpos[0]:rightpos[0]+eye.shape[1]] = eye
     return eyes
@@ -42,8 +44,17 @@ def rotateFrame(frame):
     return frame
 
 def composeFrame(expression):
-    frame = mask.copy()
-    eyes = composeEyes(expression, left_eye_center, right_eye_center)
+    if expression == 0:
+        eye = eye_neutral.copy()
+        mask = mask_neutral.copy()
+    elif expression == 3:
+        eye = eye_sad.copy()
+        mask = mask_sad.copy()
+    elif expression == 4:
+        eye = eye_happy.copy()
+        mask = mask_happy.copy()
+    frame = mask
+    eyes = composeEyes(eye, mask, left_eye_center, right_eye_center)
     frame[np.where((frame == [255, 255, 255]).all(axis = 2))] = eyes[np.where((frame == [255, 255, 255]).all(axis = 2))]
     frame = rotateFrame(frame)
     print(frame.shape)
