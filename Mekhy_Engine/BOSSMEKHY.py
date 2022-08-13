@@ -20,7 +20,7 @@ voice_pub = rospy.Publisher('/voice_volume', float32, queue_size=10)
 
 def machine_vision_thread():
     while True:
-        MachineVision.calculateTargetPoint()
+        MachineVision.calculateTargetPoint(TelegramBot.Recording)
 
 def display_thread():
     while True:

@@ -14,6 +14,7 @@ import requests, os, subprocess, math, time
 import traceback
 start_time = time.time()
 ExpressionState = 0
+Recording = False
 
 updates = fursuitbot.getUpdates()
 if updates:
@@ -107,6 +108,22 @@ def handle(msg):
             elif msg['text'] == 'Speak':
                 fursuitbot.sendMessage(chat_id, '>>>Reply to THIS message with what you want me to speak\n(Almost any language works!)')
                 current_keyboard = 'none'
+            elif msg['text'] == 'Record':
+                if Recording == False:
+                    fursuitbot.sendMessage(chat_id, '>>>Started recording...\nPress "Stop recording" to stop')
+                    Recording = True
+                else:
+                    fursuitbot.sendMessage(chat_id, 'I am already recording something!')
+            elif msg['text'] == 'Stop recording':
+                if Recording == True:
+                    fursuitbot.sendMessage(chat_id, '>>>Stopped recording')
+                    fursuitbot.sendMessage(chat_id, '>>>Sending recorded footage...')
+                    fursuitbot.sendchatAction(chat_id, 'upload_video')
+                    fursuitbot.sendVideo(chat_id, open('recorded.mp4', 'rb'))
+                    os.remove('recorded.mp4')
+                    Recording = False
+                else:
+                    fursuitbot.sendMessage(chat_id, 'I am not recording anything!')
             elif msg['text'] == 'Reboot':
                 if chat_id==mekhyID:
                     fursuitbot.sendMessage(chat_id, '>>>System Reboot initiated.....')
@@ -144,7 +161,7 @@ def handle(msg):
         elif content_type in ['photo', 'document', 'sticker', 'video_note', 'video', 'voice', 'location', 'contact', 'venue', 'contact', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
             fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret that kind of input.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop sound")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop sound")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Record"), KeyboardButton(text="Stop recording")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
             fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])

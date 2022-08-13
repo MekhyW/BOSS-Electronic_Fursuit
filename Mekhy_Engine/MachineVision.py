@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
 import math
+downscaled_resolution = (800, 448)
 cap = cv2.VideoCapture(0)
+writer = cv2.VideoWriter('recorded.mp4', cv2.VideoWriter_fourcc(*'DIVX'), 30, downscaled_resolution)
 target_point_x = 0 #mm
 target_point_y = 0 #mm
 target_point_z = math.inf #mm
@@ -41,7 +43,7 @@ def unwrap_detection(input_image, output_data):
 
 def getCameraFrame():
     ret, frame = cap.read()
-    frame = cv2.resize(frame, (800, 448))
+    frame = cv2.resize(frame, downscaled_resolution)
     cv2.waitKey(1)
     return frame
 
@@ -59,11 +61,13 @@ def xyFormula(depth, normalized_x, normalized_y, frame_width, frame_height):
     y = depth * math.tan(math.radians(beta)) - distance_from_sensor_to_displays
     return x, y
 
-def calculateTargetPoint():
+def calculateTargetPoint(Recording):
     global target_point_x
     global target_point_y
     global target_point_z
     frame = getCameraFrame()
+    if Recording:
+        writer.write(frame)
     blob = cv2.dnn.blobFromImage(frame, 1/255, (640, 640), crop=False, swapRB=True)
     net.setInput(blob)
     predictions = net.forward()
