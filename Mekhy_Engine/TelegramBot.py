@@ -23,6 +23,7 @@ if updates:
 fursuitbot.sendMessage(mekhyID, 'I am online')
 
 def SetExpression(fursuitbot, chat_id, msg):
+    global ExpressionState
     if msg['text'] == 'Neutral':
         ExpressionState = 0
     elif msg['text'] == '😡':
