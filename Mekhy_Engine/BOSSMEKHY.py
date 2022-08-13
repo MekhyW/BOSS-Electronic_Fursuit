@@ -24,7 +24,7 @@ def machine_vision_thread():
 
 def display_thread():
     while True:
-        Displays.GraphicsRefresh(TelegramBot.ExpressionState)
+        Displays.GraphicsRefresh(TelegramBot.ExpressionState, (MachineVision.target_point_x, MachineVision.target_point_y, MachineVision.target_point_z))
 
 def ros_thread():
     while True:
