@@ -81,8 +81,10 @@ def TTS(fursuitbot, chat_id, msg):
 
 def PlayAudioFile(fursuitbot, chat_id, msg):
     fursuitbot.sendMessage(chat_id, '>>>Audio Received!')
-    f = requests.get("https://api.telegram.org/bot{}/getFile?file_id={}".format(Token, msg['audio']['file_id'])).text
-    file_path = f.split(",")[4].split(":")[1].replace('"', '').replace('}', '')
+    if 'audio' in msg:
+        file_path = fursuitbot.getFile(msg['audio']['file_id'])['file_path']
+    else:
+        file_path = fursuitbot.getFile(msg['voice']['file_id'])['file_path']
     file_name = file_path.split("/")[1]
     r = requests.get("https://api.telegram.org/file/bot{}/{}".format(Token, file_path), allow_redirects=True)
     open(file_name, 'wb').write(r.content)
@@ -156,9 +158,9 @@ def handle(msg):
                 JackClient.JackVoicemodRoute(msg['text'])
             elif msg['text'] == '⬅️(Back to commands)':
                 current_keyboard = 'Main'
-        elif content_type == 'audio':
+        elif content_type in ['audio', 'voice']:
             PlayAudioFile(fursuitbot, chat_id, msg)
-        elif content_type in ['photo', 'document', 'sticker', 'video_note', 'video', 'voice', 'location', 'contact', 'venue', 'contact', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
+        elif content_type in ['photo', 'document', 'sticker', 'video_note', 'video', 'location', 'contact', 'venue', 'contact', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
             fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret that kind of input.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop sound")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Record"), KeyboardButton(text="Stop recording")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
