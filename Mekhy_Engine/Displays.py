@@ -3,7 +3,7 @@ gi.require_version('Wnck', '3.0')
 from gi.repository import Wnck
 import numpy as np
 import cv2
-import math
+import math, os
 display_height = 480
 display_width = 800
 display_rotation = 30
@@ -18,6 +18,7 @@ eye_happy = cv2.imread('../Eyes/eye_happy.png', cv2.COLOR_BGR2RGB)
 mask_neutral = cv2.imread('../Eyes/mask.png', cv2.COLOR_BGR2RGB)
 mask_sad = cv2.imread('../Eyes/mask_sad.png', cv2.COLOR_BGR2RGB)
 mask_happy = cv2.imread('../Eyes/mask_happy.png', cv2.COLOR_BGR2RGB)
+playingvideo = False
 
 def map(value, leftMin, leftMax, rightMin, rightMax):
     leftSpan = leftMax - leftMin
@@ -76,12 +77,27 @@ def composeFrame(expression, target_position):
     print(frame.shape)
     return frame
 
+def PlayVideo(file_name):
+    global playingvideo
+    playingvideo = True
+    cap = cv2.VideoCapture(file_name)
+    while(cap.isOpened() and playingvideo):
+        ret, frame = cap.read()
+        if ret:
+            cv2.imshow('Eyes', frame)
+        else:
+            break
+    cap.release()
+    os.remove(file_name)
+    playingvideo = False
+
 def GraphicsRefresh(expression, target_position):
-    cv2.imshow('Eyes', composeFrame(expression, target_position))
+    if not playingvideo:
+        cv2.imshow('Eyes', composeFrame(expression, target_position))
     screen = Wnck.Screen.get_default()
     screen.force_update()
     for window in screen.get_windows():
-        if "Eye" in window.get_name():
+        if "Eyes" in window.get_name():
             window.maximize()
         elif "Terminal" in window.get_name():
             window.minimize()

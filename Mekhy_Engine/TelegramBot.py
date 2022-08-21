@@ -1,4 +1,5 @@
 import SoundEffects
+import Displays
 import JackClient
 import telepot
 from telepot.loop import MessageLoop
@@ -79,6 +80,23 @@ def TTS(fursuitbot, chat_id, msg):
     gTTS(text=msgToSpeak, lang=language, slow=False).save(filename)
     SoundEffects.PlayOnDemand(filename)
 
+def PlayVideoFile(fursuitbot, chat_id, msg):
+    fursuitbot.sendMessage(chat_id, '>>>Visual Received!')
+    if 'video' in msg:
+        file_path = fursuitbot.getFile(msg['video']['file_id'])['file_path']
+    else:
+        file_path = fursuitbot.getFile(msg['photo'][0]['file_id'])['file_path']
+    file_name = file_path.split("/")[1]
+    r = requests.get("https://api.telegram.org/file/bot{}/{}".format(Token, file_path), allow_redirects=True)
+    open(file_name, 'wb').write(r.content)
+    if 'video' in msg:
+        SoundEffects.PlayOnDemand(file_name)
+        Displays.PlayVideo(file_name)
+    else:
+        subprocess.call(["ffmpeg", "-loop", "1", "-i", file_name, "-c:v", "libx264", "-t", "15", "-pix_fmt", "yuv420p", "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2", "out.mp4"])
+        Displays.PlayVideo("out.mp4")
+    fursuitbot.sendMessage(chat_id, ">>>Playing.....\n\nUse 'Stop Media' to make me stop òwó")
+
 def PlayAudioFile(fursuitbot, chat_id, msg):
     fursuitbot.sendMessage(chat_id, '>>>Audio Received!')
     if 'audio' in msg:
@@ -89,7 +107,7 @@ def PlayAudioFile(fursuitbot, chat_id, msg):
     r = requests.get("https://api.telegram.org/file/bot{}/{}".format(Token, file_path), allow_redirects=True)
     open(file_name, 'wb').write(r.content)
     SoundEffects.PlayOnDemand(file_name)
-    fursuitbot.sendMessage(chat_id, '>>>Playing.....\n\nInvoke /stopsound to make me stop òwó')
+    fursuitbot.sendMessage(chat_id, ">>>Playing.....\n\nUse 'Stop Media' to make me stop òwó")
 
 def handle(msg):
     try:
@@ -144,9 +162,10 @@ def handle(msg):
                     fursuitbot.sendMessage(chat_id, 'Suit active for: {} Hours + {} Minutes'.format(int(math.floor(s/3600)), str((s - (3600 * math.floor(s/3600)))/60)[:4]))
                 else:
                     fursuitbot.sendMessage(chat_id, 'Suit active for: {} Minutes'.format(str(s/60)[:4]))
-            elif msg['text'] == 'Stop sound':
+            elif msg['text'] == 'Stop Media':
                 fursuitbot.sendMessage(chat_id, '>>>OK')
                 SoundEffects.StopSound()
+                Displays.playingvideo = False
             elif msg['text'] == 'Set Mood':
                 current_keyboard = 'Choose Mood'
             elif msg['text'] in ['Neutral', '😡', 'Zzz', '😢', '😊', '>w<', '?w?', '😱', '🤪', '😍', 'Hypno 🌈']:
@@ -160,10 +179,12 @@ def handle(msg):
                 current_keyboard = 'Main'
         elif content_type in ['audio', 'voice']:
             PlayAudioFile(fursuitbot, chat_id, msg)
-        elif content_type in ['photo', 'document', 'sticker', 'video_note', 'video', 'location', 'contact', 'venue', 'contact', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
+        elif content_type in ['video', 'photo']:
+            PlayVideoFile(fursuitbot, chat_id, msg)
+        elif content_type in ['document', 'sticker', 'video_note', 'location', 'contact', 'venue', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
             fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret that kind of input.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop sound")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Record"), KeyboardButton(text="Stop recording")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Record"), KeyboardButton(text="Stop recording")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
             fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
