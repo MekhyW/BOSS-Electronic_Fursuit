@@ -4,7 +4,7 @@ pygame.mixer.init()
 pygame.init()
 
 def PlayBootSound():
-    pygame.mixer.Sound('sfx_WINDOWSXPBOOT.wav').play()
+    pygame.mixer.Sound('resources/sfx_WINDOWSXPBOOT.wav').play()
 
 def StopSound():
     pygame.mixer.music.stop()
