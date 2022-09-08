@@ -5,9 +5,9 @@
 #define LED_COUNT 64
 Adafruit_NeoPixel GearsStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 int Color_Brightness = 25;
-int8[64] Red;
-int8[64] Green;
-int8[64] Blue;
+int8[LED_COUNT] Red;
+int8[LED_COUNT] Green;
+int8[LED_COUNT] Blue;
 
 void redCallback(const std_msgs::Int8MultiArray& msg)
 {
