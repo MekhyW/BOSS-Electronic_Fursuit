@@ -5,9 +5,10 @@ import VoiceAnalyser
 import Displays
 import SoundEffects
 import MachineVision
+import Leds
 import os
 import rospy
-from std_msgs.msg import UInt16, float32
+from std_msgs.msg import UInt16, float32, Int8MultiArray
 import threading
 import math
 
@@ -17,6 +18,9 @@ os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyA
 rospy.init_node('BOSSMEKHY')
 expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
 voice_pub = rospy.Publisher('/voice_volume', float32, queue_size=10)
+led_red_pub = rospy.Publisher('/led_red', Int8MultiArray, queue_size=10)
+led_green_pub = rospy.Publisher('/led_green', Int8MultiArray, queue_size=10)
+led_blue_pub = rospy.Publisher('/led_blue', Int8MultiArray, queue_size=10)
 
 def machine_vision_thread():
     while True:
@@ -31,6 +35,9 @@ def ros_thread():
         try:
             expression_pub.publish(TelegramBot.ExpressionState)
             voice_pub.publish(VoiceAnalyser.getVolume())
+            led_red_pub.publish(Leds.led_red)
+            led_green_pub.publish(Leds.led_green)
+            led_blue_pub.publish(Leds.led_blue)
         except Exception as e:
             print(e)
         finally:
