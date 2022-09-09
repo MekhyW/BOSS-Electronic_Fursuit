@@ -2,7 +2,7 @@
 #include <ros.h>
 #include <std_msgs/Int8MultiArray.h>
 #define LED_PIN 39
-#define LED_COUNT 64
+#define LED_COUNT 256
 Adafruit_NeoPixel GearsStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 int Color_Brightness = 25;
 int8[LED_COUNT] Red;
