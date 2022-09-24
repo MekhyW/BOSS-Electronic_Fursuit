@@ -30,24 +30,20 @@ def SetExpression(fursuitbot, chat_id, msg):
         ExpressionState = 0
     elif msg['text'] == '😡':
         ExpressionState = 1
-    elif msg['text'] == 'Zzz':
+    elif msg['text'] == '😒':
         ExpressionState = 2
     elif msg['text'] == '😢':
         ExpressionState = 3
     elif msg['text'] == '😊':
         ExpressionState = 4
-    elif msg['text'] == '>w<':
-        ExpressionState = 5
-    elif msg['text'] == '?w?':
-        ExpressionState = 6
     elif msg['text'] == '😱':
-        ExpressionState = 7
-    elif msg['text'] == '🤪':
-        ExpressionState = 8
+        ExpressionState = 5
     elif msg['text'] == '😍':
-        ExpressionState = 9
+        ExpressionState = 6
     elif msg['text'] == 'Hypno 🌈':
-        ExpressionState = 10
+        ExpressionState = 7
+    elif msg['text'] == '😏':
+        ExpressionState = 8
     fursuitbot.sendMessage(chat_id, '>>>Mood Set to: {}'.format(msg['text']))
 
 def PlaySongName(fursuitbot, chat_id, msg):
@@ -168,7 +164,7 @@ def handle(msg):
                 Displays.playingvideo = False
             elif msg['text'] == 'Set Mood':
                 current_keyboard = 'Choose Mood'
-            elif msg['text'] in ['Neutral', '😡', 'Zzz', '😢', '😊', '>w<', '?w?', '😱', '🤪', '😍', 'Hypno 🌈']:
+            elif msg['text'] in ['Neutral', '😡', '😒', '😢', '😊', '😱', '😍', 'Hypno 🌈', '😏']:
                 SetExpression(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Change Voice':
                 current_keyboard = 'Choose Voice'
@@ -187,7 +183,7 @@ def handle(msg):
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Record"), KeyboardButton(text="Stop recording")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
             fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="Zzz"), KeyboardButton(text="😊"), KeyboardButton(text=">w<"), KeyboardButton(text="?w?")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="🤪"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="😒"), KeyboardButton(text="😊"), KeyboardButton(text="😏")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
             fursuitbot.sendMessage(chat_id, '>>>Which mood?', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Voice':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Mekhy")], [KeyboardButton(text="Clear")], [KeyboardButton(text="Mute")]])
