@@ -30,6 +30,10 @@ def display_thread():
     while True:
         Displays.GraphicsRefresh(TelegramBot.ExpressionState, (MachineVision.target_point_x, MachineVision.target_point_y, MachineVision.target_point_z))
 
+def leds_thread():
+    while True:
+        Leds.update_leds_video()
+
 def ros_thread():
     while True:
         try:
@@ -48,8 +52,10 @@ JackClient.JackVoicemodRoute("Clear")
 if WiFi.ConnectWifi():
     TelegramBot.StartBot()
 machine_vision_thread = threading.Thread(target=machine_vision_thread)
-machine_vision_thread.start()
 display_thread = threading.Thread(target=display_thread)
-display_thread.start()
+leds_thread = threading.Thread(target=leds_thread)
 ros_thread = threading.Thread(target=ros_thread)
+machine_vision_thread.start()
+display_thread.start()
+leds_thread.start()
 ros_thread.start()
