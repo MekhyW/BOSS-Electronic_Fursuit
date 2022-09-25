@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="meEQKwicSAwc1KFZT5nb" name="Page-1">
-        <mxGraphModel dx="367" dy="337" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#000000" math="0" shadow="1">
+        <mxGraphModel dx="371" dy="383" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#000000" math="0" shadow="1">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -40,7 +40,7 @@
                         <mxPoint x="27.680000000000007" y="677.63" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="Ozhnao1Kgd7wMi6BiEIW-4" value="Digitigrade Bodysuit structure (DOUBLE-SIZED LIMBS+PAWS)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
+                <mxCell id="Ozhnao1Kgd7wMi6BiEIW-4" value="Digitigrade Bodysuit structure (DOUBLE-SIZED LIMBS+PAWS, dropped crotch)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
                     <mxGeometry x="276.38" y="959.25" width="128" height="65" as="geometry"/>
                 </mxCell>
                 <mxCell id="DGbpkix3uCbMqAGdI3nw-13" value="Lab Coat Prop" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
@@ -123,18 +123,6 @@
                 </mxCell>
                 <mxCell id="SpIbLsfifqnd3sB7QlT--1" value="Magnetic Glasses" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
                     <mxGeometry x="419.01" y="47.000000000000014" width="95.98" height="46" as="geometry"/>
-                </mxCell>
-                <mxCell id="LMGvcSsd6-tG-FGanWij-3" value="Butt Padding" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="169.63" y="969.75" width="104" height="44" as="geometry"/>
-                </mxCell>
-                <mxCell id="d0vmk9wZkhKShE1cy558-1" value="" style="endArrow=none;dashed=1;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="EwRE9bhfaP1bS0f3p2Km-1" target="d0vmk9wZkhKShE1cy558-2" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="761.73" y="234.37" as="sourcePoint"/>
-                        <mxPoint x="684.73" y="259.37" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="d0vmk9wZkhKShE1cy558-2" value="Balaclava" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="679.24" y="239.68" width="67" height="29" as="geometry"/>
                 </mxCell>
                 <mxCell id="3" value="MG996R Servo LP" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000066;" parent="1" vertex="1">
                     <mxGeometry x="663.0000000000002" y="432.53" width="63" height="34" as="geometry"/>
@@ -220,15 +208,6 @@
                         <mxPoint x="376" y="642" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="32" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="33" target="EwRE9bhfaP1bS0f3p2Km-1" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="438.87" y="198" as="sourcePoint"/>
-                        <mxPoint x="497.87" y="198" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="33" value="G5 insufilm-tinted acryllic shields for vision" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="371" y="230" width="120" height="48.37" as="geometry"/>
-                </mxCell>
                 <mxCell id="38" value="" style="endArrow=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="16" target="MiqG1OLB_oiA9NUDDggW-14" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="505" y="529" as="sourcePoint"/>
@@ -312,6 +291,12 @@
                         <mxPoint x="236" y="668" as="sourcePoint"/>
                         <mxPoint x="286" y="618" as="targetPoint"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="58" value="Long fur" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="169.63" y="972" width="104" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="60" value="Airbrushed head details" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="418.31000000000006" y="161" width="101.63" height="51.63" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
