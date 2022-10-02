@@ -5,8 +5,8 @@ display_width = 800
 display_rotation = 30
 left_eye_center = (340, 210)
 right_eye_center = (1125, 210)
-eye = cv2.imread('eye_neutral.png', cv2.COLOR_BGR2RGB)
-mask = cv2.VideoCapture('MASK_TEST.mp4')
+eye = cv2.imread('eye_sexy.png', cv2.COLOR_BGR2RGB)
+mask = cv2.VideoCapture('mask_sexy.mp4')
 
 def composeEyes(frame, leftpos, rightpos):
     eyes = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8)
@@ -38,7 +38,8 @@ def rotateFrame(frame):
 def composeFrame(mask):
     frame = mask.copy()
     eyes = composeEyes(frame, left_eye_center, right_eye_center)
-    frame[np.where((frame == [255, 255, 255]).all(axis = 2))] = eyes[np.where((frame == [255, 255, 255]).all(axis = 2))]
+    whiteregion = np.where((frame > 240).all(axis = 2))
+    frame[whiteregion] = eyes[whiteregion]
     #frame = rotateFrame(frame)
     print(frame.shape)
     return frame

@@ -21,6 +21,7 @@ eye_disgusted = cv2.imread('../Eyes/eye_disgusted.png', cv2.COLOR_BGR2RGB)
 eye_heart = cv2.imread('../Eyes/eye_heart.png', cv2.COLOR_BGR2RGB)
 eye_hypnotic = cv2.imread('../Eyes/eye_hypnotic.png', cv2.COLOR_BGR2RGB)
 eye_sexy = cv2.imread('../Eyes/eye_sexy.png', cv2.COLOR_BGR2RGB)
+eye_demonic = cv2.imread('../Eyes/eye_demonic.png', cv2.COLOR_BGR2RGB)
 mask_neutral = cv2.VideoCapture('../Eyes/mask_neutral.mp4')
 mask_sad = cv2.VideoCapture('../Eyes/mask_sad.mp4')
 mask_happy = cv2.VideoCapture('../Eyes/mask_happy.mp4')
@@ -30,6 +31,7 @@ mask_disgusted = cv2.VideoCapture('../Eyes/mask_disgusted.mp4')
 mask_heart = cv2.VideoCapture('../Eyes/mask_heart.mp4')
 mask_hypnotic = cv2.VideoCapture('../Eyes/mask_hypnotic.mp4')
 mask_sexy = cv2.VideoCapture('../Eyes/mask_sexy.mp4')
+mask_demonic = cv2.VideoCapture('../Eyes/mask_demonic.mp4')
 playingvideo = False
 
 def map(value, leftMin, leftMax, rightMin, rightMax):
@@ -75,7 +77,8 @@ def rotateFrame(frame):
 def composeFrame(eye, mask, target_position):
     frame = mask.copy()
     eyes = composeEyes(eye, mask, target_position)
-    frame[np.where((frame == [255, 255, 255]).all(axis = 2))] = eyes[np.where((frame == [255, 255, 255]).all(axis = 2))]
+    whiteregion = np.where((frame > 240).all(axis = 2))
+    frame[whiteregion] = eyes[whiteregion]
     frame = rotateFrame(frame)
     print(frame.shape)
     return frame
@@ -122,6 +125,9 @@ def GraphicsRefresh(expression, target_position):
     elif expression == 8:
         eye = eye_sexy
         mask = mask_sexy
+    elif expression == 9:
+        eye = eye_demonic
+        mask = mask_demonic
     if not playingvideo:
         ret, frame = mask.read()
         if ret:
