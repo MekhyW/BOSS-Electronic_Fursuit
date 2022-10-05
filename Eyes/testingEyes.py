@@ -3,10 +3,10 @@ import numpy as np
 display_height = 480
 display_width = 800
 display_rotation = 30
-left_eye_center = (340, 210)
-right_eye_center = (1125, 210)
-eye = cv2.imread('eye_sexy.png', cv2.COLOR_BGR2RGB)
-mask = cv2.VideoCapture('mask_sexy.mp4')
+left_eye_center = (150, 97)
+right_eye_center = (552, 97)
+eye = cv2.imread('eye_scared.png', cv2.COLOR_BGR2RGB)
+mask = cv2.VideoCapture('mask_scared.mp4')
 
 def composeEyes(frame, leftpos, rightpos):
     eyes = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8)
@@ -38,9 +38,9 @@ def rotateFrame(frame):
 def composeFrame(mask):
     frame = mask.copy()
     eyes = composeEyes(frame, left_eye_center, right_eye_center)
-    whiteregion = np.where((frame > 240).all(axis = 2))
+    whiteregion = np.where((frame > 125).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
-    #frame = rotateFrame(frame)
+    frame = rotateFrame(frame)
     print(frame.shape)
     return frame
 
