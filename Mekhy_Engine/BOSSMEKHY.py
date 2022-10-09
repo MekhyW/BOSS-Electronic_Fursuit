@@ -10,7 +10,6 @@ import os
 import rospy
 from std_msgs.msg import UInt16, float32, Int8MultiArray
 import threading
-import math
 
 os.system("lxterminal -e roscore")
 os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200")
@@ -24,11 +23,11 @@ led_blue_pub = rospy.Publisher('/led_blue', Int8MultiArray, queue_size=10)
 
 def machine_vision_thread():
     while True:
-        MachineVision.calculateTargetPoint(TelegramBot.Recording)
+        MachineVision.FacialRecognition()
 
 def display_thread():
     while True:
-        Displays.GraphicsRefresh(TelegramBot.ExpressionState, (MachineVision.target_point_x, MachineVision.target_point_y, MachineVision.target_point_z))
+        Displays.GraphicsRefresh(TelegramBot.ExpressionState, MachineVision.left_eye_center, MachineVision.right_eye_center)
 
 def leds_thread():
     while True:

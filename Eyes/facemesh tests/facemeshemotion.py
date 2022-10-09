@@ -1,127 +1,132 @@
-import silence_tensorflow.auto
-from tensorflow.compat.v1 import ConfigProto
-from tensorflow.compat.v1 import InteractiveSession
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image as img_keras
-from collections import deque
-import mediapipe as mp
+import tensorflow as tf
 import numpy as np
 import cv2
+import mediapipe as mp
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers.experimental.preprocessing import Rescaling
+from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
+from tensorflow.keras.layers import BatchNormalization
+from tensorflow.keras.losses import categorical_crossentropy
+from tensorflow.keras.optimizers import Adam
 
+emotions = {
+    0: ['Angry', (0,0,255), (255,255,255)],
+    1: ['Disgust', (0,102,0), (255,255,255)],
+    2: ['Fear', (255,255,153), (0,51,51)],
+    3: ['Happy', (153,0,153), (255,255,255)],
+    4: ['Sad', (255,0,0), (255,255,255)],
+    5: ['Surprise', (0,255,0), (255,255,255)],
+    6: ['Neutral', (160,160,160), (255,255,255)]
+}
+num_classes = len(emotions)
+input_shape = (48, 48, 1)
+weights_1 = 'vggnet.h5'
+weights_2 = 'vggnet_up.h5'
 
-config = ConfigProto()
-config.gpu_options.allow_growth = True
-session = InteractiveSession(config=config)
+class VGGNet(Sequential):
+    def __init__(self, input_shape, num_classes, checkpoint_path, lr=1e-3):
+        super().__init__()
+        self.add(Rescaling(1./255, input_shape=input_shape))
+        self.add(Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal'))
+        self.add(BatchNormalization())
+        self.add(Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(MaxPool2D())
+        self.add(Dropout(0.5))
+        self.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(MaxPool2D())
+        self.add(Dropout(0.4))
+        self.add(Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(MaxPool2D())
+        self.add(Dropout(0.5))
+        self.add(Conv2D(512, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(Conv2D(512, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(MaxPool2D())
+        self.add(Dropout(0.4))
+        self.add(Flatten())
+        self.add(Dense(1024, activation='relu'))
+        self.add(Dropout(0.5))
+        self.add(Dense(256, activation='relu'))
+        self.add(Dense(num_classes, activation='softmax'))
+        self.compile(optimizer=Adam(learning_rate=lr),
+                    loss=categorical_crossentropy,
+                    metrics=['accuracy'])
+        self.checkpoint_path = checkpoint_path
 
+model_1 = VGGNet(input_shape, num_classes, weights_1)
+model_2 = VGGNet(input_shape, num_classes, weights_2)
+model_1.load_weights(model_1.checkpoint_path)
+model_2.load_weights(model_2.checkpoint_path)
 
+mp_face_detection = mp.solutions.face_detection
 mp_drawing = mp.solutions.drawing_utils
-mp_face_mesh = mp.solutions.face_mesh
-Q = deque(maxlen=10)
-writer = None
+face_detection = mp_face_detection.FaceDetection(min_detection_confidence=0.5)
 
-# parameters for loading data and images
-emotions = ("Angry", "Disgusted", "Feared", "Happy", "Sad", "Surprise", "Neutral")
-emotion_model_path = 'emotiondetect.hdf5'
-out_video_path = 'output/video.avi'
+def detection_preprocessing(image, h_max=360):
+    h, w, _ = image.shape
+    if h > h_max:
+        ratio = h_max / h
+        w_ = int(w * ratio)
+        image = cv2.resize(image, (w_,h_max))
+    return image
 
-# loading models
-model = load_model(emotion_model_path, compile=False)
+def resize_face(face):
+    x = tf.expand_dims(tf.convert_to_tensor(face), axis=2)
+    return tf.image.resize(x, (48,48))
 
+def recognition_preprocessing(faces):
+    x = tf.convert_to_tensor([resize_face(f) for f in faces])
+    return x
 
-# For webcam input:
-drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
+def inference(image):
+    H, W, _ = image.shape
+    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    results = face_detection.process(rgb_image)
+    if results.detections:
+        faces = []
+        pos = []
+        for detection in results.detections:
+            box = detection.location_data.relative_bounding_box
+            x = int(box.xmin * W)
+            y = int(box.ymin * H)
+            w = int(box.width * W)
+            h = int(box.height * H)
+            x1 = max(0, x)
+            y1 = max(0, y)
+            x2 = min(x + w, W)
+            y2 = min(y + h, H)
+            face = image[y1:y2,x1:x2]
+            face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+            faces.append(face)
+            pos.append((x1, y1, x2, y2))
+        x = recognition_preprocessing(faces)
+        y_1 = model_1.predict(x)
+        y_2 = model_2.predict(x)
+        l = np.argmax(y_1+y_2, axis=1)
+        for i in range(len(faces)):
+            cv2.rectangle(image, (pos[i][0],pos[i][1]),
+                            (pos[i][2],pos[i][3]), emotions[l[i]][1], 2, lineType=cv2.LINE_AA)
+            cv2.rectangle(image, (pos[i][0],pos[i][1]-20),
+                            (pos[i][2]+20,pos[i][1]), emotions[l[i]][1], -1, lineType=cv2.LINE_AA)
+            cv2.putText(image, f'{emotions[l[i]][0]}', (pos[i][0],pos[i][1]-5),
+                            0, 0.6, emotions[l[i]][2], 2, lineType=cv2.LINE_AA)
+    return image
+
 cap = cv2.VideoCapture(0)
-
-
-with mp_face_mesh.FaceMesh(
-    min_detection_confidence=0.5,
-    min_tracking_confidence=0.5) as face_mesh:
-    
-    while cap.isOpened():
-        success, image = cap.read()
-        
-        if not success:
-            print("Ignoring empty camera frame.")
-            # If loading a video, use 'break' instead of 'continue'.
-            continue
-
-        # Flip the image horizontally for a later selfie-view display, and convert
-        # the BGR image to RGB.
-        image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
-        # To improve performance, optionally mark the image as not writeable to
-        # pass by reference.
-        image.flags.writeable = False
-        results = face_mesh.process(image)
-
-        # Draw the face mesh annotations on the image.
-        image.flags.writeable = True
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-        
-        if results.multi_face_landmarks:
-            
-            for face_landmarks in results.multi_face_landmarks:
-                mp_drawing.draw_landmarks(
-                    image=image,
-                    landmark_list=face_landmarks,
-                    connections=mp_face_mesh.FACEMESH_CONTOURS,
-                    landmark_drawing_spec=drawing_spec,
-                    connection_drawing_spec=drawing_spec)
-                
-                
-                h, w, c = image.shape
-                cx_min=  w
-                cy_min = h
-                cx_max= cy_max= 0
-                for id, lm in enumerate(face_landmarks.landmark):
-                    cx, cy = int(lm.x * w), int(lm.y * h)
-                    if cx<cx_min:
-                        cx_min=cx
-                    if cy<cy_min:
-                        cy_min=cy
-                    if cx>cx_max:
-                        cx_max=cx
-                    if cy>cy_max:
-                        cy_max=cy
-                        
-                # crop detected face
-                detected_face = image[int(cy_min):int(cy_max), int(cx_min):int(cx_max)]
-                detected_face = cv2.cvtColor(
-                    detected_face, cv2.COLOR_BGR2GRAY)  # transform to gray scale
-                detected_face = cv2.resize(detected_face, (64, 64))
-
-                img_pixels = img_keras.img_to_array(detected_face)
-                img_pixels = np.expand_dims(img_pixels, axis=0)
-
-                # pixels are in scale of [0, 255]. normalize all pixels in scale of [0, 1]
-                img_pixels /= 255
-
-                # store probabilities of 7 expressions
-                emotion = model.predict(img_pixels)[0]
-                Q.append(emotion)
-                
-                # perform prediction averaging over the current history of previous predictions
-                results = np.array(Q).mean(axis=0)
-                i = np.argmax(results)
-                label = emotions[i]
-
-                # write emotion text above rectangle
-                cv2.putText(image, label, (cx_min, cy_min),cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-                cv2.rectangle(image, (cx_min, cy_min), (cx_max, cy_max), (0, 255, 0), 2)
-                #cv2.circle(image, ((cx_min+cx_max)//2, (cy_min+cy_max)//2), 100, (0, 255, 0), 2)
-                               
-        # check if the video writer is None
-        if writer is None:
-            # initialize our video writer
-            h, w, c = image.shape
-            fourcc = cv2.VideoWriter_fourcc('D', 'I', 'V', 'X')
-            writer = cv2.VideoWriter(out_video_path, fourcc, 20, (w, h), True)
-
-        # write the output frame to disk
-        writer.write(image)
-            
-        cv2.imshow('MediaPipe FaceMesh', image)
-        if cv2.waitKey(5) & 0xFF == 27:
-            break
-  
-cap.release()
+while cap.isOpened():
+    ret, frame = cap.read()
+    if not ret:
+        break
+    frame = detection_preprocessing(frame)
+    frame = inference(frame)
+    cv2.imshow('frame', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break

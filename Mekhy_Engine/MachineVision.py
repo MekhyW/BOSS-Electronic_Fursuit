@@ -1,92 +1,147 @@
-import cv2
+import tensorflow as tf
 import numpy as np
-import math
-downscaled_resolution = (800, 448)
+import cv2
+import mediapipe as mp
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers.experimental.preprocessing import Rescaling
+from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
+from tensorflow.keras.layers import BatchNormalization
+from tensorflow.keras.losses import categorical_crossentropy
+from tensorflow.keras.optimizers import Adam
 cap = cv2.VideoCapture(0)
-writer = cv2.VideoWriter('recorded.mp4', cv2.VideoWriter_fourcc(*'DIVX'), 30, downscaled_resolution)
-target_point_x = 0 #mm
-target_point_y = 0 #mm
-target_point_z = math.inf #mm
-net = cv2.dnn.readNet("resources/best.onnx")
-avg_height_fursuit_head = 305
-avg_height_human_head = 250
-focal_length = 3.67
-field_of_view = 78
-distance_from_sensor_to_displays = 300
+mp_face_detection = mp.solutions.face_detection
+mp_face_mesh = mp.solutions.face_mesh
+mp_drawing = mp.solutions.drawing_utils
+drawSpec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
+face_detection = mp_face_detection.FaceDetection(min_detection_confidence=0.5)
+face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
-def unwrap_detection(input_image, output_data):
-    class_ids = []
-    confidences = []
-    boxes = []
-    rows = output_data.shape[0]
-    image_width, image_height, _ = input_image.shape
-    x_factor = image_width / 640
-    y_factor =  image_height / 640
-    for r in range(rows):
-        row = output_data[r]
-        confidence = row[4]
-        if confidence >= 0.5:
-            classes_scores = row[5:]
-            _, _, _, max_indx = cv2.minMaxLoc(classes_scores)
-            class_id = max_indx[1]
-            if (classes_scores[class_id] > .25):
-                confidences.append(confidence)
-                class_ids.append(class_id)
-                x, y, w, h = row[0].item(), row[1].item(), row[2].item(), row[3].item() 
-                left = int((x - 0.5 * w) * x_factor)
-                top = int((y - 0.5 * h) * y_factor)
-                width = int(w * x_factor)
-                height = int(h * y_factor)
-                box = np.array([left, top, width, height])
-                boxes.append(box)
-    return class_ids, confidences, boxes
+LEFT_EYE = [362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385,384, 398]
+RIGHT_EYE= [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161 , 246] 
+LEFT_IRIS = [474,475, 476, 477]
+RIGHT_IRIS = [469, 470, 471, 472]
 
-def getCameraFrame():
-    ret, frame = cap.read()
-    frame = cv2.resize(frame, downscaled_resolution)
-    cv2.waitKey(1)
+emotions = {
+    0: ['Angry', (0,0,255), (255,255,255)],
+    1: ['Disgust', (0,102,0), (255,255,255)],
+    2: ['Fear', (255,255,153), (0,51,51)],
+    3: ['Happy', (153,0,153), (255,255,255)],
+    4: ['Sad', (255,0,0), (255,255,255)],
+    5: ['Surprise', (0,255,0), (255,255,255)],
+    6: ['Neutral', (160,160,160), (255,255,255)]
+}
+num_classes = len(emotions)
+input_shape = (48, 48, 1)
+weights_1 = 'resources/vggnet.h5'
+weights_2 = 'resources/vggnet_up.h5'
+
+class VGGNet(Sequential):
+    def __init__(self, input_shape, num_classes, checkpoint_path, lr=1e-3):
+        super().__init__()
+        self.add(Rescaling(1./255, input_shape=input_shape))
+        self.add(Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal'))
+        self.add(BatchNormalization())
+        self.add(Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(MaxPool2D())
+        self.add(Dropout(0.5))
+        self.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(MaxPool2D())
+        self.add(Dropout(0.4))
+        self.add(Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(MaxPool2D())
+        self.add(Dropout(0.5))
+        self.add(Conv2D(512, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(Conv2D(512, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
+        self.add(BatchNormalization())
+        self.add(MaxPool2D())
+        self.add(Dropout(0.4))
+        self.add(Flatten())
+        self.add(Dense(1024, activation='relu'))
+        self.add(Dropout(0.5))
+        self.add(Dense(256, activation='relu'))
+        self.add(Dense(num_classes, activation='softmax'))
+        self.compile(optimizer=Adam(learning_rate=lr),
+                    loss=categorical_crossentropy,
+                    metrics=['accuracy'])
+        self.checkpoint_path = checkpoint_path
+
+def detection_preprocessing(image, h_max=360):
+    h, w, _ = image.shape
+    if h > h_max:
+        ratio = h_max / h
+        w_ = int(w * ratio)
+        image = cv2.resize(image, (w_,h_max))
+    return image
+
+def resize_face(face):
+    x = tf.expand_dims(tf.convert_to_tensor(face), axis=2)
+    return tf.image.resize(x, (48,48))
+
+def recognition_preprocessing(faces):
+    x = tf.convert_to_tensor([resize_face(f) for f in faces])
+    return x
+
+def inference(image):
+    frame = image.copy()
+    H, W, _ = frame.shape
+    rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = face_detection.process(rgb_image)
+    results_mesh = face_mesh.process(rgb_image)
+    if results.detections:
+        faces = []
+        pos = []
+        for detection in results.detections:
+            box = detection.location_data.relative_bounding_box
+            x = int(box.xmin * W)
+            y = int(box.ymin * H)
+            w = int(box.width * W)
+            h = int(box.height * H)
+            x1 = max(0, x)
+            y1 = max(0, y)
+            x2 = min(x + w, W)
+            y2 = min(y + h, H)
+            face = image[y1:y2,x1:x2]
+            face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+            faces.append(face)
+            pos.append((x1, y1, x2, y2))
+        x = recognition_preprocessing(faces)
+        y_1 = model_1.predict(x)
+        y_2 = model_2.predict(x)
+        l = np.argmax(y_1+y_2, axis=1)
+        for i in range(len(faces)):
+            cv2.rectangle(frame, (pos[i][0],pos[i][1]),
+                            (pos[i][2],pos[i][3]), emotions[l[i]][1], 2, lineType=cv2.LINE_AA)
+            cv2.rectangle(frame, (pos[i][0],pos[i][1]-20),
+                            (pos[i][2]+20,pos[i][1]), emotions[l[i]][1], -1, lineType=cv2.LINE_AA)
+            cv2.putText(frame, f'{emotions[l[i]][0]}', (pos[i][0],pos[i][1]-5),
+                            0, 0.6, emotions[l[i]][2], 2, lineType=cv2.LINE_AA)
+        if results_mesh.multi_face_landmarks:
+            for faceLms in results_mesh.multi_face_landmarks:
+                mp_drawing.draw_landmarks(frame, faceLms, mp_face_mesh.FACEMESH_CONTOURS,drawSpec,drawSpec)
+            mesh_points=np.array([np.multiply([p.x, p.y], [W, H]).astype(int) for p in results_mesh.multi_face_landmarks[0].landmark])
+            (l_cx, l_cy), l_radius = cv2.minEnclosingCircle(mesh_points[LEFT_IRIS])
+            (r_cx, r_cy), r_radius = cv2.minEnclosingCircle(mesh_points[RIGHT_IRIS])
+            center_left = np.array([l_cx, l_cy], dtype=np.int32)
+            center_right = np.array([r_cx, r_cy], dtype=np.int32)
+            cv2.circle(frame, center_left, int(l_radius), (255,0,255), 1, cv2.LINE_AA)
+            cv2.circle(frame, center_right, int(r_radius), (255,0,255), 1, cv2.LINE_AA)
     return frame
 
-def depthFormula(object_size, label):
-    if label == 0:
-        depth = (focal_length * avg_height_fursuit_head) / object_size
-    else:
-        depth = (focal_length * avg_height_human_head) / object_size
-    return depth
+model_1 = VGGNet(input_shape, num_classes, weights_1)
+model_2 = VGGNet(input_shape, num_classes, weights_2)
+model_1.load_weights(model_1.checkpoint_path)
+model_2.load_weights(model_2.checkpoint_path)
 
-def xyFormula(depth, normalized_x, normalized_y, frame_width, frame_height):
-    alpha = normalized_x * (field_of_view / frame_width)
-    beta = normalized_y * (field_of_view / frame_height)
-    x = depth * math.tan(math.radians(alpha))
-    y = depth * math.tan(math.radians(beta)) - distance_from_sensor_to_displays
-    return x, y
-
-def calculateTargetPoint(Recording):
-    global target_point_x
-    global target_point_y
-    global target_point_z
-    frame = getCameraFrame()
-    if Recording:
-        writer.write(frame)
-    blob = cv2.dnn.blobFromImage(frame, 1/255, (640, 640), crop=False, swapRB=True)
-    net.setInput(blob)
-    predictions = net.forward()
-    class_ids, confidences, boxes = unwrap_detection(frame, predictions)
-    #take box with the largest area and use it to calculate the target point
-    max_side = 0
-    max_box = None
-    label = 0
-    for box_id in range(len(boxes)):
-        side = max(boxes[box_id][2], boxes[box_id][3])
-        if side > max_side:
-            max_side = side
-            max_box = boxes[box_id]
-            label = class_ids[box_id]
-    if max_box is not None:
-        target_point_z = depthFormula(max_side, label)
-        normalized_x = (max_box[0] + (max_box[2] / 2)) - (frame.shape[1] / 2)
-        normalized_y = (max_box[1] + (max_box[3] / 2)) - (frame.shape[0] / 2)
-        target_point_x, target_point_y = xyFormula(normalized_x, normalized_y, frame.shape[1], frame.shape[0])
-    else:
-        target_point_x, target_point_y, target_point_z = 0, 0, math.inf
-        
+def FacialRecognition():
+    ret, frame = cap.read()
+    frame = detection_preprocessing(frame)
+    frame = inference(frame)
+    return frame

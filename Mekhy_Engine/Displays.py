@@ -3,7 +3,7 @@ gi.require_version('Wnck', '3.0')
 from gi.repository import Wnck
 import numpy as np
 import cv2
-import math, os
+import os
 display_height = 480
 display_width = 800
 display_rotation = 30
@@ -34,22 +34,9 @@ mask_sexy = cv2.VideoCapture('../Eyes/mask_sexy.mp4')
 mask_demonic = cv2.VideoCapture('../Eyes/mask_demonic.mp4')
 playingvideo = False
 
-def map(value, leftMin, leftMax, rightMin, rightMax):
-    leftSpan = leftMax - leftMin
-    rightSpan = rightMax - rightMin
-    valueScaled = float(value - leftMin) / float(leftSpan)
-    return rightMin + (valueScaled * rightSpan)
-
-def composeEyes(eye, mask, target_position):
-    eyes = np.zeros((mask.shape[0], mask.shape[1], 3), dtype=np.uint8)
+def composeEyes(frame, eye, leftpos, rightpos):
+    eyes = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8)
     eyes[:] = eye[0, 0]
-    target_point_x, target_point_y, target_point_z = target_position
-    leftpos_x = map(math.atan2(target_point_z, target_point_x+(distance_between_displays/2)), 0, 2*math.pi, left_eye_center[0]+left_eye_center[1], left_eye_center[0]-left_eye_center[1])
-    leftpos_y = map(math.atan2(target_point_z, target_point_y), 0, 2*math.pi, 0, 2*left_eye_center[1])
-    rightpos_x = map(math.atan2(target_point_z, target_point_x-(distance_between_displays/2)), 0, 2*math.pi, right_eye_center[0]-right_eye_center[1], right_eye_center[0]+right_eye_center[1])
-    rightpos_y = map(math.atan2(target_point_z, target_point_y), 0, 2*math.pi, 0, 2*right_eye_center[1])
-    leftpos = (int(leftpos_x), int(leftpos_y))
-    rightpos = (int(rightpos_x), int(rightpos_y))
     eyes[leftpos[1]:leftpos[1]+eye.shape[0], leftpos[0]:leftpos[0]+eye.shape[1]] = eye
     eyes[rightpos[1]:rightpos[1]+eye.shape[0], rightpos[0]:rightpos[0]+eye.shape[1]] = eye
     return eyes
@@ -74,10 +61,10 @@ def rotateFrame(frame):
     frame = np.concatenate((firstHalf, secondHalf), axis = 1)
     return frame
 
-def composeFrame(eye, mask, target_position):
+def composeFrame(eye, mask, leftpos, rightpos):
     frame = mask.copy()
-    eyes = composeEyes(eye, mask, target_position)
-    whiteregion = np.where((frame > 240).all(axis = 2))
+    eyes = composeEyes(frame, eye, leftpos, rightpos)
+    whiteregion = np.where((frame > 125).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
     frame = rotateFrame(frame)
     print(frame.shape)
@@ -97,7 +84,7 @@ def PlayVideo(file_name):
     os.remove(file_name)
     playingvideo = False
 
-def GraphicsRefresh(expression, target_position):
+def GraphicsRefresh(expression, leftpos, rightpos):
     if expression == 0:
         eye = eye_neutral
         mask = mask_neutral
@@ -131,7 +118,7 @@ def GraphicsRefresh(expression, target_position):
     if not playingvideo:
         ret, frame = mask.read()
         if ret:
-            frame = composeFrame(eye, frame, target_position)
+            frame = composeFrame(eye, mask, leftpos, rightpos)
             cv2.imshow('frame', frame)
         else:
             mask.set(cv2.CAP_PROP_POS_FRAMES, 0)
