@@ -2,7 +2,6 @@ import tensorflow as tf
 import numpy as np
 import cv2
 import mediapipe as mp
-import threading
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers.experimental.preprocessing import Rescaling
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
