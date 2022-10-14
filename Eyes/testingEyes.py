@@ -1,12 +1,16 @@
 import cv2
 import numpy as np
+import facemesh
 display_height = 480
 display_width = 800
 display_rotation = 30
-left_eye_center = (150, 97)
-right_eye_center = (552, 97)
-eye = cv2.imread('eye_scared.png', cv2.COLOR_BGR2RGB)
-mask = cv2.VideoCapture('mask_scared.mp4')
+left_eye_center = (150, 107)
+right_eye_center = (552, 107)
+eye_radius_horizontal = 120
+eye_radius_vertical = 80
+eye = cv2.imread('eye_neutral.png', cv2.COLOR_BGR2RGB)
+mask = cv2.VideoCapture('mask_neutral.mp4')
+import threading
 
 def composeEyes(frame, leftpos, rightpos):
     eyes = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8)
@@ -37,14 +41,22 @@ def rotateFrame(frame):
 
 def composeFrame(mask):
     frame = mask.copy()
-    eyes = composeEyes(frame, left_eye_center, right_eye_center)
+    print(facemesh.displacement_eye)
+    lefteye_center_x = int(left_eye_center[0] + (eye_radius_horizontal*facemesh.displacement_eye[0]))
+    lefteye_center_y = int(left_eye_center[1] + (eye_radius_vertical*facemesh.displacement_eye[1]))
+    righteye_center_x = int(right_eye_center[0] + (eye_radius_horizontal*facemesh.displacement_eye[0]))
+    righteye_center_y = int(right_eye_center[1] + (eye_radius_vertical*facemesh.displacement_eye[1]))
+    eyes = composeEyes(frame, (lefteye_center_x, lefteye_center_y), (righteye_center_x, righteye_center_y))
     whiteregion = np.where((frame > 125).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
-    frame = rotateFrame(frame)
-    print(frame.shape)
+    #frame = rotateFrame(frame)
     return frame
 
-while True:
+def machine_vision_thread():
+    while True:
+        facemesh.FacialRecognition()
+
+def display_thread():
     while(mask.isOpened()):
         ret, frame = mask.read()
         if ret:
@@ -53,3 +65,8 @@ while True:
         else:
             mask.set(cv2.CAP_PROP_POS_FRAMES, 0)
         cv2.waitKey(1)
+
+machine_vision_thread = threading.Thread(target=machine_vision_thread)
+display_thread = threading.Thread(target=display_thread)
+machine_vision_thread.start()
+display_thread.start()

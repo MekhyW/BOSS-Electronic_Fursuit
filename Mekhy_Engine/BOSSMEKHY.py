@@ -27,7 +27,7 @@ def machine_vision_thread():
 
 def display_thread():
     while True:
-        Displays.GraphicsRefresh(TelegramBot.ExpressionState, MachineVision.left_eye_center, MachineVision.right_eye_center)
+        Displays.GraphicsRefresh(TelegramBot.ExpressionState, MachineVision.displacement_eye)
 
 def leds_thread():
     while True:

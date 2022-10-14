@@ -10,8 +10,6 @@ display_rotation = 30
 distance_between_displays = 150
 left_eye_center = (150, 97)
 right_eye_center = (552, 97)
-leftpos = left_eye_center
-rightpos = right_eye_center
 eye_neutral = cv2.imread('../Eyes/eye_neutral.png', cv2.COLOR_BGR2RGB)
 eye_sad = cv2.imread('../Eyes/eye_sad.png', cv2.COLOR_BGR2RGB)
 eye_happy = cv2.imread('../Eyes/eye_happy.png', cv2.COLOR_BGR2RGB)
@@ -61,13 +59,17 @@ def rotateFrame(frame):
     frame = np.concatenate((firstHalf, secondHalf), axis = 1)
     return frame
 
-def composeFrame(eye, mask, leftpos, rightpos):
+def composeFrame(eye, mask, displacement_eye):
     frame = mask.copy()
-    eyes = composeEyes(frame, eye, leftpos, rightpos)
+    print(facemesh.displacement_eye)
+    lefteye_center_x = int(left_eye_center[0] + (eye_radius_horizontal*facemesh.displacement_eye[0]))
+    lefteye_center_y = int(left_eye_center[1] + (eye_radius_vertical*facemesh.displacement_eye[1]))
+    righteye_center_x = int(right_eye_center[0] + (eye_radius_horizontal*facemesh.displacement_eye[0]))
+    righteye_center_y = int(right_eye_center[1] + (eye_radius_vertical*facemesh.displacement_eye[1]))
+    eyes = composeEyes(frame, eye, (lefteye_center_x, lefteye_center_y), (righteye_center_x, righteye_center_y))
     whiteregion = np.where((frame > 125).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
     frame = rotateFrame(frame)
-    print(frame.shape)
     return frame
 
 def PlayVideo(file_name):
@@ -84,7 +86,7 @@ def PlayVideo(file_name):
     os.remove(file_name)
     playingvideo = False
 
-def GraphicsRefresh(expression, leftpos, rightpos):
+def GraphicsRefresh(expression, displacement_eye):
     if expression == 0:
         eye = eye_neutral
         mask = mask_neutral
@@ -118,7 +120,7 @@ def GraphicsRefresh(expression, leftpos, rightpos):
     if not playingvideo:
         ret, frame = mask.read()
         if ret:
-            frame = composeFrame(eye, mask, leftpos, rightpos)
+            frame = composeFrame(eye, mask, displacement_eye)
             cv2.imshow('frame', frame)
         else:
             mask.set(cv2.CAP_PROP_POS_FRAMES, 0)
