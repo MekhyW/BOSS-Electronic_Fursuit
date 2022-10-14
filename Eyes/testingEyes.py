@@ -49,12 +49,23 @@ def composeFrame(mask):
     eyes = composeEyes(frame, (lefteye_center_x, lefteye_center_y), (righteye_center_x, righteye_center_y))
     whiteregion = np.where((frame > 125).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
-    #frame = rotateFrame(frame)
+    frame = rotateFrame(frame)
     return frame
 
-def machine_vision_thread():
+def machine_vision_thread_A():
     while True:
-        facemesh.FacialRecognition()
+        try:
+            facemesh.FacemeshRecognition()
+        except Exception as e:
+            print(e)
+
+def machine_vision_thread_B():
+    while True:
+        try:
+            facemesh.EmotionRecognition()
+            print(facemesh.ExpressionString)
+        except Exception as e:
+            print(e)
 
 def display_thread():
     while(mask.isOpened()):
@@ -66,7 +77,9 @@ def display_thread():
             mask.set(cv2.CAP_PROP_POS_FRAMES, 0)
         cv2.waitKey(1)
 
-machine_vision_thread = threading.Thread(target=machine_vision_thread)
+machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
+machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
 display_thread = threading.Thread(target=display_thread)
-machine_vision_thread.start()
+machine_vision_thread_A.start()
+machine_vision_thread_B.start()
 display_thread.start()

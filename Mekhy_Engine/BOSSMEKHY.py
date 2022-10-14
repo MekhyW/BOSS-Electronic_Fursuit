@@ -21,17 +21,35 @@ led_red_pub = rospy.Publisher('/led_red', Int8MultiArray, queue_size=10)
 led_green_pub = rospy.Publisher('/led_green', Int8MultiArray, queue_size=10)
 led_blue_pub = rospy.Publisher('/led_blue', Int8MultiArray, queue_size=10)
 
-def machine_vision_thread():
+def machine_vision_thread_A():
     while True:
-        MachineVision.FacialRecognition()
+        try:
+            MachineVision.FacemeshRecognition()
+        except Exception as e:
+            print(e)
+
+def machine_vision_thread_B():
+    while True:
+        try:
+            MachineVision.EmotionRecognition()
+        except Exception as e:
+            print(e)
 
 def display_thread():
     while True:
-        Displays.GraphicsRefresh(TelegramBot.ExpressionState, MachineVision.displacement_eye)
+        try:
+            Displays.GraphicsRefresh(TelegramBot.ExpressionState, MachineVision.displacement_eye)
+        except Exception as e:
+            print(e)
+        finally:
+            cv2.waitKey(1)
 
 def leds_thread():
     while True:
-        Leds.update_leds_video()
+        try:
+            Leds.update_leds_video()
+        except Exception as e:
+            print(e)
 
 def ros_thread():
     while True:
@@ -50,11 +68,13 @@ SoundEffects.PlayBootSound()
 JackClient.JackVoicemodRoute("Clear")
 if WiFi.ConnectWifi():
     TelegramBot.StartBot()
-machine_vision_thread = threading.Thread(target=machine_vision_thread)
+machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
+machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
 display_thread = threading.Thread(target=display_thread)
 leds_thread = threading.Thread(target=leds_thread)
 ros_thread = threading.Thread(target=ros_thread)
-machine_vision_thread.start()
+machine_vision_thread_A.start()
+machine_vision_thread_B.start()
 display_thread.start()
 leds_thread.start()
 ros_thread.start()

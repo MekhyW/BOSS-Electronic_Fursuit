@@ -131,4 +131,3 @@ def GraphicsRefresh(expression, displacement_eye):
             window.maximize()
         elif "Terminal" in window.get_name():
             window.minimize()
-    cv2.waitKey(1)

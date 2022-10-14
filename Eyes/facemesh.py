@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 import cv2
 import mediapipe as mp
+import threading
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers.experimental.preprocessing import Rescaling
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
@@ -9,6 +10,7 @@ from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.losses import categorical_crossentropy
 from tensorflow.keras.optimizers import Adam
 displacement_eye = (0,0)
+ExpressionString = ''
 mp_face_detection = mp.solutions.face_detection
 mp_face_mesh = mp.solutions.face_mesh
 mp_drawing = mp.solutions.drawing_utils
@@ -92,7 +94,43 @@ def recognition_preprocessing(faces):
     x = tf.convert_to_tensor([resize_face(f) for f in faces])
     return x
 
-def inference(image):
+def inference_emotionrecog(image):
+    frame = image.copy()
+    H, W, _ = frame.shape
+    rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = face_detection.process(rgb_image)
+    if results.detections:
+        faces = []
+        pos = []
+        for detection in results.detections:
+            box = detection.location_data.relative_bounding_box
+            x = int(box.xmin * W)
+            y = int(box.ymin * H)
+            w = int(box.width * W)
+            h = int(box.height * H)
+            x1 = max(0, x)
+            y1 = max(0, y)
+            x2 = min(x + w, W)
+            y2 = min(y + h, H)
+            face = image[y1:y2,x1:x2]
+            face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+            faces.append(face)
+            pos.append((x1, y1, x2, y2))
+        x = recognition_preprocessing(faces)
+        y_1 = model_1.predict(x)
+        y_2 = model_2.predict(x)
+        l = np.argmax(y_1+y_2, axis=1)
+        for i in range(len(faces)):
+            cv2.rectangle(frame, (pos[i][0],pos[i][1]),
+                            (pos[i][2],pos[i][3]), emotions[l[i]][1], 2, lineType=cv2.LINE_AA)
+            cv2.rectangle(frame, (pos[i][0],pos[i][1]-20),
+                            (pos[i][2]+20,pos[i][1]), emotions[l[i]][1], -1, lineType=cv2.LINE_AA)
+            cv2.putText(frame, f'{emotions[l[i]][0]}', (pos[i][0],pos[i][1]-5),
+                            0, 0.6, emotions[l[i]][2], 2, lineType=cv2.LINE_AA)
+        return frame, emotions[l[i]][0]
+    return frame, ExpressionString
+
+def inference_facemesh(image):
     frame = image.copy()
     H, W, _ = frame.shape
     rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -115,37 +153,26 @@ def inference(image):
             face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
             faces.append(face)
             pos.append((x1, y1, x2, y2))
-        x = recognition_preprocessing(faces)
-        #y_1 = model_1.predict(x)
-        #y_2 = model_2.predict(x)
-        #l = np.argmax(y_1+y_2, axis=1)
-        #for i in range(len(faces)):
-        #    cv2.rectangle(frame, (pos[i][0],pos[i][1]),
-        #                    (pos[i][2],pos[i][3]), emotions[l[i]][1], 2, lineType=cv2.LINE_AA)
-        #    cv2.rectangle(frame, (pos[i][0],pos[i][1]-20),
-        #                    (pos[i][2]+20,pos[i][1]), emotions[l[i]][1], -1, lineType=cv2.LINE_AA)
-        #    cv2.putText(frame, f'{emotions[l[i]][0]}', (pos[i][0],pos[i][1]-5),
-        #                    0, 0.6, emotions[l[i]][2], 2, lineType=cv2.LINE_AA)
-        if results_mesh.multi_face_landmarks:
-            for faceLms in results_mesh.multi_face_landmarks:
-                mp_drawing.draw_landmarks(frame, faceLms, mp_face_mesh.FACEMESH_CONTOURS,drawSpec,drawSpec)
-            mesh_points=np.array([np.multiply([p.x, p.y], [W, H]).astype(int) for p in results_mesh.multi_face_landmarks[0].landmark])
-            lex1, ley1 = np.min(mesh_points[LEFT_EYE], axis=0)
-            lex2, ley2 = np.max(mesh_points[LEFT_EYE], axis=0)
-            cv2.rectangle(frame, (lex1, ley1), (lex2, ley2), (0, 255, 0), 2)
-            rex1, rey1 = np.min(mesh_points[RIGHT_EYE], axis=0)
-            rex2, rey2 = np.max(mesh_points[RIGHT_EYE], axis=0)
-            cv2.rectangle(frame, (rex1, rey1), (rex2, rey2), (0, 255, 0), 2)
-            (l_cx, l_cy), l_radius = cv2.minEnclosingCircle(mesh_points[LEFT_IRIS])
-            (r_cx, r_cy), r_radius = cv2.minEnclosingCircle(mesh_points[RIGHT_IRIS])
-            center_left = np.array([l_cx, l_cy], dtype=np.int32)
-            center_right = np.array([r_cx, r_cy], dtype=np.int32)
-            cv2.circle(frame, center_left, int(l_radius), (255,0,255), 1, cv2.LINE_AA)
-            cv2.circle(frame, center_right, int(r_radius), (255,0,255), 1, cv2.LINE_AA)
-            displacement_left_eye = (2*(l_cx-((lex1+lex2)/2))/abs(lex2-lex1), 2*(l_cy-((ley1+ley2)/2))/abs((ley2-ley1)))
-            displacement_right_eye = (2*(r_cx-((rex1+rex2)/2))/abs(rex2-rex1), 2*(r_cy-((rey1+rey2)/2))/abs((rey2-rey1)))
-            displacement_eye = ((displacement_left_eye[0]+displacement_right_eye[0])/2, (displacement_left_eye[1]+displacement_right_eye[1])/2)
-            return frame, displacement_eye
+    if results_mesh.multi_face_landmarks:
+        for faceLms in results_mesh.multi_face_landmarks:
+            mp_drawing.draw_landmarks(frame, faceLms, mp_face_mesh.FACEMESH_CONTOURS,drawSpec,drawSpec)
+        mesh_points=np.array([np.multiply([p.x, p.y], [W, H]).astype(int) for p in results_mesh.multi_face_landmarks[0].landmark])
+        lex1, ley1 = np.min(mesh_points[LEFT_EYE], axis=0)
+        lex2, ley2 = np.max(mesh_points[LEFT_EYE], axis=0)
+        cv2.rectangle(frame, (lex1, ley1), (lex2, ley2), (0, 255, 0), 2)
+        rex1, rey1 = np.min(mesh_points[RIGHT_EYE], axis=0)
+        rex2, rey2 = np.max(mesh_points[RIGHT_EYE], axis=0)
+        cv2.rectangle(frame, (rex1, rey1), (rex2, rey2), (0, 255, 0), 2)
+        (l_cx, l_cy), l_radius = cv2.minEnclosingCircle(mesh_points[LEFT_IRIS])
+        (r_cx, r_cy), r_radius = cv2.minEnclosingCircle(mesh_points[RIGHT_IRIS])
+        center_left = np.array([l_cx, l_cy], dtype=np.int32)
+        center_right = np.array([r_cx, r_cy], dtype=np.int32)
+        cv2.circle(frame, center_left, int(l_radius), (255,0,255), 1, cv2.LINE_AA)
+        cv2.circle(frame, center_right, int(r_radius), (255,0,255), 1, cv2.LINE_AA)
+        displacement_left_eye = (2*(l_cx-((lex1+lex2)/2))/abs(lex2-lex1), 2*(l_cy-((ley1+ley2)/2))/abs((ley2-ley1)))
+        displacement_right_eye = (2*(r_cx-((rex1+rex2)/2))/abs(rex2-rex1), 2*(r_cy-((rey1+rey2)/2))/abs((rey2-rey1)))
+        displacement_eye = ((displacement_left_eye[0]+displacement_right_eye[0])/2, (displacement_left_eye[1]+displacement_right_eye[1])/2)
+        return frame, displacement_eye
     return frame, None
 
 model_1 = VGGNet(input_shape, num_classes, weights_1)
@@ -155,12 +182,20 @@ model_2.load_weights(model_2.checkpoint_path)
 
 
 cap = cv2.VideoCapture(0)
-def FacialRecognition():
+def FacemeshRecognition():
     global displacement_eye
     ret, frame = cap.read()
     frame = detection_preprocessing(frame)
-    frame, de = inference(frame)
+    frame, de = inference_facemesh(frame)
     if de:
         displacement_eye = ((displacement_eye[0]*0.75)+(de[0]*0.25), (displacement_eye[1]*0.75)+(de[1]*0.25))    
     cv2.imshow('facialrecognition', frame)
+    cv2.waitKey(1)
+
+def EmotionRecognition():
+    global ExpressionString
+    ret, frame = cap.read()
+    frame = detection_preprocessing(frame)
+    frame, ExpressionString = inference_emotionrecog(frame)
+    cv2.imshow('emotionrecognition', frame)
     cv2.waitKey(1)
