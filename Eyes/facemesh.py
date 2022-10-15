@@ -9,6 +9,8 @@ from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.losses import categorical_crossentropy
 from tensorflow.keras.optimizers import Adam
 displacement_eye = (0,0)
+left_eye_closed = False
+right_eye_closed = False
 ExpressionString = ''
 mp_face_detection = mp.solutions.face_detection
 mp_face_mesh = mp.solutions.face_mesh
@@ -171,8 +173,16 @@ def inference_facemesh(image):
         displacement_left_eye = (2*(l_cx-((lex1+lex2)/2))/abs(lex2-lex1), 2*(l_cy-((ley1+ley2)/2))/abs((ley2-ley1)))
         displacement_right_eye = (2*(r_cx-((rex1+rex2)/2))/abs(rex2-rex1), 2*(r_cy-((rey1+rey2)/2))/abs((rey2-rey1)))
         displacement_eye = ((displacement_left_eye[0]+displacement_right_eye[0])/2, (displacement_left_eye[1]+displacement_right_eye[1])/2)
-        return frame, displacement_eye
-    return frame, None
+        if abs(lex1-lex2)/abs(ley1-ley2) > 5:
+            left_eye_closed = True
+        else:
+            left_eye_closed = False
+        if abs(rex1-rex2)/abs(rey1-rey2) > 5:
+            right_eye_closed = True
+        else:
+            right_eye_closed = False
+        return frame, displacement_eye, left_eye_closed, right_eye_closed
+    return frame, None, True, True
 
 model_1 = VGGNet(input_shape, num_classes, weights_1)
 model_2 = VGGNet(input_shape, num_classes, weights_2)
@@ -182,19 +192,19 @@ model_2.load_weights(model_2.checkpoint_path)
 
 cap = cv2.VideoCapture(0)
 def FacemeshRecognition():
-    global displacement_eye
+    global displacement_eye, left_eye_closed, right_eye_closed
     ret, frame = cap.read()
-    frame = detection_preprocessing(frame)
-    frame, de = inference_facemesh(frame)
+    #frame = detection_preprocessing(frame)
+    frame, de, left_eye_closed, right_eye_closed = inference_facemesh(frame)
     if de:
-        displacement_eye = ((displacement_eye[0]*0.75)+(de[0]*0.25), (displacement_eye[1]*0.75)+(de[1]*0.25))    
+        displacement_eye = ((displacement_eye[0]*0.8)+(de[0]*0.2), (displacement_eye[1]*0.8)+(de[1]*0.2))    
     cv2.imshow('facialrecognition', frame)
     cv2.waitKey(1)
 
 def EmotionRecognition():
     global ExpressionString
     ret, frame = cap.read()
-    frame = detection_preprocessing(frame)
+    #frame = detection_preprocessing(frame)
     frame, ExpressionString = inference_emotionrecog(frame)
     cv2.imshow('emotionrecognition', frame)
     cv2.waitKey(1)

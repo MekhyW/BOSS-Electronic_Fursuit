@@ -7,6 +7,7 @@ import SoundEffects
 import MachineVision
 import Leds
 import os
+import cv2
 import rospy
 from std_msgs.msg import UInt16, float32, Int8MultiArray
 import threading

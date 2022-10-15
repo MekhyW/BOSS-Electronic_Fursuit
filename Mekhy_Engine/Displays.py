@@ -1,6 +1,7 @@
 import gi
 gi.require_version('Wnck', '3.0')
 from gi.repository import Wnck
+import MachineVision
 import numpy as np
 import cv2
 import os
@@ -10,6 +11,9 @@ display_rotation = 30
 distance_between_displays = 150
 left_eye_center = (150, 97)
 right_eye_center = (552, 97)
+eye_radius_horizontal = 150
+eye_radius_vertical = 180
+eye_closed = cv2.imread('../Eyes/eye_closed.png', cv2.COLOR_BGR2RGB)
 eye_neutral = cv2.imread('../Eyes/eye_neutral.png', cv2.COLOR_BGR2RGB)
 eye_sad = cv2.imread('../Eyes/eye_sad.png', cv2.COLOR_BGR2RGB)
 eye_happy = cv2.imread('../Eyes/eye_happy.png', cv2.COLOR_BGR2RGB)
@@ -35,8 +39,14 @@ playingvideo = False
 def composeEyes(frame, eye, leftpos, rightpos):
     eyes = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8)
     eyes[:] = eye[0, 0]
-    eyes[leftpos[1]:leftpos[1]+eye.shape[0], leftpos[0]:leftpos[0]+eye.shape[1]] = eye
-    eyes[rightpos[1]:rightpos[1]+eye.shape[0], rightpos[0]:rightpos[0]+eye.shape[1]] = eye
+    if MachineVision.left_eye_closed:
+        eyes[0:frame.shape[0], 0:int(frame.shape[1]/2)] = eye_closed[0:frame.shape[0], 0:int(frame.shape[1]/2)]
+    else:
+        eyes[leftpos[1]:leftpos[1]+eye.shape[0], leftpos[0]:leftpos[0]+eye.shape[1]] = eye
+    if MachineVision.right_eye_closed:
+        eyes[0:frame.shape[0], int(frame.shape[1]/2):frame.shape[1]] = eye_closed[0:frame.shape[0], int(frame.shape[1]/2):frame.shape[1]]
+    else:
+        eyes[rightpos[1]:rightpos[1]+eye.shape[0], rightpos[0]:rightpos[0]+eye.shape[1]] = eye
     return eyes
 
 def rotate_image(image, angle):
@@ -61,11 +71,10 @@ def rotateFrame(frame):
 
 def composeFrame(eye, mask, displacement_eye):
     frame = mask.copy()
-    print(facemesh.displacement_eye)
-    lefteye_center_x = int(left_eye_center[0] + (eye_radius_horizontal*facemesh.displacement_eye[0]))
-    lefteye_center_y = int(left_eye_center[1] + (eye_radius_vertical*facemesh.displacement_eye[1]))
-    righteye_center_x = int(right_eye_center[0] + (eye_radius_horizontal*facemesh.displacement_eye[0]))
-    righteye_center_y = int(right_eye_center[1] + (eye_radius_vertical*facemesh.displacement_eye[1]))
+    lefteye_center_x = int(left_eye_center[0] + (eye_radius_horizontal*MachineVision.displacement_eye[0]))
+    lefteye_center_y = int(left_eye_center[1] + (eye_radius_vertical*MachineVision.displacement_eye[1]))
+    righteye_center_x = int(right_eye_center[0] + (eye_radius_horizontal*MachineVision.displacement_eye[0]))
+    righteye_center_y = int(right_eye_center[1] + (eye_radius_vertical*MachineVision.displacement_eye[1]))
     eyes = composeEyes(frame, eye, (lefteye_center_x, lefteye_center_y), (righteye_center_x, righteye_center_y))
     whiteregion = np.where((frame > 125).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
