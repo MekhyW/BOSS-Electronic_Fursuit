@@ -14,7 +14,8 @@ from pytube import YouTube
 import requests, os, subprocess, math, time
 import traceback
 start_time = time.time()
-ExpressionState = 0
+manual_expression_mode = False
+ManualExpression = 'Neutral'
 
 updates = fursuitbot.getUpdates()
 if updates:
@@ -24,28 +25,38 @@ if updates:
 fursuitbot.sendMessage(mekhyID, 'I am online')
 
 def SetExpression(fursuitbot, chat_id, msg):
-    global ExpressionState
+    global ManualExpression, manual_expression_mode
+    manual_expression_mode = True
     if msg['text'] == 'Neutral':
-        ExpressionState = 0
+        ManualExpression = 0
     elif msg['text'] == '😡':
-        ExpressionState = 1
+        ManualExpression = 'Angry'
     elif msg['text'] == '😒':
-        ExpressionState = 2
+        ManualExpression = 'Disgusted'
     elif msg['text'] == '😢':
-        ExpressionState = 3
+        ManualExpression = 'Sad'
     elif msg['text'] == '😊':
-        ExpressionState = 4
+        ManualExpression = 'Happy'
     elif msg['text'] == '😱':
-        ExpressionState = 5
+        ManualExpression = 'Scared'
     elif msg['text'] == '😍':
-        ExpressionState = 6
+        ManualExpression = 'Heart'
     elif msg['text'] == 'Hypno 🌈':
-        ExpressionState = 7
+        ManualExpression = 'Hypnotic'
     elif msg['text'] == '😏':
-        ExpressionState = 8
+        ManualExpression = 'Sexy'
     elif msg['text'] == '😈':
-        ExpressionState = 9
+        ManualExpression = 'Demonic'
     fursuitbot.sendMessage(chat_id, '>>>Mood Set to: {}'.format(msg['text']))
+
+def toggleAutoMood(fursuitbot, chat_id, msg):
+    global manual_expression_mode
+    if manual_expression_mode:
+        manual_expression_mode = False
+        fursuitbot.sendMessage(chat_id, '>>>Auto Mood Enabled (ON)')
+    else:
+        manual_expression_mode = True
+        fursuitbot.sendMessage(chat_id, '>>>Auto Mood Disabled (OFF)')
 
 def PlaySongName(fursuitbot, chat_id, msg):
     fursuitbot.sendMessage(chat_id, '>>>Finding song with query "{}"...'.format(msg['text']))
@@ -108,7 +119,6 @@ def PlayAudioFile(fursuitbot, chat_id, msg):
 
 def handle(msg):
     try:
-        global ExpressionState
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id)
         current_keyboard = 'Main'
@@ -149,6 +159,8 @@ def handle(msg):
                 Displays.playingvideo = False
             elif msg['text'] == 'Set Mood':
                 current_keyboard = 'Choose Mood'
+            elif msg['text'] == 'Toggle Automatic Mood':
+                toggleAutoMood(fursuitbot, chat_id, msg)
             elif msg['text'] in ['Neutral', '😡', '😒', '😢', '😊', '😱', '😍', 'Hypno 🌈', '😏', '😈']:
                 SetExpression(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Change Voice':
@@ -165,7 +177,7 @@ def handle(msg):
         elif content_type in ['document', 'sticker', 'video_note', 'location', 'contact', 'venue', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
             fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret that kind of input.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")], [KeyboardButton(text="Set Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")], [KeyboardButton(text="Set Mood"), KeyboardButton(text="Toggle Automatic Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
             fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="😒"), KeyboardButton(text="😊"), KeyboardButton(text="😏"), KeyboardButton(text="😈")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])

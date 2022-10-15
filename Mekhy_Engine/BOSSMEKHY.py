@@ -22,6 +22,28 @@ led_red_pub = rospy.Publisher('/led_red', Int8MultiArray, queue_size=10)
 led_green_pub = rospy.Publisher('/led_green', Int8MultiArray, queue_size=10)
 led_blue_pub = rospy.Publisher('/led_blue', Int8MultiArray, queue_size=10)
 
+def convertExpressionStringToNumber(expression):
+    if expression == "Neutral":
+        return 0
+    elif expression == "Angry":
+        return 1
+    elif expression == "Disgusted":
+        return 2
+    elif expression == "Sad":
+        return 3
+    elif expression == "Happy":
+        return 4
+    elif expression == "Scared":
+        return 5
+    elif expression == "Heart":
+        return 6
+    elif expression == "Hypnotic":
+        return 7
+    elif expression == "Demonic":
+        return 8
+    else:
+        return 0
+
 def machine_vision_thread_A():
     while True:
         try:
@@ -39,7 +61,10 @@ def machine_vision_thread_B():
 def display_thread():
     while True:
         try:
-            Displays.GraphicsRefresh(TelegramBot.ExpressionState, MachineVision.displacement_eye)
+            if TelegramBot.manual_expression_mode:     
+                Displays.GraphicsRefresh(convertExpressionStringToNumber(TelegramBot.ManualExpression), MachineVision.displacement_eye)
+            else:
+                Displays.GraphicsRefresh(convertExpressionStringToNumber(MachineVision.AutomaticExpression), MachineVision.displacement_eye)
         except Exception as e:
             print(e)
         finally:
@@ -55,7 +80,10 @@ def leds_thread():
 def ros_thread():
     while True:
         try:
-            expression_pub.publish(TelegramBot.ExpressionState)
+            if TelegramBot.manual_expression_mode:     
+                expression_pub.publish(convertExpressionStringToNumber(TelegramBot.ManualExpression))
+            else:
+                expression_pub.publish(convertExpressionStringToNumber(MachineVision.AutomaticExpression))
             voice_pub.publish(VoiceAnalyser.getVolume())
             led_red_pub.publish(Leds.led_red)
             led_green_pub.publish(Leds.led_green)

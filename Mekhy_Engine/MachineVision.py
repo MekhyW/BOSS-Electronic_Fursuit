@@ -11,7 +11,7 @@ from tensorflow.keras.optimizers import Adam
 displacement_eye = (0,0)
 left_eye_closed = False
 right_eye_closed = False
-ExpressionString = ''
+AutomaticExpression = 'Neutral'
 cap = cv2.VideoCapture(0)
 mp_face_detection = mp.solutions.face_detection
 mp_face_mesh = mp.solutions.face_mesh
@@ -29,11 +29,11 @@ RIGHT_EYEBROW = [156, 70, 63, 105, 66, 107, 55, 193]
 
 emotions = {
     0: ['Angry', (0,0,255), (255,255,255)],
-    1: ['Disgust', (0,102,0), (255,255,255)],
-    2: ['Fear', (255,255,153), (0,51,51)],
+    1: ['Disgusted', (0,102,0), (255,255,255)],
+    2: ['Scared', (255,255,153), (0,51,51)],
     3: ['Happy', (153,0,153), (255,255,255)],
     4: ['Sad', (255,0,0), (255,255,255)],
-    5: ['Surprise', (0,255,0), (255,255,255)],
+    5: ['Scared', (0,255,0), (255,255,255)],
     6: ['Neutral', (160,160,160), (255,255,255)]
 }
 num_classes = len(emotions)
@@ -121,7 +121,7 @@ def inference_emotionrecog(image):
             cv2.putText(frame, f'{emotions[l[i]][0]}', (pos[i][0],pos[i][1]-5),
                             0, 0.6, emotions[l[i]][2], 2, lineType=cv2.LINE_AA)
         return frame, emotions[l[i]][0]
-    return frame, ExpressionString
+    return frame, AutomaticExpression
 
 def inference_facemesh(image):
     frame = image.copy()
@@ -189,6 +189,6 @@ def FacemeshRecognition():
         displacement_eye = ((displacement_eye[0]*0.8)+(de[0]*0.2), (displacement_eye[1]*0.8)+(de[1]*0.2))    
 
 def EmotionRecognition():
-    global ExpressionString
+    global AutomaticExpression
     ret, frame = cap.read()
-    frame, ExpressionString = inference_emotionrecog(frame)
+    frame, AutomaticExpression = inference_emotionrecog(frame)
