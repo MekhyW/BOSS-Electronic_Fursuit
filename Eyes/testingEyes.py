@@ -8,9 +8,9 @@ left_eye_center = (150, 107)
 right_eye_center = (552, 107)
 eye_radius_horizontal = 150
 eye_radius_vertical = 180
-eye = cv2.imread('eye_demonic.png', cv2.COLOR_BGR2RGB)
+eye = cv2.imread('eye_disgusted.png', cv2.COLOR_BGR2RGB)
 eye_closed = cv2.imread('eye_closed.png', cv2.COLOR_BGR2RGB)
-mask = cv2.VideoCapture('mask_demonic.mp4')
+mask = cv2.VideoCapture('mask_disgusted.mp4')
 import threading
 
 def composeEyes(frame, leftpos, rightpos):
