@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="meEQKwicSAwc1KFZT5nb" name="Page-1">
-        <mxGraphModel dx="281" dy="255" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#000000" math="0" shadow="1">
+        <mxGraphModel dx="422" dy="383" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#000000" math="0" shadow="1">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -337,8 +337,11 @@
                         <mxPoint x="701.3699999999999" y="620.53" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="70" value="Gray = Aesthetics&lt;br&gt;Red = Power source&lt;br&gt;Green = System controller&lt;br&gt;Purple = System input&lt;br&gt;Blue = System output&lt;br&gt;Orange = Mechanical/Thermodynamic functioning" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="9.01" y="1071" width="275" height="88" as="geometry"/>
+                <mxCell id="70" value="Gray = Aesthetics&lt;br&gt;Red = Power source&lt;br&gt;Green = System controller&lt;br&gt;Purple = System input&lt;br&gt;Blue = System output&lt;br&gt;Orange = Mechanics/Thermodynamics" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="9.01" y="1071" width="216" height="88" as="geometry"/>
+                </mxCell>
+                <mxCell id="72" value="Butt padding" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="155.75" y="1003.25" width="104" height="44" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
