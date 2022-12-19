@@ -45,3 +45,6 @@ sudo dphys-swapfile setup
 sudo dphys-swapfile swapon
 sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/noetic -j1 -DPYTHON_EXECUTABLE=/usr/bin/python3
 source /opt/ros/noetic/setup.bash
+# Remember to set auto login and password for pi user
+# Remember to setup new VNC address
+# Remember to setup dual display scheme
