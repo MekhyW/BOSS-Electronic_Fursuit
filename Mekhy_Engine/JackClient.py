@@ -6,7 +6,7 @@ in1 = client.inports.register('BOSS_in1')
 in2 = client.inports.register('BOSS_in2')
 out1 = client.outports.register('BOSS_out1')
 out2 = client.outports.register('BOSS_out2')
-# Start client and setup camera-to-headphone route
+# Start client and setup dongle-to-headphone route
 client.activate()
 os.system("lxterminal -e alsa_in -d hw:0")
 os.system("lxterminal -e alsa_out -d hw:1")
