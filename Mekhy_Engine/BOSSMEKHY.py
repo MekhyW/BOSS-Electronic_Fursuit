@@ -5,7 +5,6 @@ import VoiceAnalyser
 import Displays
 import SoundEffects
 import MachineVision
-import Leds
 import os
 import cv2
 import rospy
@@ -70,13 +69,6 @@ def display_thread():
         finally:
             cv2.waitKey(1)
 
-def leds_thread():
-    while True:
-        try:
-            Leds.update_leds_video()
-        except Exception as e:
-            print(e)
-
 def ros_thread():
     while True:
         try:
@@ -85,9 +77,6 @@ def ros_thread():
             else:
                 expression_pub.publish(convertExpressionStringToNumber(MachineVision.AutomaticExpression))
             voice_pub.publish(VoiceAnalyser.getVolume())
-            led_red_pub.publish(Leds.led_red)
-            led_green_pub.publish(Leds.led_green)
-            led_blue_pub.publish(Leds.led_blue)
         except Exception as e:
             print(e)
         finally:
@@ -100,10 +89,8 @@ if WiFi.ConnectWifi():
 machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
 machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
 display_thread = threading.Thread(target=display_thread)
-leds_thread = threading.Thread(target=leds_thread)
 ros_thread = threading.Thread(target=ros_thread)
 machine_vision_thread_A.start()
 machine_vision_thread_B.start()
 display_thread.start()
-leds_thread.start()
 ros_thread.start()
