@@ -1,8 +1,8 @@
 #include <Adafruit_NeoPixel.h>
 #include <ros.h>
 #include <std_msgs/UInt16.h>
-#define LED_PIN 39
-#define LED_COUNT 42
+#define LED_PIN 10
+#define LED_COUNT 41
 Adafruit_NeoPixel GearsStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 int Color_Brightness = 25;
 uint32_t black = GearsStrip.Color(0, 0, 0);
@@ -14,6 +14,7 @@ uint32_t deep_blue = GearsStrip.Color(0, 0, 255);
 uint32_t light_blue = GearsStrip.Color(0, 255, 255);
 uint32_t orange = GearsStrip.Color(255, 128, 0);
 uint32_t green = GearsStrip.Color(0, 255, 0);
+uint32_t purple = GearsStrip.Color(115, 0, 255);
 int ExpressionState = 0;
 int Effect = 1;
 uint32_t* activeColor = &white;
@@ -28,20 +29,22 @@ ros::NodeHandle nodehandle;
 ros::Subscriber<std_msgs::UInt16> sub_expression("expression", &expressionCallback);
 
 void colorStatic(uint32_t color) {
-  GearsStrip.setBrightness(Color_Brightness/3);
+  GearsStrip.setBrightness(Color_Brightness/2);
   GearsStrip.fill(color, 0, GearsStrip.numPixels());
   GearsStrip.show();
 }
 
 void colorSparkle(uint32_t color) {
-  GearsStrip.setBrightness(Color_Brightness*2);
+  GearsStrip.setBrightness(Color_Brightness*3);
   int Pixel = random(GearsStrip.numPixels());
   GearsStrip.setPixelColor(Pixel, color);
   GearsStrip.show();
+  delay(50);
   GearsStrip.setPixelColor(Pixel, black);
 }
 
 void colorTwinkle(uint32_t color) {
+  GearsStrip.setBrightness(Color_Brightness*2);
   GearsStrip.fill(black, 0, GearsStrip.numPixels());
   for (int i=0; i<(GearsStrip.numPixels())/2; i++) {
      GearsStrip.setPixelColor(random(GearsStrip.numPixels()), color);
@@ -65,7 +68,7 @@ void colorStrobe(uint32_t color){
     GearsStrip.show();
     delay(50);
   }
- delay(3000);
+ delay(1500);
 }
 
 void colorFade(uint32_t color){
@@ -116,7 +119,7 @@ void colorWipe(uint32_t color) {
 
 
 void colorTheaterChase(uint32_t color) {
-  GearsStrip.setBrightness(Color_Brightness);
+  GearsStrip.setBrightness(Color_Brightness*2);
   for(int a=0; a<10; a++) {
     for(int b=0; b<3; b++) {
       GearsStrip.clear();
@@ -134,7 +137,7 @@ void colorTheaterChase(uint32_t color) {
 }
 
 void Rainbow(int wait) {
-  GearsStrip.setBrightness(Color_Brightness);
+  GearsStrip.setBrightness(Color_Brightness*2);
   for(long firstPixelHue = 0; firstPixelHue < 5*65536; firstPixelHue += 256) {
     for(int i=0; i<GearsStrip.numPixels(); i++) {
       int pixelHue = firstPixelHue + (i * 65536L / GearsStrip.numPixels());
@@ -180,7 +183,7 @@ void loop() {
         activeColor = &yellow;
         break;
       case 5:
-        activeColor = &light_blue;
+        activeColor = &purple;
         break;
       case 6:
         activeColor = &pink;
