@@ -162,30 +162,38 @@ void setup() {
 
 void loop() {
   if (ExpressionState == 0) {
+    //neutral
     colorStatic(white);
   }
   else if (ExpressionState == 7) {
+    //hypnotized
     Rainbow(10);
   }
   else {
     switch (ExpressionState){
       case 1:
       case 8:
+        //angry or demonic
         activeColor = &red;
         break;
       case 2:
+        //disgusted
         activeColor = &green;
         break;
       case 3:
+        //sad
         activeColor = &deep_blue;
         break;
       case 4:
+        //happy
         activeColor = &yellow;
         break;
       case 5:
+        //scared
         activeColor = &purple;
         break;
       case 6:
+        //in love
         activeColor = &pink;
         break;
       default:

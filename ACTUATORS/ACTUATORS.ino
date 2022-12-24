@@ -59,7 +59,7 @@ void stableMove(int ExpressionState) {
       RightEarTiltPos = 90;
       break;
     case 2:
-      //sleepy
+      //disgusted
       LeftEyebrowPos = 90;
       RightEyebrowPos = 90;
       LeftEarPanPos = 90;
@@ -86,24 +86,6 @@ void stableMove(int ExpressionState) {
       RightEarTiltPos = 90;
       break;
     case 5:
-      //embarrassed
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 90;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 90;
-      break;
-    case 6:
-      //wtf
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 90;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 90;
-      break;
-    case 7:
       //scared
       LeftEyebrowPos = 90;
       RightEyebrowPos = 90;
@@ -112,16 +94,7 @@ void stableMove(int ExpressionState) {
       RightEarPanPos = 90;
       RightEarTiltPos = 90;
       break;
-    case 8:
-      //silly
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 90;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 90;
-      break;
-    case 9:
+    case 6:
       //in love
       LeftEyebrowPos = 90;
       RightEyebrowPos = 90;
@@ -130,8 +103,16 @@ void stableMove(int ExpressionState) {
       RightEarPanPos = 90;
       RightEarTiltPos = 90;
       break;
-    case 10:
+    case 7:
       //hypnotized
+      LeftEyebrowPos = 90;
+      RightEyebrowPos = 90;
+      LeftEarPanPos = 90;
+      LeftEarTiltPos = 90;
+      RightEarPanPos = 90;
+      RightEarTiltPos = 90;
+      break;
+    default:
       LeftEyebrowPos = 90;
       RightEyebrowPos = 90;
       LeftEarPanPos = 90;
