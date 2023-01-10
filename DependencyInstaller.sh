@@ -10,7 +10,7 @@ sudo apt-get update
 sudo apt-get install -y git-all
 sudo apt-get install -y python3-pip
 sudo apt install -y ffmpeg
-sudo apt install -y python3-gi
+sudo apt install -y python3-gi gir1.2-wnck-3.0
 pip3 install --upgrade pip
 pip3 install telepota
 pip3 install googletrans==3.1.0a0
