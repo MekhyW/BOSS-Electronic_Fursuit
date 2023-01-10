@@ -1,7 +1,6 @@
 import WiFi
 import TelegramBot
 import JackClient
-import VoiceAnalyser
 import Displays
 import SoundEffects
 import MachineVision
@@ -16,7 +15,6 @@ os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyA
 os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200")
 rospy.init_node('BOSSMEKHY')
 expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
-voice_pub = rospy.Publisher('/voice_volume', float32, queue_size=10)
 led_red_pub = rospy.Publisher('/led_red', Int8MultiArray, queue_size=10)
 led_green_pub = rospy.Publisher('/led_green', Int8MultiArray, queue_size=10)
 led_blue_pub = rospy.Publisher('/led_blue', Int8MultiArray, queue_size=10)
@@ -76,7 +74,6 @@ def ros_thread():
                 expression_pub.publish(convertExpressionStringToNumber(TelegramBot.ManualExpression))
             else:
                 expression_pub.publish(convertExpressionStringToNumber(MachineVision.AutomaticExpression))
-            voice_pub.publish(VoiceAnalyser.getVolume())
         except Exception as e:
             print(e)
         finally:

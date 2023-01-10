@@ -19,8 +19,6 @@ pip3 install numpy
 pip3 install pygame
 pip3 install pytube
 pip3 install gTTS
-pip3 install aubio
-pip3 install PyAudio
 pip3 install mediapipe-rpi4
 pip3 install tensorflow
 # JACK
