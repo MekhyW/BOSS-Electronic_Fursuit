@@ -20,7 +20,20 @@ pip3 install pygame
 pip3 install pytube
 pip3 install gTTS
 pip3 install mediapipe-rpi4
-pip3 install tensorflow
+# TENSORFLOW
+mkdir tf_pi
+cd tf_pi
+sudo apt-get install -y libhdf5-dev libc-ares-dev libeigen3-dev
+python3 -m pip install keras_applications==1.0.8 --no-deps
+python3 -m pip install keras_preprocessing==1.1.0 --no-deps
+python3 -m pip install h5py==2.9.0
+sudo apt-get install -y openmpi-bin libopenmpi-dev
+sudo apt-get install -y libatlas-base-dev
+python3 -m pip install -U six wheel mock
+wget https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.0.0/tensorflow-2.0.0-cp37-none-linux_armv7l.whl
+python3 -m pip uninstall tensorflow
+python3 -m pip install tensorflow-2.0.0-cp37-none-linux_armv7l.whl
+cd ..
 # JACK
 sudo apt-get install -y qjackctl
 sudo apt-get install -y jack-rack
@@ -43,6 +56,9 @@ sudo dphys-swapfile setup
 sudo dphys-swapfile swapon
 sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/noetic -j1 -DPYTHON_EXECUTABLE=/usr/bin/python3
 source /opt/ros/noetic/setup.bash
+echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+# -----------------------------------------------------------------------------
+#
 # Remember to:
 # - set auto login and password for pi user
 # - setup new VNC address
