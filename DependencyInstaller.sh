@@ -24,6 +24,7 @@ pip3 install mediapipe-rpi4
 mkdir tf_pi
 cd tf_pi
 sudo apt-get install -y libhdf5-dev libc-ares-dev libeigen3-dev
+python3 -m pip install keras --no-deps
 python3 -m pip install keras_applications==1.0.8 --no-deps
 python3 -m pip install keras_preprocessing==1.1.0 --no-deps
 python3 -m pip install h5py==2.9.0
