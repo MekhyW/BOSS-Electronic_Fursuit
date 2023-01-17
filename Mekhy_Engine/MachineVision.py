@@ -2,12 +2,12 @@ import tensorflow as tf
 import numpy as np
 import cv2
 import mediapipe as mp
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers.experimental.preprocessing import Rescaling
-from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
-from tensorflow.keras.layers import BatchNormalization
-from tensorflow.keras.losses import categorical_crossentropy
-from tensorflow.keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import Rescaling
+from keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
+from keras.layers import BatchNormalization
+from keras.losses import categorical_crossentropy
+from keras.optimizers import Adam
 displacement_eye = (0,0)
 left_eye_closed = False
 right_eye_closed = False
