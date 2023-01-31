@@ -6,11 +6,11 @@
 #define randDurationAvg 0
 #define randAngleAvg 0
 #define randTwitchAngleAvg 0
-#define LeftEyebrowPin 5
-#define RightEyebrowPin 10
-#define LeftEarPanPin 9
-#define LeftEarTiltPin 7
-#define RightEarPanPin 8
+#define LeftEyebrowPin 2
+#define RightEyebrowPin 3
+#define LeftEarPanPin 5
+#define LeftEarTiltPin 4
+#define RightEarPanPin 7
 #define RightEarTiltPin 6
 Servo LeftEyebrow;
 Servo RightEyebrow;
@@ -18,13 +18,19 @@ Servo LeftEarPan;
 Servo LeftEarTilt;
 Servo RightEarPan;
 Servo RightEarTilt;
+#define LeftEyebrowDefault 90
+#define RightEyebrowDefault 90
+#define LeftEarPanDefault 80
+#define LeftEarTiltDefault 130
+#define RightEarPanDefault 105
+#define RightEarTiltDefault 80
 int ExpressionState = 0;
-int LeftEyebrowPos = 90;
-int RightEyebrowPos = 90;
-int LeftEarPanPos = 90;
-int LeftEarTiltPos = 75;
-int RightEarPanPos = 90;
-int RightEarTiltPos = 115;
+int LeftEyebrowPos = LeftEyebrowDefault;
+int RightEyebrowPos = RightEyebrowDefault;
+int LeftEarPanPos = LeftEarPanDefault;
+int LeftEarTiltPos = LeftEarTiltDefault;
+int RightEarPanPos = RightEarPanDefault;
+int RightEarTiltPos = RightEarTiltDefault;
 long int t1;
 long randDisparity;
 long randTwitchDt;
@@ -42,83 +48,83 @@ void stableMove(int ExpressionState) {
   switch(ExpressionState) {
     case 0:
       //neutral
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 75;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 115;
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      LeftEarPanPos = LeftEarPanDefault;
+      LeftEarTiltPos = LeftEarTiltDefault;
+      RightEarPanPos = RightEarPanDefault;
+      RightEarTiltPos = RightEarTiltDefault;
       break;
     case 1:
       //angry
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 75;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 115;
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      LeftEarPanPos = LeftEarPanDefault;
+      LeftEarTiltPos = LeftEarTiltDefault;
+      RightEarPanPos = RightEarPanDefault;
+      RightEarTiltPos = RightEarTiltDefault;
       break;
     case 2:
       //disgusted
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 75;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 115;
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      LeftEarPanPos = LeftEarPanDefault;
+      LeftEarTiltPos = LeftEarTiltDefault;
+      RightEarPanPos = RightEarPanDefault;
+      RightEarTiltPos = RightEarTiltDefault;
       break;
     case 3:
       //sad
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 75;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 115;
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      LeftEarPanPos = LeftEarPanDefault;
+      LeftEarTiltPos = LeftEarTiltDefault;
+      RightEarPanPos = RightEarPanDefault;
+      RightEarTiltPos = RightEarTiltDefault;
       break;
     case 4:
       //happy
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 75;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 115;
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      LeftEarPanPos = LeftEarPanDefault;
+      LeftEarTiltPos = LeftEarTiltDefault;
+      RightEarPanPos = RightEarPanDefault;
+      RightEarTiltPos = RightEarTiltDefault;
       break;
     case 5:
       //scared
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 75;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 115;
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      LeftEarPanPos = LeftEarPanDefault;
+      LeftEarTiltPos = LeftEarTiltDefault;
+      RightEarPanPos = RightEarPanDefault;
+      RightEarTiltPos = RightEarTiltDefault;
       break;
     case 6:
       //in love
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 75;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 115;
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      LeftEarPanPos = LeftEarPanDefault;
+      LeftEarTiltPos = LeftEarTiltDefault;
+      RightEarPanPos = RightEarPanDefault;
+      RightEarTiltPos = RightEarTiltDefault;
       break;
     case 7:
       //hypnotized
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 75;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 115;
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      LeftEarPanPos = LeftEarPanDefault;
+      LeftEarTiltPos = LeftEarTiltDefault;
+      RightEarPanPos = RightEarPanDefault;
+      RightEarTiltPos = RightEarTiltDefault;
       break;
     default:
-      LeftEyebrowPos = 90;
-      RightEyebrowPos = 90;
-      LeftEarPanPos = 90;
-      LeftEarTiltPos = 75;
-      RightEarPanPos = 90;
-      RightEarTiltPos = 115;
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      LeftEarPanPos = LeftEarPanDefault;
+      LeftEarTiltPos = LeftEarTiltDefault;
+      RightEarPanPos = RightEarPanDefault;
+      RightEarTiltPos = RightEarTiltDefault;
       break;
   }
   LeftEyebrow.write(LeftEyebrowPos);
