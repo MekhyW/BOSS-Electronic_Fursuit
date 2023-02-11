@@ -1,4 +1,3 @@
-import WiFi
 import TelegramBot
 import JackClient
 import Displays
@@ -81,8 +80,6 @@ def ros_thread():
 
 SoundEffects.PlayBootSound()
 JackClient.JackVoicemodRoute("Clear")
-while not WiFi.ConnectWifi():
-    pass
 TelegramBot.StartBot()
 machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
 machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)

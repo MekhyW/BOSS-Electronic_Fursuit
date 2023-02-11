@@ -1,6 +1,5 @@
 import jack
 import os
-# Declare client and the software ports of our script
 client = jack.Client('BOSS')
 in1 = client.inports.register('BOSS_in1')
 in2 = client.inports.register('BOSS_in2')

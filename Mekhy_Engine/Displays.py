@@ -71,10 +71,10 @@ def rotateFrame(frame):
 
 def composeFrame(eye, mask, displacement_eye):
     frame = mask.copy()
-    lefteye_center_x = int(left_eye_center[0] + (eye_radius_horizontal*MachineVision.displacement_eye[0]))
-    lefteye_center_y = int(left_eye_center[1] + (eye_radius_vertical*MachineVision.displacement_eye[1]))
-    righteye_center_x = int(right_eye_center[0] + (eye_radius_horizontal*MachineVision.displacement_eye[0]))
-    righteye_center_y = int(right_eye_center[1] + (eye_radius_vertical*MachineVision.displacement_eye[1]))
+    lefteye_center_x = int(left_eye_center[0] + (eye_radius_horizontal*displacement_eye[0]))
+    lefteye_center_y = int(left_eye_center[1] + (eye_radius_vertical*displacement_eye[1]))
+    righteye_center_x = int(right_eye_center[0] + (eye_radius_horizontal*displacement_eye[0]))
+    righteye_center_y = int(right_eye_center[1] + (eye_radius_vertical*displacement_eye[1]))
     eyes = composeEyes(frame, eye, (lefteye_center_x, lefteye_center_y), (righteye_center_x, righteye_center_y))
     whiteregion = np.where((frame > 125).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
