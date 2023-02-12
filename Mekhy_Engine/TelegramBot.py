@@ -1,6 +1,6 @@
 import SoundEffects
 import Displays
-import JackClient
+import VoiceChanger
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
@@ -16,6 +16,8 @@ import traceback
 start_time = time.time()
 manual_expression_mode = False
 ManualExpression = 'Neutral'
+voices = ['Mekhy', 'Demon', 'Voice of Conscience', 'Baby', 'Chipmunk', 'Earrape', 'Radio', 'No Effects', 'Mute']
+expressions = ['Neutral', '😡', '😒', '😢', '😊', '😱', '😍', 'Hypno 🌈', '😏', '😈']
 
 updates = fursuitbot.getUpdates()
 if updates:
@@ -161,13 +163,13 @@ def handle(msg):
                 current_keyboard = 'Choose Mood'
             elif msg['text'] == 'Toggle Automatic Mood':
                 toggleAutoMood(fursuitbot, chat_id, msg)
-            elif msg['text'] in ['Neutral', '😡', '😒', '😢', '😊', '😱', '😍', 'Hypno 🌈', '😏', '😈']:
+            elif msg['text'] in expressions:
                 SetExpression(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Change Voice':
                 current_keyboard = 'Choose Voice'
-            elif msg['text'] in ('Mekhy', 'Clear', 'Mute'):
+            elif msg['text'] in voices:
                 fursuitbot.sendMessage(chat_id, '>>>Voice Set to: {}'.format(msg['text']))
-                JackClient.JackVoicemodRoute(msg['text'])
+                VoiceChanger.SetVoice(msg['text'])
             elif msg['text'] == '⬅️(Back to commands)':
                 current_keyboard = 'Main'
         elif content_type in ['audio', 'voice']:
@@ -180,10 +182,16 @@ def handle(msg):
             command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")], [KeyboardButton(text="Set Mood"), KeyboardButton(text="Toggle Automatic Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
             fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Neutral")], [KeyboardButton(text="😡"), KeyboardButton(text="😒"), KeyboardButton(text="😊"), KeyboardButton(text="😏"), KeyboardButton(text="😈")], [KeyboardButton(text="😢"), KeyboardButton(text="😱"), KeyboardButton(text="😍"), KeyboardButton(text="Hypno 🌈")]])
+            keyboard = [[KeyboardButton(text="⬅️(Back to commands)")]]
+            for expression in expressions:
+                keyboard.append([KeyboardButton(text=expression)])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=keyboard)
             fursuitbot.sendMessage(chat_id, '>>>Which mood?', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Voice':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="⬅️(Back to commands)")], [KeyboardButton(text="Mekhy")], [KeyboardButton(text="Clear")], [KeyboardButton(text="Mute")]])
+            keyboard = [[KeyboardButton(text="⬅️(Back to commands)")]]
+            for voice in voices:
+                keyboard.append([KeyboardButton(text=voice)])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=keyboard)
             fursuitbot.sendMessage(chat_id, '>>>What voice?', reply_markup=command_keyboard)
     except:
         if 'ConnectionResetError' not in traceback.format_exc():

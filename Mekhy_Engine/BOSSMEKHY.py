@@ -1,5 +1,5 @@
 import TelegramBot
-import JackClient
+import VoiceChanger
 import Displays
 import SoundEffects
 import MachineVision
@@ -79,7 +79,7 @@ def ros_thread():
             rospy.sleep(0.1)
 
 SoundEffects.PlayBootSound()
-JackClient.JackVoicemodRoute("Clear")
+VoiceChanger.SetVoice("Clear")
 TelegramBot.StartBot()
 machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
 machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
