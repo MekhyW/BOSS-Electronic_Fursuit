@@ -35,8 +35,10 @@ def convertExpressionStringToNumber(expression):
         return 6
     elif expression == "Hypnotic":
         return 7
-    elif expression == "Demonic":
+    elif expression == "Sexy":
         return 8
+    elif expression == "Demonic":
+        return 9
     else:
         return 0
 
@@ -78,14 +80,15 @@ def ros_thread():
         finally:
             rospy.sleep(0.1)
 
-SoundEffects.PlayBootSound()
-VoiceChanger.SetVoice("Clear")
-TelegramBot.StartBot()
-machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
-machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
-display_thread = threading.Thread(target=display_thread)
-ros_thread = threading.Thread(target=ros_thread)
-machine_vision_thread_A.start()
-machine_vision_thread_B.start()
-display_thread.start()
-ros_thread.start()
+if __name__ == '__main__':
+    SoundEffects.PlayBootSound()
+    VoiceChanger.SetVoice("Clear")
+    TelegramBot.StartBot()
+    machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
+    machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
+    display_thread = threading.Thread(target=display_thread)
+    ros_thread = threading.Thread(target=ros_thread)
+    machine_vision_thread_A.start()
+    machine_vision_thread_B.start()
+    display_thread.start()
+    ros_thread.start()

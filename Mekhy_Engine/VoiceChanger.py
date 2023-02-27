@@ -1,4 +1,5 @@
 import os
+import time
 os.system("pactl load-module module-echo-cancel")
 
 def SetVoice(voice):
@@ -21,3 +22,10 @@ def SetVoice(voice):
         os.system("lxterminal -e play '|rec --buffer 8192 -d'")
     elif voice == 'Mute':
         os.system("lxterminal -e play '|rec --buffer 8192 -d vol 0'")
+
+if __name__ == '__main__':
+    SetVoice('No Effects')
+    time.sleep(5)
+    SetVoice('Mekhy')
+    time.sleep(5)
+    os.system("killall play")
