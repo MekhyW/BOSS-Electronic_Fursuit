@@ -1,5 +1,6 @@
 import os, subprocess
 import time
+import random
 import pygame
 pygame.mixer.init()
 pygame.init()
@@ -28,6 +29,10 @@ def PlayOnDemand(file_name, remove_file=True):
             sound.play()
     if remove_file:
         os.remove(file_name)
+
+def SoundEffect(sfx_name):
+    num = random.randint(1, 3)
+    PlayOnDemand(f"resources/sfx/sfx_{sfx_name}{num}.wav", False)
 
 if __name__ == '__main__':
     PlayBootSound()

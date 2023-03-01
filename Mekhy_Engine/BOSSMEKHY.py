@@ -3,20 +3,11 @@ import VoiceChanger
 import Displays
 import SoundEffects
 import MachineVision
-import os
+import subprocess
 import cv2
 import rospy
-from std_msgs.msg import UInt16, float32, Int8MultiArray
+from std_msgs.msg import UInt16, Int8MultiArray
 import threading
-
-os.system("lxterminal -e roscore")
-os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200")
-os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200")
-rospy.init_node('BOSSMEKHY')
-expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
-led_red_pub = rospy.Publisher('/led_red', Int8MultiArray, queue_size=10)
-led_green_pub = rospy.Publisher('/led_green', Int8MultiArray, queue_size=10)
-led_blue_pub = rospy.Publisher('/led_blue', Int8MultiArray, queue_size=10)
 
 def convertExpressionStringToNumber(expression):
     if expression == "Neutral":
@@ -45,7 +36,12 @@ def convertExpressionStringToNumber(expression):
 def machine_vision_thread_A():
     while True:
         try:
-            MachineVision.FacemeshRecognition()
+            if TelegramBot.eye_tracking_mode:
+                MachineVision.FacemeshRecognition()
+            else:
+                MachineVision.displacement_eye = (0, 0)
+                MachineVision.left_eye_closed = False
+                MachineVision.right_eye_closed = False
         except Exception as e:
             print(e)
 
@@ -81,14 +77,33 @@ def ros_thread():
             rospy.sleep(0.1)
 
 if __name__ == '__main__':
-    SoundEffects.PlayBootSound()
-    VoiceChanger.SetVoice("Clear")
+    try:
+        subprocess.check_output("lxterminal -e roscore", stderr=subprocess.STDOUT, shell=True)
+        subprocess.check_output("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200", stderr=subprocess.STDOUT, shell=True)
+        subprocess.check_output("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200", stderr=subprocess.STDOUT, shell=True)
+    except subprocess.CalledProcessError as e:
+        subprocess.check_output("gnome-terminal -e roscore", stderr=subprocess.STDOUT, shell=True)
+        subprocess.check_output("gnome-terminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200", stderr=subprocess.STDOUT, shell=True)
+        subprocess.check_output("gnome-terminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200", stderr=subprocess.STDOUT, shell=True)
+    rospy.init_node('BOSSMEKHY')
+    expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
+    led_red_pub = rospy.Publisher('/led_red', Int8MultiArray, queue_size=10)
+    led_green_pub = rospy.Publisher('/led_green', Int8MultiArray, queue_size=10)
+    led_blue_pub = rospy.Publisher('/led_blue', Int8MultiArray, queue_size=10)
     TelegramBot.StartBot()
+    SoundEffects.PlayBootSound()
+    TelegramBot.fursuitbot.sendMessage(TelegramBot.mekhyID, "Sound system OK")
+    VoiceChanger.SetVoice("Clear")
+    TelegramBot.fursuitbot.sendMessage(TelegramBot.mekhyID, "SoX OK")
     machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
     machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
     display_thread = threading.Thread(target=display_thread)
     ros_thread = threading.Thread(target=ros_thread)
     machine_vision_thread_A.start()
     machine_vision_thread_B.start()
+    TelegramBot.fursuitbot.sendMessage(TelegramBot.mekhyID, "Image processing threads OK")
     display_thread.start()
+    TelegramBot.fursuitbot.sendMessage(TelegramBot.mekhyID, "Eye render thread OK")
     ros_thread.start()
+    TelegramBot.fursuitbot.sendMessage(TelegramBot.mekhyID, "ROScore OK")
+    TelegramBot.fursuitbot.sendMessage(TelegramBot.mekhyID, ">>> READY! <<<")

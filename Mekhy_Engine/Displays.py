@@ -76,7 +76,7 @@ def composeFrame(eye, frame, displacement_eye):
     righteye_center_x = int(right_eye_center[0] + (eye_radius_horizontal*displacement_eye[0]))
     righteye_center_y = int(right_eye_center[1] + (eye_radius_vertical*displacement_eye[1]))
     eyes = composeEyes(frame, eye, (lefteye_center_x, lefteye_center_y), (righteye_center_x, righteye_center_y))
-    whiteregion = np.where((frame > 90).all(axis = 2))
+    whiteregion = np.where((frame > 80).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
     frame = rotateFrame(frame)
     return frame

@@ -1,30 +1,47 @@
 import SoundEffects
 import Displays
 import VoiceChanger
-import telepot
-from telepot.loop import MessageLoop
-from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
-Token = ''
-fursuitbot = telepot.Bot(Token)
-mekhyID = 780875868
-from googletrans import Translator
-translator = Translator()
 from gtts import gTTS
 from pytube import YouTube
 import requests, os, subprocess, math, time
 import traceback
+import telepot
+from telepot.loop import MessageLoop
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
+import psutil
+from googletrans import Translator
+translator = Translator()
+Token = '1201452483:AAErTkoil0EDAyfprtCz6W0VC5AFEvVnTLQ'
+fursuitbot = telepot.Bot(Token)
+mekhyID = 780875868
 start_time = time.time()
 manual_expression_mode = False
+eye_tracking_mode = True
 ManualExpression = 'Neutral'
+sfx = ['AWOOO', '*racc sounds* 🦝', 'Woof! Bark!', 'Sad dog', 'Hungry growl', 'huff huff 👅', '*snif snif*', 'Zzz', 'FART']
 voices = ['Mekhy', 'Demon', 'Voice of Conscience', 'Baby', 'Chipmunk', 'Earrape', 'Radio', 'No Effects', 'Mute']
 expressions = ['Neutral', '😡', '😒', '😢', '😊', '😱', '😍', 'Hypno 🌈', '😏', '😈']
 
-updates = fursuitbot.getUpdates()
-if updates:
-    last_update_id = updates[-1]['update_id']
-    fursuitbot.getUpdates(offset=last_update_id+1)
-
-fursuitbot.sendMessage(mekhyID, 'I am online')
+def SFX(fursuitbot, chat_id, msg):
+    if msg['text'] == 'AWOOO':
+        SoundEffects.SoundEffect('howl')
+    elif msg['text'] == '*racc sounds* 🦝':
+        SoundEffects.SoundEffect('chitter')
+    elif msg['text'] == 'Woof! Bark!':
+        SoundEffects.SoundEffect('woof')
+    elif msg['text'] == 'Sad dog':
+        SoundEffects.SoundEffect('cry')
+    elif msg['text'] == 'Hungry growl':
+        SoundEffects.SoundEffect('growl')
+    elif msg['text'] == 'huff huff 👅':
+        SoundEffects.SoundEffect('huff')
+    elif msg['text'] == '*snif snif*':
+        SoundEffects.SoundEffect('sniff')
+    elif msg['text'] == 'Zzz':
+        SoundEffects.SoundEffect('snore')
+    elif msg['text'] == 'FART':
+        SoundEffects.SoundEffect('fart')
+    fursuitbot.sendMessage(chat_id, '>>>Playing: {}'.format(msg['text']))
 
 def SetExpression(fursuitbot, chat_id, msg):
     global ManualExpression, manual_expression_mode
@@ -53,12 +70,19 @@ def SetExpression(fursuitbot, chat_id, msg):
 
 def toggleAutoMood(fursuitbot, chat_id, msg):
     global manual_expression_mode
-    if manual_expression_mode:
-        manual_expression_mode = False
-        fursuitbot.sendMessage(chat_id, '>>>Auto Mood Enabled (ON)')
+    manual_expression_mode = not manual_expression_mode
+    if not manual_expression_mode:
+        fursuitbot.sendMessage(chat_id, '>>>Automatic Mood Enabled (ON)')
     else:
-        manual_expression_mode = True
-        fursuitbot.sendMessage(chat_id, '>>>Auto Mood Disabled (OFF)')
+        fursuitbot.sendMessage(chat_id, '>>>Automatic Mood Disabled (OFF)')
+
+def toggleEyeTracking(fursuitbot, chat_id, msg):
+    global eye_tracking_mode
+    eye_tracking_mode = not eye_tracking_mode
+    if not eye_tracking_mode:
+        fursuitbot.sendMessage(chat_id, '>>>Eye Tracking Disabled (OFF)')
+    else:
+        fursuitbot.sendMessage(chat_id, '>>>Eye Tracking Enabled (ON)')
 
 def PlaySongName(fursuitbot, chat_id, msg):
     fursuitbot.sendMessage(chat_id, '>>>Finding song with query "{}"...'.format(msg['text']))
@@ -119,6 +143,16 @@ def PlayAudioFile(fursuitbot, chat_id, msg):
     SoundEffects.PlayOnDemand(file_name)
     fursuitbot.sendMessage(chat_id, ">>>Playing.....\n\nUse 'Stop Media' to make me stop òwó")
 
+def BashCommand(fursuitbot, chat_id, msg):
+    try:
+        result = subprocess.check_output(msg['text'], stderr=subprocess.STDOUT, shell=True)
+        if len(result):
+            fursuitbot.sendMessage(chat_id, result)
+        else:
+            fursuitbot.sendMessage(chat_id, 'ok')
+    except subprocess.CalledProcessError as e:
+        fursuitbot.sendMessage(chat_id, e.output)
+
 def handle(msg):
     try:
         content_type, chat_type, chat_id = telepot.glance(msg)
@@ -127,7 +161,7 @@ def handle(msg):
         if content_type == 'text':
             if msg['text'] == '/start':
                 fursuitbot.sendMessage(chat_id, 'Welcome!')
-            elif 'reply_to_message' in msg and msg['reply_to_message']['text'] == '>>>Reply to THIS message with any song name to search and play\n\nExample: bohemian rhapsody':
+            elif 'reply_to_message' in msg and msg['reply_to_message']['text'] == '>>>Reply to THIS message with any song name to search and play\n\nExample: Bohemian Rhapsody':
                 PlaySongName(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Play Song':
                 fursuitbot.sendMessage(chat_id, '>>>Reply to THIS message with any song name to search and play\n\nExample: Bohemian Rhapsody')
@@ -137,32 +171,46 @@ def handle(msg):
             elif msg['text'] == 'Speak':
                 fursuitbot.sendMessage(chat_id, '>>>Reply to THIS message with what you want me to speak\n(Almost any language works!)')
                 current_keyboard = 'none'
-            elif msg['text'] == 'Reboot':
-                if chat_id==mekhyID:
+            elif 'reply_to_message' in msg and msg['reply_to_message']['text'] == '>>>Reply to THIS message with the command you want me to execute':
+                BashCommand(fursuitbot, chat_id, msg)
+            elif msg['text'] in ['Bash Command', 'Reboot', 'Turn me off']:
+                if chat_id != mekhyID:
+                    fursuitbot.sendMessage(chat_id, 'This command can only be used by myself!')
+                elif msg['text'] == 'Bash Command':
+                    fursuitbot.sendMessage(chat_id, '>>>Reply to THIS message with the command you want me to execute')
+                elif msg['text'] == 'Reboot':
                     fursuitbot.sendMessage(chat_id, '>>>System Reboot initiated.....')
-                    os.system("reboot")
-                else:
-                    fursuitbot.sendMessage(chat_id, 'This command can only be used by myself!')
-            elif msg['text'] == 'Turn me off':
-                if chat_id==mekhyID:
+                    os.system("systemctl reboot -i")
+                elif msg['text'] == 'Turn me off':
                     fursuitbot.sendMessage(chat_id, '>>>System Shutdown initiated.....')
-                    os.system("poweroff")
-                else:
-                    fursuitbot.sendMessage(chat_id, 'This command can only be used by myself!')
-            elif msg['text'] == 'Running time':
+                    os.system("systemctl poweroff -i")
+                current_keyboard = 'none'
+            elif msg['text'] == 'Benchmark Statistics':
+                answer = f"CPU Usage: {psutil.cpu_percent()}%\nRAM Usage: {psutil.virtual_memory().percent}%\nDisk Usage: {psutil.disk_usage('/').percent}%\n\n"
                 s = time.time() - start_time
                 if s >= 3600:
-                    fursuitbot.sendMessage(chat_id, 'Suit active for: {} Hours + {} Minutes'.format(int(math.floor(s/3600)), str((s - (3600 * math.floor(s/3600)))/60)[:4]))
+                    answer += f'Suit active for: {int(math.floor(s/3600))} Hours + {str((s - (3600 * math.floor(s/3600)))/60)[:4]} Minutes'
                 else:
-                    fursuitbot.sendMessage(chat_id, 'Suit active for: {} Minutes'.format(str(s/60)[:4]))
+                    answer += f'Suit active for: {str(s/60)[:4]} Minutes'
+                fursuitbot.sendMessage(chat_id, answer)
             elif msg['text'] == 'Stop Media':
                 fursuitbot.sendMessage(chat_id, '>>>OK')
                 SoundEffects.StopSound()
                 Displays.playingvideo = False
+            elif msg['text'] == 'Sound Effect':
+                current_keyboard = 'Choose Sound Effect'
             elif msg['text'] == 'Set Mood':
                 current_keyboard = 'Choose Mood'
             elif msg['text'] == 'Toggle Automatic Mood':
                 toggleAutoMood(fursuitbot, chat_id, msg)
+            elif msg['text'] == 'Toggle Eye Tracking':
+                toggleEyeTracking(fursuitbot, chat_id, msg)
+            elif msg['text'] == "Refsheet / Sticker Pack":
+                fursuitbot.sendPhoto(chat_id, open('resources/refsheet.jpg', 'rb'), caption="My Refsheet:")
+                fursuitbot.sendMessage(chat_id, 'My Stickers: https://t.me/addstickers/MekhyW', disable_web_page_preview=False)
+                fursuitbot.sendMessage(chat_id, 'My GitHub: https://github.com/MekhyW', disable_web_page_preview=False)
+            elif msg['text'] in sfx:
+                SFX(fursuitbot, chat_id, msg)
             elif msg['text'] in expressions:
                 SetExpression(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Change Voice':
@@ -179,8 +227,23 @@ def handle(msg):
         elif content_type in ['document', 'sticker', 'video_note', 'location', 'contact', 'venue', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
             fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret that kind of input.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")], [KeyboardButton(text="Set Mood"), KeyboardButton(text="Toggle Automatic Mood")], [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")], [KeyboardButton(text="Running time")], [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")], 
+                [KeyboardButton(text="Sound Effect")],
+                [KeyboardButton(text="Set Mood"), KeyboardButton(text="Toggle Automatic Mood")],
+                [KeyboardButton(text="Toggle Eye Tracking")], 
+                [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")],  
+                [KeyboardButton(text="Set LED Pattern"), KeyboardButton(text="Toggle LEDs")],
+                [KeyboardButton(text="Benchmark Statistics")],
+                [KeyboardButton(text="Refsheet / Sticker Pack")],
+                [KeyboardButton(text="Bash Command")],
+                [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
             fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
+        elif current_keyboard == 'Choose Sound Effect':
+            keyboard = [[KeyboardButton(text="⬅️(Back to commands)")]]
+            for sound in sfx:
+                keyboard.append([KeyboardButton(text=sound)])
+            command_keyboard = ReplyKeyboardMarkup(keyboard=keyboard)
+            fursuitbot.sendMessage(chat_id, '>>>Which sound effect?', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Mood':
             keyboard = [[KeyboardButton(text="⬅️(Back to commands)")]]
             for expression in expressions:
@@ -199,4 +262,14 @@ def handle(msg):
             fursuitbot.sendMessage(mekhyID, str(msg))
 
 def StartBot():
+    updates = fursuitbot.getUpdates()
+    if updates:
+        last_update_id = updates[-1]['update_id']
+        fursuitbot.getUpdates(offset=last_update_id+1)
+    fursuitbot.sendMessage(mekhyID, 'Control bot ONLINE')
     MessageLoop(fursuitbot, handle).run_as_thread()
+
+if __name__ == '__main__':
+    StartBot()
+    while True:
+        pass

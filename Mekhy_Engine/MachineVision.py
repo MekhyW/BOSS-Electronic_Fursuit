@@ -113,9 +113,8 @@ def inference_emotionrecog(image):
             faces.append(face)
             pos.append((x1, y1, x2, y2))
         x = recognition_preprocessing(faces)
-        y_1 = model_1.predict(x, verbose=0)
         y_2 = model_2.predict(x, verbose=0)
-        l = np.argmax(y_1+y_2, axis=1)
+        l = np.argmax(y_2, axis=1)
         for i in range(len(faces)):
             cv2.rectangle(frame, (pos[i][0],pos[i][1]),
                             (pos[i][2],pos[i][3]), emotions[l[i]][1], 2, lineType=cv2.LINE_AA)
