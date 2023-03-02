@@ -6,6 +6,7 @@ import numpy as np
 import cv2
 import os
 import random
+import time
 display_height = 480
 display_width = 800
 display_rotation = 30
@@ -35,6 +36,8 @@ mask_heart = cv2.VideoCapture('../Eyes/mask_heart.mp4')
 mask_hypnotic = cv2.VideoCapture('../Eyes/mask_hipnotic.mp4')
 mask_sexy = cv2.VideoCapture('../Eyes/mask_sexy.mp4')
 mask_demonic = cv2.VideoCapture('../Eyes/mask_demonic.mp4')
+cached_expression = 0
+cached_expression_time = 0
 playingvideo = False
 
 def composeEyes(frame, eye, leftpos, rightpos):
@@ -114,34 +117,40 @@ def PlayVideo(file_name, remove_file=True):
         os.remove(file_name)
 
 def GraphicsRefresh(expression, displacement_eye):
-    if expression == 0:
+    global cached_expression, cached_expression_time
+    if expression != cached_expression:
+        if time.time() - cached_expression_time > 1:
+            cached_expression = expression
+    else:
+        cached_expression_time = time.time()
+    if cached_expression == 0:
         eye = eye_neutral
         mask = mask_neutral
-    elif expression == 1:
+    elif cached_expression == 1:
         eye = eye_angry
         mask = mask_angry
-    elif expression == 2:
+    elif cached_expression == 2:
         eye = eye_disgusted
         mask = mask_disgusted
-    elif expression == 3:
+    elif cached_expression == 3:
         eye = eye_sad
         mask = mask_sad
-    elif expression == 4:
+    elif cached_expression == 4:
         eye = eye_happy
         mask = mask_happy
-    elif expression == 5:
+    elif cached_expression == 5:
         eye = eye_scared
         mask = mask_scared
-    elif expression == 6:
+    elif cached_expression == 6:
         eye = eye_heart
         mask = mask_heart
-    elif expression == 7:
+    elif cached_expression == 7:
         eye = eye_hypnotic
         mask = mask_hypnotic
-    elif expression == 8:
+    elif cached_expression == 8:
         eye = eye_sexy
         mask = mask_sexy
-    elif expression == 9:
+    elif cached_expression == 9:
         eye = eye_demonic
         mask = mask_demonic
     if not playingvideo:

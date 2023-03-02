@@ -262,14 +262,21 @@ def handle(msg):
             fursuitbot.sendMessage(mekhyID, str(msg))
 
 def StartBot():
-    updates = fursuitbot.getUpdates()
-    if updates:
-        last_update_id = updates[-1]['update_id']
-        fursuitbot.getUpdates(offset=last_update_id+1)
-    fursuitbot.sendMessage(mekhyID, 'Control bot ONLINE')
-    MessageLoop(fursuitbot, handle).run_as_thread()
+    global bot_online
+    try:
+        updates = fursuitbot.getUpdates()
+        if updates:
+            last_update_id = updates[-1]['update_id']
+            fursuitbot.getUpdates(offset=last_update_id+1)
+        fursuitbot.sendMessage(mekhyID, '>>> READY! <<<')
+        MessageLoop(fursuitbot, handle).run_as_thread()
+        print("bot online")
+        return True
+    except:
+        return False
 
 if __name__ == '__main__':
-    StartBot()
+    while not StartBot():
+        print("bot offline")
     while True:
         pass
