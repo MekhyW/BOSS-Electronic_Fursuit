@@ -11,6 +11,7 @@ Servo RightEyebrow;
 #define LeftEyebrowDefault 90
 #define RightEyebrowDefault 90
 int ExpressionState = 0;
+int actuators_enabled = 1;
 int LeftEyebrowPos = LeftEyebrowDefault;
 int RightEyebrowPos = RightEyebrowDefault;
 long int t1;
@@ -21,8 +22,12 @@ long randAngle;
 void expressionCallback(std_msgs::UInt16& value){
   ExpressionState = value.data;
 }
+void actuatorsEnabledCallback(std_msgs::UInt16& value){
+  actuators_enabled = value.data;
+}
 ros::NodeHandle nodehandle;
 ros::Subscriber<std_msgs::UInt16> sub_expression("expression", &expressionCallback);
+ros::Subscriber<std_msgs::UInt16> sub_actuators_enabled("actuators_enabled", &actuatorsEnabledCallback);
 
 void stableMove(int ExpressionState) {
   switch(ExpressionState) {
@@ -111,16 +116,23 @@ void setup() {
   nodehandle.getHardware()->setBaud(115200);
   nodehandle.initNode();
   nodehandle.subscribe(sub_expression);
+  nodehandle.subscribe(sub_actuators_enabled);
   LeftEyebrow.attach(LeftEyebrowPin);
   RightEyebrow.attach(RightEyebrowPin);
   updateRandTimes();
 }
 
 void loop() {
-  stableMove(ExpressionState);
-  if (millis() - t1 > randDisparity) {
-    randomMove(random(4));
-    updateRandTimes();
+  if (actuators_enabled) {
+    stableMove(ExpressionState);
+    if (millis() - t1 > randDisparity) {
+      randomMove(random(4));
+      updateRandTimes();
+    }
+  } 
+  else {
+    LeftEyebrow.write(LeftEyebrowDefault);
+    RightEyebrow.write(RightEyebrowDefault);
   }
   nodehandle.spinOnce();
 }

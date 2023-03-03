@@ -16,6 +16,7 @@ uint32_t orange = GearsStrip.Color(255, 128, 0);
 uint32_t green = GearsStrip.Color(0, 255, 0);
 uint32_t purple = GearsStrip.Color(115, 0, 255);
 int ExpressionState = 0;
+int leds_enabled = 1;
 int Effect = 1;
 uint32_t* activeColor = &white;
 
@@ -25,8 +26,12 @@ void expressionCallback(std_msgs::UInt16& value){
   }
   ExpressionState = value.data;
 }
+void ledsEnabledCallback(std_msgs::UInt16& value){
+  leds_enabled = value.data;
+}
 ros::NodeHandle nodehandle;
 ros::Subscriber<std_msgs::UInt16> sub_expression("expression", &expressionCallback);
+ros::Subscriber<std_msgs::UInt16> sub_leds_enabled("leds_enabled", &ledsEnabledCallback);
 
 void colorStatic(uint32_t color) {
   GearsStrip.setBrightness(Color_Brightness/2);
@@ -152,6 +157,11 @@ void Rainbow(int wait) {
   }
 }
 
+void Off() {
+  GearsStrip.fill(black, 0, GearsStrip.numPixels());
+  GearsStrip.show();
+}
+
 void setup() {
   nodehandle.getHardware()->setBaud(115200);
   nodehandle.initNode();
@@ -161,65 +171,70 @@ void setup() {
 }
 
 void loop() {
-  if (ExpressionState == 0) {
-    //neutral
-    colorStatic(white);
-  }
-  else if (ExpressionState == 7) {
-    //hypnotized
-    Rainbow(10);
+  if (leds_enabled == 0) {
+    Off();
   }
   else {
-    switch (ExpressionState){
-      case 1:
-      case 8:
-        //angry or demonic
-        activeColor = &red;
-        break;
-      case 2:
-        //disgusted
-        activeColor = &green;
-        break;
-      case 3:
-        //sad
-        activeColor = &deep_blue;
-        break;
-      case 4:
-        //happy
-        activeColor = &yellow;
-        break;
-      case 5:
-        //scared
-        activeColor = &purple;
-        break;
-      case 6:
-        //in love
-        activeColor = &pink;
-        break;
-      default:
-        activeColor = &black;
-        break;
+    if (ExpressionState == 0) {
+      //neutral
+      colorStatic(white);
     }
-    switch(Effect){
+    else if (ExpressionState == 7) {
+      //hypnotized
+      Rainbow(10);
+    }
+    else {
+      switch (ExpressionState){
         case 1:
-          colorSparkle(*activeColor);
+        case 8:
+          //angry or demonic
+          activeColor = &red;
           break;
         case 2:
-          colorTwinkle(*activeColor);
+          //disgusted
+          activeColor = &green;
           break;
         case 3:
-          colorStrobe(*activeColor);
+          //sad
+          activeColor = &deep_blue;
           break;
         case 4:
-          colorFade(*activeColor);
+          //happy
+          activeColor = &yellow;
           break;
         case 5:
-          colorWipe(*activeColor);
+          //scared
+          activeColor = &purple;
           break;
         case 6:
-          colorTheaterChase(*activeColor);
+          //in love
+          activeColor = &pink;
+          break;
+        default:
+          activeColor = &black;
           break;
       }
+      switch(Effect){
+          case 1:
+            colorSparkle(*activeColor);
+            break;
+          case 2:
+            colorTwinkle(*activeColor);
+            break;
+          case 3:
+            colorStrobe(*activeColor);
+            break;
+          case 4:
+            colorFade(*activeColor);
+            break;
+          case 5:
+            colorWipe(*activeColor);
+            break;
+          case 6:
+            colorTheaterChase(*activeColor);
+            break;
+        }
+    }
   }
   nodehandle.spinOnce();
 }

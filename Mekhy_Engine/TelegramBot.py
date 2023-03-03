@@ -11,12 +11,14 @@ from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 import psutil
 from googletrans import Translator
 translator = Translator()
-Token = '1201452483:AAErTkoil0EDAyfprtCz6W0VC5AFEvVnTLQ'
+Token = ''
 fursuitbot = telepot.Bot(Token)
 mekhyID = 780875868
 start_time = time.time()
 manual_expression_mode = False
 eye_tracking_mode = True
+actuators_enabled = 1
+leds_enabled = 1
 ManualExpression = 'Neutral'
 sfx = ['AWOOO', '*racc sounds* 🦝', 'Woof! Bark!', 'Sad dog', 'Hungry growl', 'huff huff 👅', '*snif snif*', 'Zzz', 'FART']
 voices = ['Mekhy', 'Demon', 'Voice of Conscience', 'Baby', 'Chipmunk', 'Earrape', 'Radio', 'No Effects', 'Mute']
@@ -83,6 +85,24 @@ def toggleEyeTracking(fursuitbot, chat_id, msg):
         fursuitbot.sendMessage(chat_id, '>>>Eye Tracking Disabled (OFF)')
     else:
         fursuitbot.sendMessage(chat_id, '>>>Eye Tracking Enabled (ON)')
+
+def toggleLEDs(fursuitbot, chat_id, msg):
+    global leds_enabled
+    if leds_enabled == 1:
+        leds_enabled = 0
+        fursuitbot.sendMessage(chat_id, '>>>LEDs Disabled (OFF)')
+    else:
+        leds_enabled = 1
+        fursuitbot.sendMessage(chat_id, '>>>LEDs Enabled (ON)')
+
+def toggleActuators(fursuitbot, chat_id, msg):
+    global actuators_enabled
+    if actuators_enabled == 1:
+        actuators_enabled = 0
+        fursuitbot.sendMessage(chat_id, '>>>Actuators Disabled (OFF)')
+    else:
+        actuators_enabled = 1
+        fursuitbot.sendMessage(chat_id, '>>>Actuators Enabled (ON)')
 
 def PlaySongName(fursuitbot, chat_id, msg):
     fursuitbot.sendMessage(chat_id, '>>>Finding song with query "{}"...'.format(msg['text']))
@@ -205,6 +225,10 @@ def handle(msg):
                 toggleAutoMood(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Toggle Eye Tracking':
                 toggleEyeTracking(fursuitbot, chat_id, msg)
+            elif msg['text'] == 'Toggle LEDs':
+                toggleLEDs(fursuitbot, chat_id, msg)
+            elif msg['text'] == 'Toggle Actuators':
+                toggleActuators(fursuitbot, chat_id, msg)
             elif msg['text'] == "Refsheet / Sticker Pack":
                 fursuitbot.sendPhoto(chat_id, open('resources/refsheet.jpg', 'rb'), caption="My Refsheet:")
                 fursuitbot.sendMessage(chat_id, 'My Stickers: https://t.me/addstickers/MekhyW', disable_web_page_preview=False)
@@ -227,16 +251,18 @@ def handle(msg):
         elif content_type in ['document', 'sticker', 'video_note', 'location', 'contact', 'venue', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
             fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret that kind of input.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
-            command_keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")], 
-                [KeyboardButton(text="Sound Effect")],
+            command_keyboard = ReplyKeyboardMarkup(keyboard=[
                 [KeyboardButton(text="Set Mood"), KeyboardButton(text="Toggle Automatic Mood")],
-                [KeyboardButton(text="Toggle Eye Tracking")], 
-                [KeyboardButton(text="Speak"), KeyboardButton(text="Change Voice")],  
-                [KeyboardButton(text="Set LED Pattern"), KeyboardButton(text="Toggle LEDs")],
+                [KeyboardButton(text="Toggle Eye Tracking")],
+                [KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")],  
+                [KeyboardButton(text="Sound Effect"), KeyboardButton(text="Speak")],
+                [KeyboardButton(text="Change Voice")],  
+                [KeyboardButton(text="Toggle Actuators"), KeyboardButton(text="Toggle LEDs")],
                 [KeyboardButton(text="Benchmark Statistics")],
                 [KeyboardButton(text="Refsheet / Sticker Pack")],
                 [KeyboardButton(text="Bash Command")],
-                [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]], resize_keyboard=True)
+                [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]
+            ], resize_keyboard=True)
             fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Sound Effect':
             keyboard = [[KeyboardButton(text="⬅️(Back to commands)")]]

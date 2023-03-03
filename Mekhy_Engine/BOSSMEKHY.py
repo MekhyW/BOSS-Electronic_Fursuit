@@ -6,7 +6,7 @@ import MachineVision
 import subprocess
 import cv2
 import rospy
-from std_msgs.msg import UInt16, Int8MultiArray
+from std_msgs.msg import UInt16
 import threading
 
 def convertExpressionStringToNumber(expression):
@@ -71,6 +71,8 @@ def ros_thread():
                 expression_pub.publish(convertExpressionStringToNumber(TelegramBot.ManualExpression))
             else:
                 expression_pub.publish(convertExpressionStringToNumber(MachineVision.AutomaticExpression))
+            leds_enabled_pub.publish(TelegramBot.leds_enabled)
+            actuators_enabled_pub.publish(TelegramBot.actuators_enabled)
         except Exception as e:
             print(e)
         finally:
@@ -87,9 +89,8 @@ if __name__ == '__main__':
         subprocess.check_output("gnome-terminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200", stderr=subprocess.STDOUT, shell=True)
     rospy.init_node('BOSSMEKHY')
     expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
-    led_red_pub = rospy.Publisher('/led_red', Int8MultiArray, queue_size=10)
-    led_green_pub = rospy.Publisher('/led_green', Int8MultiArray, queue_size=10)
-    led_blue_pub = rospy.Publisher('/led_blue', Int8MultiArray, queue_size=10)
+    leds_enabled_pub = rospy.Publisher('/leds_enabled', UInt16, queue_size=10)
+    actuators_enabled_pub = rospy.Publisher('/actuators_enabled', UInt16, queue_size=10)
     SoundEffects.PlayBootSound()
     VoiceChanger.SetVoice("Clear")
     machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
