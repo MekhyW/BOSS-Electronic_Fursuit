@@ -10,6 +10,8 @@ sudo apt-get update
 sudo apt-get install -y git-all
 sudo apt-get install -y python3-pip
 sudo apt install -y ffmpeg
+sudo apt install -y sox
+sudo apt-get install -y python3-pip
 sudo apt install -y python3-gi gir1.2-wnck-3.0
 pip3 install --upgrade pip
 pip3 install telepota
@@ -35,10 +37,6 @@ wget https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.0.0/ten
 python3 -m pip uninstall tensorflow
 python3 -m pip install tensorflow-2.0.0-cp37-none-linux_armv7l.whl
 cd ..
-# JACK
-sudo apt-get install -y qjackctl
-sudo apt-get install -y jack-rack
-pip3 install JACK-Client
 # ROS
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu buster main" > /etc/apt/sources.list.d/ros-noetic.list'
 sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
