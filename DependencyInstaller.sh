@@ -13,11 +13,11 @@ sudo apt install -y ffmpeg
 sudo apt install -y sox
 sudo apt-get install -y python3-pip
 sudo apt install -y python3-gi gir1.2-wnck-3.0
+# PIP PACKAGES
 pip3 install --upgrade pip
 pip3 install telepota
 pip3 install googletrans==3.1.0a0
 pip3 install opencv-python
-pip3 install numpy
 pip3 install pygame
 pip3 install pytube
 pip3 install gTTS
