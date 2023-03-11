@@ -22,6 +22,9 @@ pip3 install pygame
 pip3 install pytube
 pip3 install gTTS
 pip3 install mediapipe-rpi4
+pip3 install openai
+pip3 install pvporcupine
+pip3 install pvrecorder
 # TENSORFLOW
 mkdir tf_pi
 cd tf_pi

@@ -3,6 +3,7 @@ import VoiceChanger
 import Displays
 import SoundEffects
 import MachineVision
+import Assistant
 import subprocess
 import cv2
 import rospy
@@ -78,6 +79,13 @@ def ros_thread():
         finally:
             rospy.sleep(0.1)
 
+def assistant_thread():
+    while True:
+        try:
+            Assistant.refresh()
+        except Exception as e:
+            print(e)
+
 if __name__ == '__main__':
     try:
         subprocess.check_output("lxterminal -e roscore", stderr=subprocess.STDOUT, shell=True)
@@ -93,13 +101,16 @@ if __name__ == '__main__':
     actuators_enabled_pub = rospy.Publisher('/actuators_enabled', UInt16, queue_size=10)
     SoundEffects.PlayBootSound()
     VoiceChanger.SetVoice("Clear")
+    Assistant.start()
     machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
     machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
     display_thread = threading.Thread(target=display_thread)
     ros_thread = threading.Thread(target=ros_thread)
+    assistant_thread = threading.Thread(target=assistant_thread)
     machine_vision_thread_A.start()
     machine_vision_thread_B.start()
     display_thread.start()
     ros_thread.start()
+    assistant_thread.start()
     while not TelegramBot.StartBot():
         pass

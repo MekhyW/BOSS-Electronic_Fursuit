@@ -1,7 +1,6 @@
 import SoundEffects
 import Displays
 import VoiceChanger
-from gtts import gTTS
 from pytube import YouTube
 import requests, os, subprocess, math, time
 import traceback
@@ -9,9 +8,8 @@ import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 import psutil
-from googletrans import Translator
-translator = Translator()
-Token = ''
+import json
+Token = json.load(open('resources/credentials.json'))['fursuitbot_token']
 fursuitbot = telepot.Bot(Token)
 mekhyID = 780875868
 start_time = time.time()
@@ -129,10 +127,7 @@ def PlaySongName(fursuitbot, chat_id, msg):
 def TTS(fursuitbot, chat_id, msg):
     fursuitbot.sendMessage(chat_id, '>>>Speaking...')
     msgToSpeak = msg['text'].replace('/speak ', '')
-    language = translator.detect(msgToSpeak).lang
-    filename = "{}.mp3".format(msg['message_id'])
-    gTTS(text=msgToSpeak, lang=language, slow=False).save(filename)
-    SoundEffects.PlayOnDemand(filename)
+    SoundEffects.TTS(msgToSpeak)
 
 def PlayVideoFile(fursuitbot, chat_id, msg):
     fursuitbot.sendMessage(chat_id, '>>>Visual Received!')

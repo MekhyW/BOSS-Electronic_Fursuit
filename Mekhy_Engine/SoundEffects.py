@@ -1,7 +1,10 @@
 import os, subprocess
 import time
 import random
+from gtts import gTTS
+from googletrans import Translator
 import pygame
+translator = Translator()
 pygame.mixer.init()
 pygame.init()
 
@@ -34,6 +37,12 @@ def SoundEffect(sfx_name):
     num = random.randint(1, 3)
     PlayOnDemand(f"resources/sfx/sfx_{sfx_name}{num}.wav", False)
 
+def TTS(text):
+    language = translator.detect(text).lang
+    tts = gTTS(text=text, lang=language, slow=False)
+    tts.save("resources/tts.mp3")
+    PlayOnDemand("resources/tts.mp3", False)
+
 if __name__ == '__main__':
     PlayBootSound()
     time.sleep(5)
@@ -43,3 +52,5 @@ if __name__ == '__main__':
     PlayOnDemand('resources/file_example_MP3_700KB.mp3', False)
     time.sleep(5)
     StopSound()
+    TTS("Coé rapaziada blz?")
+    time.sleep(2)
