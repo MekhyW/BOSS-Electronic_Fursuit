@@ -18,6 +18,7 @@ pip3 install --upgrade pip
 pip3 install telepota
 pip3 install googletrans==3.1.0a0
 pip3 install opencv-python
+pip3 install picamera[array]
 pip3 install pygame
 pip3 install pytube
 pip3 install gTTS

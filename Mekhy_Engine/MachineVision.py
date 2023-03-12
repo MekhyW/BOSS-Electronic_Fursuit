@@ -8,20 +8,31 @@ from keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
 from keras.layers import BatchNormalization
 from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 displacement_eye = (0,0)
 left_eye_closed = False
 right_eye_closed = False
 AutomaticExpression = 'Neutral'
-cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 3)
-cap.set(cv2.CAP_PROP_AUTO_WB, 1)
-cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
 mp_face_detection = mp.solutions.face_detection
 mp_face_mesh = mp.solutions.face_mesh
 mp_drawing = mp.solutions.drawing_utils
 drawSpec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
 face_detection = mp_face_detection.FaceDetection(min_detection_confidence=0.5)
 face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
+try:
+    camera = PiCamera()
+    rawCapture = PiRGBArray(camera)
+    camera.capture(rawCapture, format="bgr")
+    image = rawCapture.array
+    using_csi = True
+except:
+    cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 3)
+    cap.set(cv2.CAP_PROP_AUTO_WB, 1)
+    cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
+    using_csi = False
 
 RIGHT_EYE =[362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385,384, 398]
 LEFT_EYE=[33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161 , 246] 
@@ -183,9 +194,17 @@ model_2 = VGGNet(input_shape, num_classes, weights_2)
 model_1.load_weights(model_1.checkpoint_path)
 model_2.load_weights(model_2.checkpoint_path)
 
+def getFrame():
+    if using_csi:
+        camera.capture(rawCapture, format="bgr")
+        frame = rawCapture.array
+    else:
+        ret, frame = cap.read()
+    return frame
+
 def FacemeshRecognition():
     global displacement_eye, left_eye_closed, right_eye_closed
-    ret, frame = cap.read()
+    frame = getFrame()
     frame, de, left_eye_closed, right_eye_closed = inference_facemesh(frame)
     if de:
         displacement_eye = ((displacement_eye[0]*0.8)+(de[0]*0.2), (displacement_eye[1]*0.8)+(de[1]*0.2))
@@ -194,7 +213,7 @@ def FacemeshRecognition():
 
 def EmotionRecognition():
     global AutomaticExpression
-    ret, frame = cap.read()
+    frame = getFrame()
     frame, AutomaticExpression = inference_emotionrecog(frame)
     return frame
 
