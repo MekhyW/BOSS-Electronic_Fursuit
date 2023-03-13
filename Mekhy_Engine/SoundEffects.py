@@ -13,6 +13,7 @@ def PlayBootSound():
 
 def StopSound():
     pygame.mixer.music.stop()
+    pygame.mixer.music.unload()
     pygame.mixer.stop()
 
 def PlayOnDemand(file_name, remove_file=True):
@@ -40,6 +41,7 @@ def SoundEffect(sfx_name):
 def TTS(text):
     language = translator.detect(text).lang
     tts = gTTS(text=text, lang=language, slow=False)
+    StopSound()
     tts.save("resources/tts.mp3")
     PlayOnDemand("resources/tts.mp3", False)
 
@@ -53,4 +55,6 @@ if __name__ == '__main__':
     time.sleep(5)
     StopSound()
     TTS("Coé rapaziada blz?")
+    time.sleep(2)
+    TTS("Tudo certo?")
     time.sleep(2)

@@ -40,18 +40,25 @@ def assistant_query(query):
 
 def trigger():
     print("Triggered")
+    recorder.stop()
     SoundEffects.PlayOnDemand("resources/assistant_listening.wav", remove_file=False)
     time.sleep(0.5)
     print("Recording")
+    recorder.start()
     record_query()
+    recorder.stop()
     SoundEffects.PlayOnDemand("resources/assistant_ok.wav", remove_file=False)
     with open("resources/query.wav", "rb") as query:
         transcript = openai.Audio.transcribe("whisper-1", query)['text']
     query.close()
     print(transcript)
     answer = assistant_query(transcript)
-    print(answer)
-    SoundEffects.TTS(answer)
+    if len(answer):
+        print(answer)
+        SoundEffects.TTS(answer)
+    else:
+        print("No answer")
+    recorder.start()
 
 def start():
     recorder.start()
