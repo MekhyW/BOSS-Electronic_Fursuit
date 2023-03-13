@@ -66,5 +66,5 @@ echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 # - set auto login and password for pi user
 # - setup new VNC address
 # - setup dual display scheme
-# - insert telegram bot token into TelegramBot.py
+# - insert credentials into Mekhy_Engine/resources/credentials.json
 # - run sudo nano /etc/rc.local and add the following line before exit 0: python3 ~/BOSS-Electronic_Fursuit/Mekhy_Engine/BOSSMEKHY.py
