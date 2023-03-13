@@ -27,7 +27,7 @@ def assistant_query(query):
     query = query.capitalize()
     completion = openai.Completion.create(
         engine="davinci",
-        prompt=f"Question: {query}\nAnswer: ",
+        prompt=f"You are a helpful assistant.\nQuestion: {query}\nAnswer: ",
         temperature=0.5,
         max_tokens=150,
         top_p=1,

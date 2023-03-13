@@ -43,7 +43,8 @@ def TTS(text):
     tts = gTTS(text=text, lang=language, slow=False)
     StopSound()
     tts.save("resources/tts.mp3")
-    PlayOnDemand("resources/tts.mp3", False)
+    subprocess.call(["ffmpeg", "-i", "resources/tts.mp3", "-filter:a", "atempo=1.5", "resources/tts_faster.mp3", "-y"])
+    PlayOnDemand("resources/tts_faster.mp3", False)
 
 if __name__ == '__main__':
     PlayBootSound()
