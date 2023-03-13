@@ -28,7 +28,7 @@ def assistant_query(query):
     completion = openai.Completion.create(
         engine="davinci",
         prompt=f"Question: {query}\nAnswer: ",
-        temperature=0.9,
+        temperature=0.5,
         max_tokens=150,
         top_p=1,
         frequency_penalty=0,
@@ -58,6 +58,7 @@ def trigger():
         SoundEffects.TTS(answer)
     else:
         print("No answer")
+        SoundEffects.TTS("I don't have an answer to that")
     recorder.start()
 
 def start():
