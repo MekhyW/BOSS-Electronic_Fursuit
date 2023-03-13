@@ -8,8 +8,6 @@ from keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
 from keras.layers import BatchNormalization
 from keras.losses import categorical_crossentropy
 from keras.optimizers import Adam
-from picamera.array import PiRGBArray
-from picamera import PiCamera
 displacement_eye = (0,0)
 left_eye_closed = False
 right_eye_closed = False
@@ -20,14 +18,16 @@ mp_drawing = mp.solutions.drawing_utils
 drawSpec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
 face_detection = mp_face_detection.FaceDetection(min_detection_confidence=0.5)
 face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
-
 try:
+    from picamera.array import PiRGBArray
+    from picamera import PiCamera
     camera = PiCamera()
     rawCapture = PiRGBArray(camera)
     camera.capture(rawCapture, format="bgr")
     image = rawCapture.array
     using_csi = True
-except:
+except Exception as e:
+    print(e)
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 3)
     cap.set(cv2.CAP_PROP_AUTO_WB, 1)
