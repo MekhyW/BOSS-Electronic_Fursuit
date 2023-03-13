@@ -1,10 +1,10 @@
 <mxfile host="65bd71144e">
     <diagram id="meEQKwicSAwc1KFZT5nb" name="Page-1">
-        <mxGraphModel dx="517" dy="433" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#000000" math="0" shadow="1">
+        <mxGraphModel dx="377" dy="433" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#000000" math="0" shadow="1">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="DGbpkix3uCbMqAGdI3nw-2" value="Electrical Passage Box" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;" parent="1" vertex="1">
+                <mxCell id="DGbpkix3uCbMqAGdI3nw-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;" parent="1" vertex="1">
                     <mxGeometry x="74" y="403" width="250" height="197" as="geometry"/>
                 </mxCell>
                 <mxCell id="sJYIKFFBBBpRVcEcnY1A-2" value="Raspberry Pi 4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
@@ -46,8 +46,8 @@
                 <mxCell id="DGbpkix3uCbMqAGdI3nw-13" value="Lab Coat Prop" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
                     <mxGeometry x="267.38" y="858" width="112.73" height="47.25" as="geometry"/>
                 </mxCell>
-                <mxCell id="Nwgi6No1Y5rALYJXFBc9-3" value="WS2811 12V LED strip" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000066;" parent="1" vertex="1">
-                    <mxGeometry x="492.5000000000001" y="683.9999999999999" width="100.5" height="44" as="geometry"/>
+                <mxCell id="Nwgi6No1Y5rALYJXFBc9-3" value="WS28112b LED Circuit" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000066;" parent="1" vertex="1">
+                    <mxGeometry x="492.5" y="684" width="99.5" height="44" as="geometry"/>
                 </mxCell>
                 <mxCell id="H9GIjnEAIh9E3dcZyppp-1" value="Nylon white Whiskers" style="rounded=0;whiteSpace=wrap;html=1;gradientColor=none;gradientDirection=radial;strokeColor=none;shadow=0;sketch=0;" parent="1" vertex="1">
                     <mxGeometry x="533.7" y="50.000000000000014" width="95.11" height="43" as="geometry"/>
@@ -106,7 +106,7 @@
                         <mxPoint x="357.68" y="550" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="Yjcuvt-7D69lJ8ES1OOV-1" value="Blackboard Mega" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
+                <mxCell id="Yjcuvt-7D69lJ8ES1OOV-1" value="Arduino Nano" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
                     <mxGeometry x="94" y="556" width="90" height="40.13" as="geometry"/>
                 </mxCell>
                 <mxCell id="dLq0NmMCFaMVdCEzxlDA-1" value="Glow-in-the-dark solid claws" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
@@ -184,7 +184,7 @@
                         <mxPoint x="253" y="552.7600000000003" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="46" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;exitX=0.5;exitY=0;exitDx=0;exitDy=0;strokeColor=default;noJump=0;flowAnimation=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" parent="1" source="mBO-9hLZOUBeBoBWAcDw-1" target="sJYIKFFBBBpRVcEcnY1A-2" edge="1">
+                <mxCell id="46" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;exitX=0.5;exitY=0;exitDx=0;exitDy=0;strokeColor=default;noJump=0;flowAnimation=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="mBO-9hLZOUBeBoBWAcDw-1" target="sJYIKFFBBBpRVcEcnY1A-2" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="378" y="704" as="sourcePoint"/>
                         <mxPoint x="164" y="540" as="targetPoint"/>
@@ -230,15 +230,6 @@
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="279.01" y="466.18000000000006" as="sourcePoint"/>
                         <mxPoint x="428" y="631" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="76" value="12V LiPo battery" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" parent="1" vertex="1">
-                    <mxGeometry x="217" y="547" width="96" height="39" as="geometry"/>
-                </mxCell>
-                <mxCell id="78" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;flowAnimation=1;" parent="1" source="76" target="Nwgi6No1Y5rALYJXFBc9-3" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="264.0000000000001" y="471.32000000000005" as="sourcePoint"/>
-                        <mxPoint x="381" y="552.4725" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="79" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;flowAnimation=1;" parent="1" source="sJYIKFFBBBpRVcEcnY1A-4" target="73" edge="1">
