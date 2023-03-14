@@ -4,7 +4,7 @@ import Displays
 import SoundEffects
 import MachineVision
 import Assistant
-import subprocess
+import os
 import cv2
 import rospy
 from std_msgs.msg import UInt16
@@ -87,14 +87,9 @@ def assistant_thread():
             print(e)
 
 if __name__ == '__main__':
-    try:
-        subprocess.check_output("lxterminal -e roscore", stderr=subprocess.STDOUT, shell=True)
-        subprocess.check_output("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200", stderr=subprocess.STDOUT, shell=True)
-        subprocess.check_output("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200", stderr=subprocess.STDOUT, shell=True)
-    except subprocess.CalledProcessError as e:
-        subprocess.check_output("gnome-terminal -e roscore", stderr=subprocess.STDOUT, shell=True)
-        subprocess.check_output("gnome-terminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200", stderr=subprocess.STDOUT, shell=True)
-        subprocess.check_output("gnome-terminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200", stderr=subprocess.STDOUT, shell=True)
+    os.system("lxterminal -e roscore")
+    os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200")
+    os.system("lxterminal -e rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200")
     rospy.init_node('BOSSMEKHY')
     expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
     leds_enabled_pub = rospy.Publisher('/leds_enabled', UInt16, queue_size=10)
