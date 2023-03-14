@@ -100,7 +100,7 @@ if __name__ == '__main__':
     leds_enabled_pub = rospy.Publisher('/leds_enabled', UInt16, queue_size=10)
     actuators_enabled_pub = rospy.Publisher('/actuators_enabled', UInt16, queue_size=10)
     SoundEffects.PlayBootSound()
-    VoiceChanger.SetVoice("Clear")
+    VoiceChanger.SetVoice("Mekhy")
     Assistant.start()
     machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
     machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
