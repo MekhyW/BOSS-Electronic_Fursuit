@@ -13,13 +13,14 @@ sudo apt install -y ffmpeg
 sudo apt install -y sox
 sudo apt-get install -y python3-pip
 sudo apt install -y python3-gi gir1.2-wnck-3.0
+sudo apt-get install libsdl2-mixer-2.0-0
 # PIP PACKAGES
 pip3 install --upgrade pip
 pip3 install telepota
 pip3 install googletrans==3.1.0a0
 pip3 install opencv-python
 pip3 install picamera[array]
-pip3 install pygame
+pip3 install pygame --upgrade
 pip3 install pytube
 pip3 install gTTS
 pip3 install mediapipe-rpi4
@@ -67,4 +68,6 @@ echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 # - setup new VNC address
 # - setup dual display scheme
 # - insert credentials into Mekhy_Engine/resources/credentials.json
-# - run sudo nano /etc/rc.local and add the following line before exit 0: python3 ~/BOSS-Electronic_Fursuit/Mekhy_Engine/BOSSMEKHY.py
+# - run sudo nano /etc/rc.local and add the following line before exit 0: "python3 /home/pi/BOSS-Electronic_Fursuit/Mekhy_Engine/BOSSMEKHY.py &"
+# - set app bar size to minimum
+# - enable CSI camera
