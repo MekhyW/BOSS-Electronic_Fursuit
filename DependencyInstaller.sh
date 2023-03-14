@@ -11,14 +11,24 @@ sudo apt-get install -y git-all
 sudo apt-get install -y python3-pip
 sudo apt install -y ffmpeg
 sudo apt install -y sox
-sudo apt-get install -y python3-pip
 sudo apt install -y python3-gi gir1.2-wnck-3.0
 sudo apt-get install libsdl2-mixer-2.0-0
+sudo apt-get install build-essential cmake pkg-config
+sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng-dev
+sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+sudo apt-get install libxvidcore-dev libx264-dev
+sudo apt-get install libfontconfig1-dev libcairo2-dev
+sudo apt-get install libgdk-pixbuf2.0-dev libpango1.0-dev
+sudo apt-get install libgtk2.0-dev libgtk-3-dev
+sudo apt-get install libatlas-base-dev gfortran
+sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-103
+sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
+sudo apt-get install python3-dev
 # PIP PACKAGES
 pip3 install --upgrade pip
 pip3 install telepota
 pip3 install googletrans==3.1.0a0
-pip3 install opencv-python
+pip3 install opencv-contrib-python
 pip3 install picamera[array]
 pip3 install pygame --upgrade
 pip3 install pytube
