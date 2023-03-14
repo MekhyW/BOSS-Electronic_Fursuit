@@ -3,9 +3,9 @@ import numpy as np
 import cv2
 import mediapipe as mp
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Rescaling
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
 from tensorflow.keras.layers import BatchNormalization
+from tensorflow.keras.layers import Lambda
 from tensorflow.keras.losses import categorical_crossentropy
 from tensorflow.keras.optimizers import Adam
 displacement_eye = (0,0)
@@ -58,7 +58,7 @@ weights_2 = 'resources/vggnet_up.h5'
 class VGGNet(Sequential):
     def __init__(self, input_shape, num_classes, checkpoint_path, lr=1e-3):
         super().__init__()
-        self.add(Rescaling(1./255, input_shape=input_shape))
+        self.add(Lambda(lambda x: x/255, input_shape=input_shape))
         self.add(Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal'))
         self.add(BatchNormalization())
         self.add(Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
