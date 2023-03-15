@@ -31,6 +31,7 @@ pip3 install mediapipe-rpi4
 pip3 install openai
 pip3 install pvporcupine
 pip3 install pvrecorder
+pip3 install pyserial
 # TENSORFLOW
 mkdir tf_pi
 cd tf_pi
@@ -46,30 +47,6 @@ wget https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.0.0/ten
 python3 -m pip uninstall tensorflow
 python3 -m pip install tensorflow-2.0.0-cp37-none-linux_armv7l.whl
 cd ..
-# ROS
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu buster main" > /etc/apt/sources.list.d/ros-noetic.list'
-sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-sudo apt update
-sudo apt-get install -y python-rosdep python-rosinstall-generator python-wstool python-rosinstall build-essential cmake
-sudo rosdep init
-rosdep update
-mkdir ~/ros_catkin_ws
-cd ~/ros_catkin_ws
-rosinstall_generator ros_comm --rosdistro noetic --deps --wet-only --tar > noetic-ros_comm-wet.rosinstall
-wstool init src noetic-ros_comm-wet.rosinstall
-rosdep install -y --from-paths src --ignore-src --rosdistro noetic -r --os=debian:buster
-sudo dphys-swapfile swapoff
-sudoedit /etc/dphys-swapfile # Change CONF_SWAPSIZE=100 to CONF_SWAPSIZE=1024
-sudo dphys-swapfile setup
-sudo dphys-swapfile swapon
-sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/noetic -j1 -DPYTHON_EXECUTABLE=/usr/bin/python3
-source /opt/ros/noetic/setup.bash
-echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
-cd src
-git clone https://github.com/ros-drivers/rosserial.git
-cd ..
-catkin_make
-catkin_make install
 # -----------------------------------------------------------------------------
 #
 # Remember to:

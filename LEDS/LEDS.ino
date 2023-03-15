@@ -1,6 +1,4 @@
 #include <Adafruit_NeoPixel.h>
-#include <ros.h>
-#include <std_msgs/UInt16.h>
 #define LED_PIN 10
 #define LED_COUNT 41
 Adafruit_NeoPixel GearsStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
@@ -16,22 +14,22 @@ uint32_t orange = GearsStrip.Color(255, 128, 0);
 uint32_t green = GearsStrip.Color(0, 255, 0);
 uint32_t purple = GearsStrip.Color(115, 0, 255);
 int ExpressionState = 0;
-int leds_enabled = 1;
 int Effect = 1;
 uint32_t* activeColor = &white;
+String msg = "";
+String msg_prev = "";
 
-void expressionCallback(std_msgs::UInt16& value){
-  if (value.data != ExpressionState) {
-     Effect = random(1, 6);
+void readSerialPort() {
+  msg_prev = msg;
+  msg = "";
+  if (Serial.available()) {
+    delay(10);
+    while (Serial.available() > 0) {
+      msg += (char)Serial.read();
+    }
+    Serial.flush();
   }
-  ExpressionState = value.data;
 }
-void ledsEnabledCallback(std_msgs::UInt16& value){
-  leds_enabled = value.data;
-}
-ros::NodeHandle nodehandle;
-ros::Subscriber<std_msgs::UInt16> sub_expression("expression", &expressionCallback);
-ros::Subscriber<std_msgs::UInt16> sub_leds_enabled("leds_enabled", &ledsEnabledCallback);
 
 void colorStatic(uint32_t color) {
   GearsStrip.setBrightness(Color_Brightness/2);
@@ -163,56 +161,56 @@ void Off() {
 }
 
 void setup() {
-  nodehandle.getHardware()->setBaud(115200);
-  nodehandle.initNode();
-  nodehandle.subscribe(sub_expression);
+  Serial.begin(9600);
   GearsStrip.begin();
   GearsStrip.show();
 }
 
 void loop() {
-  if (leds_enabled == 0) {
+  readSerialPort();
+  if (msg != msg_prev) {
+    Effect = random(0, 8);
+  }
+  if (msg == "99") {
     Off();
   }
   else {
-    if (ExpressionState == 0) {
+    if (msg == "0") {
       //neutral
       colorStatic(white);
     }
-    else if (ExpressionState == 7) {
+    else if (msg == "7") {
       //hypnotized
       Rainbow(10);
     }
     else {
-      switch (ExpressionState){
-        case 1:
-        case 8:
-          //angry or demonic
-          activeColor = &red;
-          break;
-        case 2:
-          //disgusted
-          activeColor = &green;
-          break;
-        case 3:
-          //sad
-          activeColor = &deep_blue;
-          break;
-        case 4:
-          //happy
-          activeColor = &yellow;
-          break;
-        case 5:
-          //scared
-          activeColor = &purple;
-          break;
-        case 6:
-          //in love
-          activeColor = &pink;
-          break;
-        default:
-          activeColor = &black;
-          break;
+      //cannot use switch case because it´s a String
+      if (msg == "1" || msg == "8") {
+        //angry or demonic
+        activeColor = &red;
+      }
+      else if (msg == "2") {
+        //disgusted
+        activeColor = &green;
+      }
+      else if (msg == "3") {
+        //sad
+        activeColor = &deep_blue;
+      }
+      else if (msg == "4") {
+        //happy
+        activeColor = &yellow;
+      }
+      else if (msg == "5") {
+        //scared
+        activeColor = &purple;
+      }
+      else if (msg == "6") {
+        //in love
+        activeColor = &pink;
+      }
+      else {
+        activeColor = &black;
       }
       switch(Effect){
           case 1:
@@ -236,5 +234,5 @@ void loop() {
         }
     }
   }
-  nodehandle.spinOnce();
+  delay(10);
 }

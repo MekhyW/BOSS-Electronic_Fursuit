@@ -4,10 +4,8 @@ import Displays
 import SoundEffects
 import MachineVision
 import Assistant
-import os
 import cv2
-import rospy
-from std_msgs.msg import UInt16
+import serial, time
 import threading
 
 def convertExpressionStringToNumber(expression):
@@ -65,25 +63,31 @@ def display_thread():
         finally:
             cv2.waitKey(1)
 
-def roscore_thread():
-    os.system("xterm -e 'rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200'")
-    os.system("xterm -e 'rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200'")
-    os.system("xterm -e 'roscore'")
-
-def ros_thread():
+def serial_thread():
+    try:
+        ser_actuators = serial.Serial('/dev/ttyACM0', 9600)
+        ser_leds = serial.Serial('/dev/ttyACM1', 9600)
+    except Exception as e:
+        print(e)
     while True:
         try:
-            if TelegramBot.manual_expression_mode:     
-                expression_pub.publish(convertExpressionStringToNumber(TelegramBot.ManualExpression))
+            if TelegramBot.manual_expression_mode:
+                expression = TelegramBot.ManualExpression
             else:
-                expression_pub.publish(convertExpressionStringToNumber(MachineVision.AutomaticExpression))
-            leds_enabled_pub.publish(TelegramBot.leds_enabled)
-            actuators_enabled_pub.publish(TelegramBot.actuators_enabled)
+                expression = MachineVision.AutomaticExpression
+            if not TelegramBot.actuators_enabled:
+                ser_actuators.write(str.encode("99"))
+            else:
+                ser_actuators.write(str.encode(expression))
+            if not TelegramBot.leds_enabled:
+                ser_leds.write(str.encode("99"))
+            else:
+                ser_leds.write(str.encode(expression))
         except Exception as e:
             print(e)
         finally:
-            rospy.sleep(0.1)
-
+            time.sleep(0.1)
+            
 def assistant_thread():
     while True:
         try:
@@ -92,24 +96,18 @@ def assistant_thread():
             print(e)
 
 if __name__ == '__main__':
-    roscore_thread = threading.Thread(target=roscore_thread)
-    roscore_thread.start()
-    rospy.init_node('BOSSMEKHY')
-    expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
-    leds_enabled_pub = rospy.Publisher('/leds_enabled', UInt16, queue_size=10)
-    actuators_enabled_pub = rospy.Publisher('/actuators_enabled', UInt16, queue_size=10)
     SoundEffects.PlayBootSound()
     VoiceChanger.SetVoice("Mekhy")
     Assistant.start()
     machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
     machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
     display_thread = threading.Thread(target=display_thread)
-    ros_thread = threading.Thread(target=ros_thread)
+    serial_thread = threading.Thread(target=serial_thread)
     assistant_thread = threading.Thread(target=assistant_thread)
     machine_vision_thread_A.start()
     machine_vision_thread_B.start()
     display_thread.start()
-    ros_thread.start()
+    serial_thread.start()
     assistant_thread.start()
     while not TelegramBot.StartBot():
         pass
