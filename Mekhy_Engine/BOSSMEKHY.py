@@ -92,9 +92,9 @@ def assistant_thread():
             print(e)
 
 if __name__ == '__main__':
-    rospy.init_node('BOSSMEKHY')
     roscore_thread = threading.Thread(target=roscore_thread)
     roscore_thread.start()
+    rospy.init_node('BOSSMEKHY')
     expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
     leds_enabled_pub = rospy.Publisher('/leds_enabled', UInt16, queue_size=10)
     actuators_enabled_pub = rospy.Publisher('/actuators_enabled', UInt16, queue_size=10)
