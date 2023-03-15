@@ -81,7 +81,7 @@ def composeFrame(eye, frame, displacement_eye):
     eyes = composeEyes(frame, eye, (lefteye_center_x, lefteye_center_y), (righteye_center_x, righteye_center_y))
     whiteregion = np.where((frame > 80).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
-    #frame = rotateFrame(frame)
+    frame = rotateFrame(frame)
     return frame
 
 def ManageWindows():
@@ -103,9 +103,9 @@ def PlayVideo(file_name, remove_file=True):
     while(cap.isOpened() and playingvideo):
         ret, frame = cap.read()
         if ret:
-            #resized = cv2.resize(frame, (display_width, display_height), interpolation = cv2.INTER_AREA)
-            #duplicated = cv2.hconcat([resized, resized])
-            #cv2.imshow('Eyes', duplicated)
+            resized = cv2.resize(frame, (display_width, display_height), interpolation = cv2.INTER_AREA)
+            duplicated = cv2.hconcat([resized, resized])
+            cv2.imshow('Eyes', duplicated)
             cv2.imshow('Eyes', frame)
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 break
