@@ -26,6 +26,7 @@ sudo apt-get install libatlas-base-dev gfortran
 sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-103
 sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
 sudo apt-get install python3-dev
+sudo apt-get install xterm
 # PIP PACKAGES
 pip3 install --upgrade pip
 pip3 install telepota
