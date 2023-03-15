@@ -68,7 +68,7 @@ def display_thread():
 def roscore_thread():
     os.system("xterm -e 'rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200'")
     os.system("xterm -e 'rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200'")
-    os.system("roscore")
+    os.system("xterm -e 'roscore'")
 
 def ros_thread():
     while True:
