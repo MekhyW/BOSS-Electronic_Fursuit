@@ -14,10 +14,9 @@ sudo apt-get install -y python3-pip
 sudo apt install -y ffmpeg
 sudo apt install -y sox
 sudo apt install -y python3-gi gir1.2-wnck-3.0
-sudo apt-get install libsdl2-mixer-2.0-0
-sudo apt-get install build-essential cmake pkg-config
-sudo apt-get install python3-dev
-sudo apt-get install xterm
+sudo apt install -y libsdl2-mixer-2.0-0
+sudo apt install -y build-essential cmake pkg-config
+sudo apt install -y python3-dev
 # PIP PACKAGES
 pip3 install --upgrade pip
 pip3 install telepota
@@ -55,5 +54,5 @@ cd ..
 # - setup dual display scheme
 # - insert credentials into Mekhy_Engine/resources/credentials.json
 # - run sudo nano /etc/rc.local and add the following line before exit 0: "python3 /home/pi/BOSS-Electronic_Fursuit/Mekhy_Engine/BOSSMEKHY.py &"
-# - set app bar size to minimum
+# - set app bar width to zero
 # - enable CSI camera
