@@ -65,6 +65,11 @@ def display_thread():
         finally:
             cv2.waitKey(1)
 
+def roscore_thread():
+    os.system("xterm -e 'rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200'")
+    os.system("xterm -e 'rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200'")
+    os.system("roscore")
+
 def ros_thread():
     while True:
         try:
@@ -87,10 +92,9 @@ def assistant_thread():
             print(e)
 
 if __name__ == '__main__':
-    os.system("xterm -e 'roscore'")
-    os.system("xterm -e 'rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0 _baud:=115200'")
-    os.system("xterm -e 'rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1 _baud:=115200'")
     rospy.init_node('BOSSMEKHY')
+    roscore_thread = threading.Thread(target=roscore_thread)
+    roscore_thread.start()
     expression_pub = rospy.Publisher('/expression', UInt16, queue_size=10)
     leds_enabled_pub = rospy.Publisher('/leds_enabled', UInt16, queue_size=10)
     actuators_enabled_pub = rospy.Publisher('/actuators_enabled', UInt16, queue_size=10)

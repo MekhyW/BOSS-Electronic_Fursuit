@@ -16,15 +16,6 @@ sudo apt install -y sox
 sudo apt install -y python3-gi gir1.2-wnck-3.0
 sudo apt-get install libsdl2-mixer-2.0-0
 sudo apt-get install build-essential cmake pkg-config
-sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng-dev
-sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
-sudo apt-get install libxvidcore-dev libx264-dev
-sudo apt-get install libfontconfig1-dev libcairo2-dev
-sudo apt-get install libgdk-pixbuf2.0-dev libpango1.0-dev
-sudo apt-get install libgtk2.0-dev libgtk-3-dev
-sudo apt-get install libatlas-base-dev gfortran
-sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-103
-sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
 sudo apt-get install python3-dev
 sudo apt-get install xterm
 # PIP PACKAGES
@@ -74,6 +65,11 @@ sudo dphys-swapfile swapon
 sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/noetic -j1 -DPYTHON_EXECUTABLE=/usr/bin/python3
 source /opt/ros/noetic/setup.bash
 echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+cd src
+git clone https://github.com/ros-drivers/rosserial.git
+cd ..
+catkin_make
+catkin_make install
 # -----------------------------------------------------------------------------
 #
 # Remember to:
