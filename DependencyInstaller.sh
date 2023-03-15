@@ -5,6 +5,8 @@
 # Usage:
 # ./DependencyInstaller.sh
 #
+# This is made for Raspberry Pi 4 running Raspbian Buster.
+#
 # -----------------------------------------------------------------------------
 sudo apt-get update
 sudo apt-get install -y git-all
