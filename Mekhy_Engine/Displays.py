@@ -81,7 +81,7 @@ def composeFrame(eye, frame, displacement_eye):
     eyes = composeEyes(frame, eye, (lefteye_center_x, lefteye_center_y), (righteye_center_x, righteye_center_y))
     whiteregion = np.where((frame > 80).all(axis = 2))
     frame[whiteregion] = eyes[whiteregion]
-    frame = rotateFrame(frame)
+    #frame = rotateFrame(frame)
     return frame
 
 def ManageWindows():
