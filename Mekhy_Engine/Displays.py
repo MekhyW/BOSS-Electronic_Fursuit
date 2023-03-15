@@ -103,9 +103,10 @@ def PlayVideo(file_name, remove_file=True):
     while(cap.isOpened() and playingvideo):
         ret, frame = cap.read()
         if ret:
-            resized = cv2.resize(frame, (display_width, display_height), interpolation = cv2.INTER_AREA)
-            duplicated = cv2.hconcat([resized, resized])
-            cv2.imshow('Eyes', duplicated)
+            #resized = cv2.resize(frame, (display_width, display_height), interpolation = cv2.INTER_AREA)
+            #duplicated = cv2.hconcat([resized, resized])
+            #cv2.imshow('Eyes', duplicated)
+            cv2.imshow('Eyes', frame)
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 break
         else:
