@@ -106,7 +106,7 @@ def PlayVideo(file_name, remove_file=True):
             resized = cv2.resize(frame, (display_width, display_height), interpolation = cv2.INTER_AREA)
             duplicated = cv2.hconcat([resized, resized])
             cv2.imshow('Eyes', duplicated)
-            if cv2.waitKey(25) & 0xFF == ord('q'):
+            if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         else:
             break
@@ -169,5 +169,5 @@ if __name__ == '__main__':
         y = random.uniform(-0.3, 0.3)
         for n in range(50):
             GraphicsRefresh(exp, (x, y))
-            if cv2.waitKey(25) & 0xFF == ord('q'):
+            if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
