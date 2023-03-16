@@ -13,6 +13,8 @@ display_rotation = 30
 distance_between_displays = 150
 left_eye_center = (150, 97)
 right_eye_center = (552, 97)
+rot_mat_positive = cv2.getRotationMatrix2D((225,197), 30, 1.0)
+rot_mat_negative = cv2.getRotationMatrix2D((225,197), -30, 1.0)
 eye_radius_horizontal = 150
 eye_radius_vertical = 180
 eye_closed = cv2.imread('../Eyes/eye_closed.png', cv2.COLOR_BGR2RGB)
@@ -54,10 +56,13 @@ def composeEyes(frame, eye, leftpos, rightpos):
     return eyes
 
 def rotate_image(image, angle):
-  image_center = tuple(np.array(image.shape[1::-1]) / 2)
-  rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
-  result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
-  return result
+    #image_center = tuple(np.array(image.shape[1::-1]) / 2)
+    if angle == 30:
+        rot_mat = rot_mat_positive
+    elif angle == -30:
+        rot_mat = rot_mat_negative
+    result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
+    return result
 
 def rotateFrame(frame):
     firstHalf = frame[0:frame.shape[0], 0:int(frame.shape[1]/2)]
