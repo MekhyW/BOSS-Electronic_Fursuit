@@ -43,16 +43,15 @@ cached_expression_time = 0
 playingvideo = False
 
 def composeEyes(frame, eye, leftpos, rightpos):
-    eyes = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8)
-    eyes[:] = eye[0, 0]
+    eyes = np.full((frame.shape[0], frame.shape[1], 3), eye[0, 0], dtype=np.uint8)
     if MachineVision.left_eye_closed:
-        eyes[0:frame.shape[0], 0:int(frame.shape[1]/2)] = eye_closed[0:frame.shape[0], 0:int(frame.shape[1]/2)]
+        eyes[:, :frame.shape[1] // 2] = eye_closed[:, :frame.shape[1] // 2]
     else:
-        eyes[leftpos[1]:leftpos[1]+eye.shape[0], leftpos[0]:leftpos[0]+eye.shape[1]] = eye
+        eyes[leftpos[1]:leftpos[1] + eye.shape[0], leftpos[0]:leftpos[0] + eye.shape[1]] = eye
     if MachineVision.right_eye_closed:
-        eyes[0:frame.shape[0], int(frame.shape[1]/2):frame.shape[1]] = eye_closed[0:frame.shape[0], int(frame.shape[1]/2):frame.shape[1]]
+        eyes[:, frame.shape[1] // 2:] = eye_closed[:, frame.shape[1] // 2:]
     else:
-        eyes[rightpos[1]:rightpos[1]+eye.shape[0], rightpos[0]:rightpos[0]+eye.shape[1]] = eye
+        eyes[rightpos[1]:rightpos[1] + eye.shape[0], rightpos[0]:rightpos[0] + eye.shape[1]] = eye
     return eyes
 
 def rotate_image(image, angle):
