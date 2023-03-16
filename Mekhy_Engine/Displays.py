@@ -68,8 +68,8 @@ def rotateFrame(frame):
     firstHalf = firstHalf[np.min(y_nonzero):np.max(y_nonzero), np.min(x_nonzero):np.max(x_nonzero)]
     y_nonzero, x_nonzero, _ = np.nonzero(secondHalf)
     secondHalf = secondHalf[np.min(y_nonzero):np.max(y_nonzero), np.min(x_nonzero):np.max(x_nonzero)]
-    firstHalf = cv2.resize(firstHalf, (display_width, display_height), interpolation = cv2.INTER_AREA)
-    secondHalf = cv2.resize(secondHalf, (display_width, display_height), interpolation = cv2.INTER_AREA)
+    firstHalf = cv2.resize(firstHalf, (display_width, display_height), interpolation = cv2.INTER_NEAREST)
+    secondHalf = cv2.resize(secondHalf, (display_width, display_height), interpolation = cv2.INTER_NEAREST)
     frame = np.concatenate((firstHalf, secondHalf), axis = 1)
     return frame
 
@@ -103,7 +103,7 @@ def PlayVideo(file_name, remove_file=True):
     while(cap.isOpened() and playingvideo):
         ret, frame = cap.read()
         if ret:
-            resized = cv2.resize(frame, (display_width, display_height), interpolation = cv2.INTER_AREA)
+            resized = cv2.resize(frame, (display_width, display_height), interpolation = cv2.INTER_NEAREST)
             duplicated = cv2.hconcat([resized, resized])
             cv2.imshow('Eyes', duplicated)
             if cv2.waitKey(1) & 0xFF == ord('q'):
