@@ -102,10 +102,7 @@ def recognition_preprocessing(faces):
     return x
 
 def inference_emotionrecog(image):
-    try:
-        frame = image.copy()
-    except:
-        return image
+    frame = image.copy()
     H, W, _ = frame.shape
     rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = face_detection.process(rgb_image)
@@ -140,10 +137,7 @@ def inference_emotionrecog(image):
     return frame, AutomaticExpression
 
 def inference_facemesh(image):
-    try:
-        frame = image.copy()
-    except:
-        return image
+    frame = image.copy()
     H, W, _ = frame.shape
     rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = face_detection.process(rgb_image)

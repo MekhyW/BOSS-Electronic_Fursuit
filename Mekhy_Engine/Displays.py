@@ -80,7 +80,7 @@ def composeEyes():
 def applyEyes():
     global frame_template, eyes, frame_with_eyes
     whiteregion = np.where((frame_template > 80).all(axis = 2))
-    frame_with_eyes_local = frame_template
+    frame_with_eyes_local = frame_template.copy()
     frame_with_eyes_local[whiteregion] = eyes[whiteregion]
     frame_with_eyes = frame_with_eyes_local
 
