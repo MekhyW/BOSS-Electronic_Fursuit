@@ -175,21 +175,24 @@ def GraphicsRefresh(expression):
 def composeEyesThread():
     while True:
         try:
-            composeEyes()
+            if not playingvideo:
+                composeEyes()
         except Exception as e:
             print(e)
 
 def applyEyesThread():
     while True:
         try:
-            applyEyes()
+            if not playingvideo:
+                applyEyes()
         except Exception as e:
             print(e)
 
 def rotateFrameThread():
     while True:
         try:
-            rotateFrame()
+            if not playingvideo:
+                rotateFrame()
         except Exception as e:
             print(e)
 
