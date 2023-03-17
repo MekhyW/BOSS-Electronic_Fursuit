@@ -55,10 +55,11 @@ def display_thread():
     Displays.startThreads()
     while True:
         try:
+            Displays.displacement_eye = MachineVision.displacement_eye
             if TelegramBot.manual_expression_mode:     
-                Displays.GraphicsRefresh(convertExpressionStringToNumber(TelegramBot.ManualExpression), MachineVision.displacement_eye)
+                Displays.GraphicsRefresh(convertExpressionStringToNumber(TelegramBot.ManualExpression))
             else:
-                Displays.GraphicsRefresh(convertExpressionStringToNumber(MachineVision.AutomaticExpression), MachineVision.displacement_eye)
+                Displays.GraphicsRefresh(convertExpressionStringToNumber(MachineVision.AutomaticExpression))
         except Exception as e:
             print(e)
         finally:
