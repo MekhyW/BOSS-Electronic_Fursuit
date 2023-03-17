@@ -139,11 +139,21 @@ def PlayVideoFile(fursuitbot, chat_id, msg):
     r = requests.get("https://api.telegram.org/file/bot{}/{}".format(Token, file_path), allow_redirects=True)
     open(file_name, 'wb').write(r.content)
     if 'video' in msg:
-        SoundEffects.PlayOnDemand(file_name)
-        Displays.PlayVideo(file_name)
+        subprocess.call(["ffmpeg", "-i", file_name, "-vf", "scale=800:480", "out.mp4", "-y"])
+        subprocess.call(["ffmpeg", "-i", "out.mp4", "-i", "out.mp4", "-filter_complex", "hstack=inputs=2", "outconcat.mp4", "-y"])
+        try:
+            SoundEffects.PlayOnDemand(file_name)
+        except Exception as e:
+            fursuitbot.sendMessage(chat_id, '>>>WARNING: no audio detected (will play video anyways)'.format(e))
     else:
-        subprocess.call(["ffmpeg", "-loop", "1", "-i", file_name, "-c:v", "libx264", "-t", "15", "-pix_fmt", "yuv420p", "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2", "out.mp4"])
-        Displays.PlayVideo("out.mp4")
+        subprocess.call(["ffmpeg", "-loop", "1", "-i", file_name, "-c:v", "libx264", "-t", "15", "-pix_fmt", "yuv420p", "-vf", "scale=800:480", "out.mp4", "-y"])
+        subprocess.call(["ffmpeg", "-i", "out.mp4", "-i", "out.mp4", "-filter_complex", "hstack=inputs=2", "outconcat.mp4", "-y"])
+    try:
+        os.remove("out.mp4")
+        os.remove(file_name)
+    except FileNotFoundError:
+        pass
+    Displays.PlayVideo("outconcat.mp4")
     fursuitbot.sendMessage(chat_id, ">>>Playing.....\n\nUse 'Stop Media' to make me stop òwó")
 
 def PlayAudioFile(fursuitbot, chat_id, msg):
