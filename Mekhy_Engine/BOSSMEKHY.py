@@ -52,6 +52,7 @@ def machine_vision_thread_B():
             print(e)
 
 def display_thread():
+    Displays.startThreads()
     while True:
         try:
             if TelegramBot.manual_expression_mode:     
