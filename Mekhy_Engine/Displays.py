@@ -112,6 +112,7 @@ def ManageWindows():
 
 def PlayVideo(file_name, remove_file=True):
     global playingvideo
+    ManageWindows()
     playingvideo = True
     cap = cv2.VideoCapture(file_name)
     while(cap.isOpened() and playingvideo):
@@ -121,7 +122,6 @@ def PlayVideo(file_name, remove_file=True):
             cv2.waitKey(1)
         else:
             break
-        ManageWindows()
     cap.release()
     playingvideo = False
     if remove_file:
@@ -132,6 +132,7 @@ def GraphicsRefresh(expression):
     if expression != cached_expression:
         if time.time() - cached_expression_time > 1:
             cached_expression = expression
+            ManageWindows()
     else:
         cached_expression_time = time.time()
     if cached_expression == 0:
@@ -170,7 +171,6 @@ def GraphicsRefresh(expression):
             cv2.imshow('Eyes', frame_rotated)
         else:
             mask.set(cv2.CAP_PROP_POS_FRAMES, 0)
-    ManageWindows()
 
 def composeEyesThread():
     while True:
@@ -195,6 +195,7 @@ def rotateFrameThread():
 
 def startThreads():
     global composeEyesThread, applyEyesThread, rotateFrameThread
+    ManageWindows()
     composeEyesThread = threading.Thread(target=composeEyesThread)
     applyEyesThread = threading.Thread(target=applyEyesThread)
     rotateFrameThread = threading.Thread(target=rotateFrameThread)
