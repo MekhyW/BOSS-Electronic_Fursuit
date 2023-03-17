@@ -1,13 +1,6 @@
-import tensorflow as tf
 import numpy as np
 import cv2
 import mediapipe as mp
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
-from tensorflow.keras.layers import BatchNormalization
-from tensorflow.keras.layers import Lambda
-from tensorflow.keras.losses import categorical_crossentropy
-from tensorflow.keras.optimizers import Adam
 displacement_eye = (0,0)
 left_eye_closed = False
 right_eye_closed = False
@@ -40,101 +33,6 @@ LEFT_IRIS = [468, 469, 470, 471, 472]
 RIGHT_IRIS = [473, 474, 475, 476, 477]
 LEFT_EYEBROW = [383, 300, 293, 334, 296, 336, 285, 417]
 RIGHT_EYEBROW = [156, 70, 63, 105, 66, 107, 55, 193]
-
-emotions = {
-    0: ['Angry', (0,0,255), (255,255,255)],
-    1: ['Disgusted', (0,102,0), (255,255,255)],
-    2: ['Scared', (255,255,153), (0,51,51)],
-    3: ['Happy', (153,0,153), (255,255,255)],
-    4: ['Sad', (255,0,0), (255,255,255)],
-    5: ['Scared', (0,255,0), (255,255,255)],
-    6: ['Neutral', (160,160,160), (255,255,255)]
-}
-num_classes = len(emotions)
-input_shape = (48, 48, 1)
-weights_1 = 'resources/vggnet.h5'
-weights_2 = 'resources/vggnet_up.h5'
-
-class VGGNet(Sequential):
-    def __init__(self, input_shape, num_classes, checkpoint_path, lr=1e-3):
-        super().__init__()
-        self.add(Lambda(lambda x: x/255, input_shape=input_shape))
-        self.add(Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal'))
-        self.add(BatchNormalization())
-        self.add(Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
-        self.add(BatchNormalization())
-        self.add(MaxPool2D())
-        self.add(Dropout(0.5))
-        self.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
-        self.add(BatchNormalization())
-        self.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
-        self.add(BatchNormalization())
-        self.add(MaxPool2D())
-        self.add(Dropout(0.4))
-        self.add(Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
-        self.add(BatchNormalization())
-        self.add(Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
-        self.add(BatchNormalization())
-        self.add(MaxPool2D())
-        self.add(Dropout(0.5))
-        self.add(Conv2D(512, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
-        self.add(BatchNormalization())
-        self.add(Conv2D(512, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same'))
-        self.add(BatchNormalization())
-        self.add(MaxPool2D())
-        self.add(Dropout(0.4))
-        self.add(Flatten())
-        self.add(Dense(1024, activation='relu'))
-        self.add(Dropout(0.5))
-        self.add(Dense(256, activation='relu'))
-        self.add(Dense(num_classes, activation='softmax'))
-        self.compile(optimizer=Adam(learning_rate=lr),
-                    loss=categorical_crossentropy,
-                    metrics=['accuracy'])
-        self.checkpoint_path = checkpoint_path
-
-def resize_face(face):
-    x = tf.expand_dims(tf.convert_to_tensor(face), axis=2)
-    return tf.image.resize(x, (48,48))
-
-def recognition_preprocessing(faces):
-    x = tf.convert_to_tensor([resize_face(f) for f in faces])
-    return x
-
-def inference_emotionrecog(image):
-    frame = image.copy()
-    H, W, _ = frame.shape
-    rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    results = face_detection.process(rgb_image)
-    if results.detections:
-        faces = []
-        pos = []
-        for detection in results.detections:
-            box = detection.location_data.relative_bounding_box
-            x = int(box.xmin * W)
-            y = int(box.ymin * H)
-            w = int(box.width * W)
-            h = int(box.height * H)
-            x1 = max(0, x)
-            y1 = max(0, y)
-            x2 = min(x + w, W)
-            y2 = min(y + h, H)
-            face = image[y1:y2,x1:x2]
-            face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
-            faces.append(face)
-            pos.append((x1, y1, x2, y2))
-        x = recognition_preprocessing(faces)
-        y_2 = model_2.predict(x, verbose=0)
-        l = np.argmax(y_2, axis=1)
-        for i in range(len(faces)):
-            cv2.rectangle(frame, (pos[i][0],pos[i][1]),
-                            (pos[i][2],pos[i][3]), emotions[l[i]][1], 2, lineType=cv2.LINE_AA)
-            cv2.rectangle(frame, (pos[i][0],pos[i][1]-20),
-                            (pos[i][2]+20,pos[i][1]), emotions[l[i]][1], -1, lineType=cv2.LINE_AA)
-            cv2.putText(frame, f'{emotions[l[i]][0]}', (pos[i][0],pos[i][1]-5),
-                            0, 0.6, emotions[l[i]][2], 2, lineType=cv2.LINE_AA)
-        return frame, emotions[l[i]][0]
-    return frame, AutomaticExpression
 
 def inference_facemesh(image):
     frame = image.copy()
@@ -189,11 +87,6 @@ def inference_facemesh(image):
         return frame, displacement_eye, left_eye_closed, right_eye_closed
     return frame, None, True, True
 
-model_1 = VGGNet(input_shape, num_classes, weights_1)
-model_2 = VGGNet(input_shape, num_classes, weights_2)
-model_1.load_weights(model_1.checkpoint_path)
-model_2.load_weights(model_2.checkpoint_path)
-
 def getFrame():
     if using_csi:
         camera.capture(rawCapture, format="bgr")
@@ -211,17 +104,9 @@ def FacemeshRecognition():
     displacement_eye = (max(min(1, displacement_eye[0]), -1), max(min(0.3, displacement_eye[1]), -0.3))
     return frame    
 
-def EmotionRecognition():
-    global AutomaticExpression
-    frame = getFrame()
-    frame, AutomaticExpression = inference_emotionrecog(frame)
-    return frame
-
 if __name__ == '__main__':
     while True:
-        frameA = FacemeshRecognition()
-        frameB = EmotionRecognition()
-        frame = cv2.hconcat([frameA, frameB])
+        frame = FacemeshRecognition()
         if left_eye_closed and right_eye_closed:
             print('BOTH EYES CLOSED')
         elif left_eye_closed:

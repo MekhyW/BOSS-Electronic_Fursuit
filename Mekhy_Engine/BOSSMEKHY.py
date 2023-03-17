@@ -32,7 +32,7 @@ def convertExpressionStringToNumber(expression):
     else:
         return 0
 
-def machine_vision_thread_A():
+def machine_vision_thread():
     while True:
         try:
             if TelegramBot.eye_tracking_mode:
@@ -41,13 +41,6 @@ def machine_vision_thread_A():
                 MachineVision.displacement_eye = (0, 0)
                 MachineVision.left_eye_closed = False
                 MachineVision.right_eye_closed = False
-        except Exception as e:
-            print(e)
-
-def machine_vision_thread_B():
-    while True:
-        try:
-            MachineVision.EmotionRecognition()
         except Exception as e:
             print(e)
 
@@ -101,13 +94,11 @@ if __name__ == '__main__':
     SoundEffects.PlayBootSound()
     VoiceChanger.SetVoice("Mekhy")
     Assistant.start()
-    machine_vision_thread_A = threading.Thread(target=machine_vision_thread_A)
-    machine_vision_thread_B = threading.Thread(target=machine_vision_thread_B)
+    machine_vision_thread = threading.Thread(target=machine_vision_thread)
     display_thread = threading.Thread(target=display_thread)
     serial_thread = threading.Thread(target=serial_thread)
     assistant_thread = threading.Thread(target=assistant_thread)
-    machine_vision_thread_A.start()
-    machine_vision_thread_B.start()
+    machine_vision_thread.start()
     display_thread.start()
     serial_thread.start()
     assistant_thread.start()
