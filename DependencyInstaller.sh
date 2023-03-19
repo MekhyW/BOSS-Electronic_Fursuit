@@ -18,26 +18,31 @@ sudo apt install -y libsdl2-mixer-2.0-0
 sudo apt install -y build-essential cmake pkg-config
 sudo apt install -y python3-dev
 # PIP PACKAGES
-pip3 install --upgrade pip
-pip3 install telepota
-pip3 install googletrans==3.1.0a0
-pip3 install opencv-python
-pip3 install picamera[array]
-pip3 install pygame --upgrade
-pip3 install pytube
-pip3 install gTTS
-pip3 install mediapipe-rpi4
-pip3 install openai
-pip3 install pvporcupine
-pip3 install pvrecorder
-pip3 install pyserial
-# -----------------------------------------------------------------------------
-#
-# Remember to:
+sudo pip3 install --upgrade pip
+sudo pip3 install telepota
+sudo pip3 install googletrans==3.1.0a0
+sudo pip3 install opencv-python
+sudo pip3 install picamera[array]
+sudo pip3 install pygame --upgrade
+sudo pip3 install pytube
+sudo pip3 install gTTS
+sudo pip3 install mediapipe-rpi4
+sudo pip3 install openai
+sudo pip3 install pvporcupine
+sudo pip3 install pvrecorder
+sudo pip3 install pyserial
+sudo pip3 uninstall protobuf
+sudo pip3 install protobuf==4.21.10
+# CRONJOB
+cd Mekhy_Engine
+chmod 755 launcher.sh
+sudo crontab -e
+# Add the following line to the end of the file: @reboot sh /home/pi/BOSS-Electronic_Fursuit/Mekhy_Engine/launcher.sh >/home/pi/BOSS-Electronic_Fursuit/Mekhy_Engine/logs/cronlog 2>&1
+cd ..
+# SETUP
 # - set auto login and password for pi user
 # - setup new VNC address
 # - setup dual display scheme
 # - insert credentials into Mekhy_Engine/resources/credentials.json
-# - run sudo nano /etc/rc.local and add the following line before exit 0: "python3 /home/pi/BOSS-Electronic_Fursuit/Mekhy_Engine/BOSSMEKHY.py &"
 # - set app bar width to zero
 # - enable CSI camera
