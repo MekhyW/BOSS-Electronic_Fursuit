@@ -79,7 +79,7 @@ def serial_thread():
             else:
                 ser_leds.write(str.encode(expression))
         except Exception as e:
-            print(e)
+            pass
         finally:
             time.sleep(0.1)
             
