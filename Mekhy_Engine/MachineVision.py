@@ -15,7 +15,8 @@ try:
     from picamera.array import PiRGBArray
     from picamera import PiCamera
     camera = PiCamera()
-    rawCapture = PiRGBArray(camera)
+    camera.resolution = (640,480)
+    rawCapture = PiRGBArray(camera, size = camera.resolution)
     camera.capture(rawCapture, format="bgr")
     image = rawCapture.array
     using_csi = True
@@ -89,7 +90,8 @@ def inference_facemesh(image):
 
 def getFrame():
     if using_csi:
-        camera.capture(rawCapture, format="bgr")
+        rawCapture.truncate(0)
+        camera.capture(rawCapture, resize=camera.resolution, format="bgr")
         frame = rawCapture.array
     else:
         ret, frame = cap.read()
