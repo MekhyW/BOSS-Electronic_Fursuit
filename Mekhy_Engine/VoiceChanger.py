@@ -1,9 +1,12 @@
 import os
 import time
+import threading
 os.system("pactl load-module module-echo-cancel")
 
-def SetVoice(voice):
+def sox_thread(voice):
+    print("Killing SoX windows")
     os.system("killall play")
+    print("Setting new voice")
     if voice == 'Mekhy':
         os.system("lxterminal -e play '|rec --buffer 2048 -d pitch -250 bass 20'")
     elif voice == 'Demon':
@@ -22,6 +25,10 @@ def SetVoice(voice):
         os.system("lxterminal -e play '|rec --buffer 8192 -d'")
     elif voice == 'Mute':
         os.system("lxterminal -e play '|rec --buffer 8192 -d vol 0'")
+
+def SetVoice(voice):
+    soxthread = threading.Thread(target=sox_thread, args=(voice,))
+    soxthread.start()
 
 if __name__ == '__main__':
     SetVoice('No Effects')
