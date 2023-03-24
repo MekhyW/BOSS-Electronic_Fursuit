@@ -15,8 +15,6 @@ sudo apt install -y ffmpeg
 sudo apt install -y sox
 sudo apt install -y python3-gi gir1.2-wnck-3.0
 sudo apt install -y libsdl2-mixer-2.0-0
-sudo apt install -y build-essential cmake pkg-config
-sudo apt install -y python3-dev
 # PIP PACKAGES
 sudo pip3 install --upgrade pip
 sudo pip3 install telepota
@@ -41,7 +39,7 @@ sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 cd ..
 # SETUP
 # - set auto login and password for pi user
-# - setup new VNC address
+# - setup VNC connection (both home wifi and 4g hotspot)
 # - setup dual display scheme
 # - insert credentials into Mekhy_Engine/resources/credentials.json
 # - set app bar width to zero
