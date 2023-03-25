@@ -49,8 +49,14 @@ def inference_facemesh(image, drawing):
         displacement_left_eye = (2*(l_cx-((lex1+lex2)/2))/abs(lex2-lex1), 2*(l_cy-((ley1+ley2)/2))/abs((ley2-ley1)))
         displacement_right_eye = (2*(r_cx-((rex1+rex2)/2))/abs(rex2-rex1), 2*(r_cy-((rey1+rey2)/2))/abs((rey2-rey1)))
         displacement_eye = ((displacement_left_eye[0]+displacement_right_eye[0])/2, (displacement_left_eye[1]+displacement_right_eye[1])/2)
-        left_eye_closed = True if l_radius == 0 else False
-        right_eye_closed = True if r_radius == 0 else False
+        if abs(lex1-lex2)/abs(ley1-ley2) > 4:
+            left_eye_closed = True
+        else:
+            left_eye_closed = False
+        if abs(rex1-rex2)/abs(rey1-rey2) > 4:
+            right_eye_closed = True
+        else:
+            right_eye_closed = False
         if drawing:
             for faceLms in results_mesh.multi_face_landmarks:
                 mp_drawing.draw_landmarks(frame, faceLms, mp_face_mesh.FACEMESH_CONTOURS,drawSpec,drawSpec)
