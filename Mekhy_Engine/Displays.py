@@ -103,11 +103,12 @@ def ManageWindows():
     screen.force_update()
     for window in screen.get_windows():
         window_name = window.get_name()
-        if "Eyes" in window_name:
+        window_name = window_name.lower()
+        if "eyes" in window_name:
             window.maximize()
             window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.X, 0, 0, display_width, display_height)
             window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.Y, 0, 0, display_width, display_height)
-        elif "Terminal" in window_name:
+        elif any([x in window_name for x in ["terminal", "sh", "play"]]):
             window.minimize()
 
 def PlayVideo(file_name, remove_file=True):
