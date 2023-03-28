@@ -304,7 +304,8 @@ def StartBot():
         MessageLoop(fursuitbot, handle).run_as_thread()
         print("bot online")
         return True
-    except:
+    except Exception as e:
+        print(e)
         return False
 
 if __name__ == '__main__':
