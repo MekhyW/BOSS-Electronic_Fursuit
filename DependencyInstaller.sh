@@ -44,7 +44,7 @@ sudo nano /boot/config.txt
 cd ..
 # SETUP
 # - set auto login and password for pi user
-# - setup VNC connection (both home wifi and 4g hotspot)
+# - setup VNC connection for 4g hotspot (remember to use 5GHz!!, 2.4GHz is too slow to work)
 # - setup dual display scheme
 # - insert credentials into Mekhy_Engine/resources/credentials.json
 # - set app bar width to zero
