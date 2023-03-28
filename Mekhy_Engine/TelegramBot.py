@@ -287,7 +287,8 @@ def handle(msg):
                 keyboard.append([KeyboardButton(text=voice)])
             command_keyboard = ReplyKeyboardMarkup(keyboard=keyboard)
             fursuitbot.sendMessage(chat_id, '>>>What voice?', reply_markup=command_keyboard)
-    except:
+    except Exception as e:
+        print(e)
         if 'ConnectionResetError' not in traceback.format_exc():
             fursuitbot.sendMessage(mekhyID, traceback.format_exc())
             fursuitbot.sendMessage(mekhyID, str(msg))
