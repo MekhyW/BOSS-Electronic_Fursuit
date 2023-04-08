@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="meEQKwicSAwc1KFZT5nb" name="Page-1">
-        <mxGraphModel dx="377" dy="433" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#000000" math="0" shadow="1">
+        <mxGraphModel dx="298" dy="289" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#000000" math="0" shadow="1">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -8,7 +8,7 @@
                     <mxGeometry x="74" y="403" width="250" height="197" as="geometry"/>
                 </mxCell>
                 <mxCell id="sJYIKFFBBBpRVcEcnY1A-2" value="Raspberry Pi 4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
-                    <mxGeometry x="84.5" y="488.00000000000006" width="109" height="59" as="geometry"/>
+                    <mxGeometry x="84.5" y="532.18" width="109" height="59" as="geometry"/>
                 </mxCell>
                 <mxCell id="sJYIKFFBBBpRVcEcnY1A-4" value="RAVPower 5V&lt;br&gt;20000mAh PowerBank" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" parent="1" vertex="1">
                     <mxGeometry x="79" y="407" width="120" height="60" as="geometry"/>
@@ -100,14 +100,11 @@
                         <mxPoint x="328.68" y="500.63" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="P2U7Luo28GVeBd__tEnY-2" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;flowAnimation=1;" parent="1" source="sJYIKFFBBBpRVcEcnY1A-4" target="sJYIKFFBBBpRVcEcnY1A-2" edge="1">
+                <mxCell id="P2U7Luo28GVeBd__tEnY-2" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;flowAnimation=1;" parent="1" source="80" target="sJYIKFFBBBpRVcEcnY1A-2" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="307.68" y="600" as="sourcePoint"/>
                         <mxPoint x="357.68" y="550" as="targetPoint"/>
                     </mxGeometry>
-                </mxCell>
-                <mxCell id="Yjcuvt-7D69lJ8ES1OOV-1" value="Arduino Nano" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
-                    <mxGeometry x="94" y="556" width="90" height="40.13" as="geometry"/>
                 </mxCell>
                 <mxCell id="dLq0NmMCFaMVdCEzxlDA-1" value="Glow-in-the-dark solid claws" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
                     <mxGeometry x="153" y="797" width="104" height="44" as="geometry"/>
@@ -132,7 +129,7 @@
                         <mxPoint x="414" y="598" as="sourcePoint"/>
                         <mxPoint x="377" y="585" as="targetPoint"/>
                         <Array as="points">
-                            <mxPoint x="337" y="546"/>
+                            <mxPoint x="337" y="560"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
@@ -154,22 +151,10 @@
                         <mxPoint x="513" y="548" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="25" value="" style="endArrow=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="Yjcuvt-7D69lJ8ES1OOV-1" target="Nwgi6No1Y5rALYJXFBc9-3" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="182.5" y="596.94" as="sourcePoint"/>
-                        <mxPoint x="376" y="642" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
                 <mxCell id="38" value="" style="endArrow=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="16" target="MiqG1OLB_oiA9NUDDggW-14" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="505" y="529" as="sourcePoint"/>
                         <mxPoint x="555" y="479" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="39" value="" style="endArrow=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="sJYIKFFBBBpRVcEcnY1A-2" target="Yjcuvt-7D69lJ8ES1OOV-1" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="240" y="514" as="sourcePoint"/>
-                        <mxPoint x="290" y="464" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="41" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;flowAnimation=1;" parent="1" source="73" target="16" edge="1">
@@ -218,7 +203,7 @@
                     <mxGeometry x="155.75" y="1003.25" width="104" height="44" as="geometry"/>
                 </mxCell>
                 <mxCell id="73" value="USB Hub" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
-                    <mxGeometry x="217" y="412.68" width="96" height="48.64" as="geometry"/>
+                    <mxGeometry x="222" y="412.68" width="96" height="48.64" as="geometry"/>
                 </mxCell>
                 <mxCell id="74" value="" style="endArrow=classic;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;flowAnimation=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" parent="1" source="73" target="16" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -226,7 +211,7 @@
                         <mxPoint x="393" y="464" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="75" value="" style="endArrow=classic;html=1;flowAnimation=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="73" target="MiqG1OLB_oiA9NUDDggW-1" edge="1">
+                <mxCell id="75" value="" style="endArrow=classic;html=1;flowAnimation=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="sJYIKFFBBBpRVcEcnY1A-4" target="MiqG1OLB_oiA9NUDDggW-1" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="279.01" y="466.18000000000006" as="sourcePoint"/>
                         <mxPoint x="428" y="631" as="targetPoint"/>
@@ -237,6 +222,9 @@
                         <mxPoint x="275" y="471.32000000000005" as="sourcePoint"/>
                         <mxPoint x="381" y="552.4725000000001" as="targetPoint"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="80" value="10000mAh USB-C PowerBank" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" vertex="1" parent="1">
+                    <mxGeometry x="88" y="471" width="102" height="39.43" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
