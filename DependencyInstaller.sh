@@ -10,6 +10,7 @@
 # -----------------------------------------------------------------------------
 sudo apt-get update
 sudo apt-get install -y git-all
+sudo apt-get install -y git-lfs
 sudo apt-get install -y python3-pip
 sudo apt install -y ffmpeg
 sudo apt install -y sox
@@ -31,8 +32,11 @@ sudo pip3 install pvrecorder
 sudo pip3 install pyserial
 sudo pip3 uninstall protobuf
 sudo pip3 install protobuf==4.21.10
+#EMOTION RECOG MODEL
+cd Mekhy_Engine/resources
+git lfs pull
+cd ..
 # AUTOSTART
-cd Mekhy_Engine
 chmod 755 launcher.sh
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 # Add the following line before @xscreensaver: @lxterminal -e sh /home/pi/BOSS-Electronic_Fursuit/Mekhy_Engine/launcher.sh >/home/pi/BOSS-Electronic_Fursuit/Mekhy_Engine/logs/cronlog 2>&1

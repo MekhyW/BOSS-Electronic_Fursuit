@@ -19,7 +19,7 @@ def convertExpressionStringToNumber(expression):
         return 3
     elif expression == "Happy":
         return 4
-    elif expression == "Scared":
+    elif expression == "Scared" or expression == "Shocked":
         return 5
     elif expression == "Heart":
         return 6
@@ -32,7 +32,7 @@ def convertExpressionStringToNumber(expression):
     else:
         return 0
 
-def machine_vision_thread():
+def eye_tracking_thread():
     while True:
         try:
             if TelegramBot.eye_tracking_mode:
@@ -41,6 +41,14 @@ def machine_vision_thread():
                 MachineVision.displacement_eye = (0, 0)
                 MachineVision.left_eye_closed = False
                 MachineVision.right_eye_closed = False
+        except Exception as e:
+            print(e)
+
+def emotion_recognition_thread():
+    while True:
+        try:
+            if not TelegramBot.manual_expression_mode:
+                MachineVision.predict_emotion()
         except Exception as e:
             print(e)
 
@@ -94,11 +102,13 @@ if __name__ == '__main__':
     SoundEffects.PlayBootSound()
     VoiceChanger.SetVoice("Mekhy")
     Assistant.start()
-    machine_vision_thread = threading.Thread(target=machine_vision_thread)
+    eye_tracking_thread = threading.Thread(target=eye_tracking_thread)
+    emotion_recognition_thread = threading.Thread(target=emotion_recognition_thread)
     display_thread = threading.Thread(target=display_thread)
     serial_thread = threading.Thread(target=serial_thread)
     assistant_thread = threading.Thread(target=assistant_thread)
-    machine_vision_thread.start()
+    eye_tracking_thread.start()
+    emotion_recognition_thread.start()
     display_thread.start()
     serial_thread.start()
     assistant_thread.start()

@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import mediapipe as mp
+import pickle
 displacement_eye = (0,0)
 left_eye_closed = False
 right_eye_closed = False
@@ -9,6 +10,8 @@ mp_face_mesh = mp.solutions.face_mesh
 mp_drawing = mp.solutions.drawing_utils
 drawSpec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
 face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
+mesh_points = None
+emotion_model = pickle.load(open('resources/emotion_model.pkl', 'rb'))
 try:
     from picamera.array import PiRGBArray
     from picamera import PiCamera
@@ -34,6 +37,7 @@ LEFT_EYEBROW = [383, 300, 293, 334, 296, 336, 285, 417]
 RIGHT_EYEBROW = [156, 70, 63, 105, 66, 107, 55, 193]
 
 def inference_facemesh(image, drawing):
+    global mesh_points
     frame = image.copy()
     H, W, _ = frame.shape
     rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -87,9 +91,24 @@ def FacemeshRecognition(drawing=False):
     displacement_eye = (max(min(1, displacement_eye[0]), -1), max(min(0.3, displacement_eye[1]), -0.3))
     return frame    
 
+def predict_emotion():
+    global mesh_points, emotion_model, AutomaticExpression
+    if mesh_points is None:
+        return None
+    nose_tip = mesh_points[4]
+    chin_tip = mesh_points[152]
+    mesh_norm = mesh_points - nose_tip
+    scale_factor = np.linalg.norm(chin_tip - nose_tip)
+    mesh_norm = np.divide(mesh_norm, scale_factor)
+    landmarks_flat = mesh_norm.flatten()
+    pred = emotion_model.predict([landmarks_flat])
+    AutomaticExpression = pred[0].capitalize()
+
 if __name__ == '__main__':
     while True:
         frame = FacemeshRecognition(drawing=True)
+        predict_emotion()
+        print(AutomaticExpression)
         if left_eye_closed and right_eye_closed:
             print('BOTH EYES CLOSED')
         elif left_eye_closed:
