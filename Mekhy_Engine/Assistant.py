@@ -11,6 +11,8 @@ porcupine_access_key = json.load(open("resources/credentials.json"))["porcupine_
 keyword_paths = ["resources/Cookie-Bot_en_raspberry-pi_v2_1_0.ppn"]
 porcupine = pvporcupine.create(access_key=porcupine_access_key, keyword_paths=keyword_paths)
 recorder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
+previous_questions = ["Who won the world series in 2020?", "Você é fofo!"]
+previous_answers = ["The Los Angeles Dodgers", "Não, você que é fofo! UwU"]
 
 def record_query():
     wavfile = wave.open("resources/query.wav", "wb")
@@ -24,18 +26,19 @@ def record_query():
     wavfile.close()
 
 def assistant_query(query):
+    global previous_question, previous_answer
     query = query.capitalize()
-    completion = openai.Completion.create(
-        engine="davinci",
-        prompt=f"You are a helpful assistant.\nQuestion: {query}\nAnswer: ",
-        temperature=0.5,
-        max_tokens=150,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0,
-        stop=["\n", " User:", " AI:"],
-    )
-    answer = completion.choices[0].text
+    prompt_beginning = "You are a helpful and silly assistant. Your name is Cookie Bot. Respond in the same language as the question"
+    messages=[{"role": "system", "content": prompt_beginning}]
+    for i in range(len(previous_questions)):
+        messages.append({"role": "user", "content": previous_questions[i]})
+        messages.append({"role": "assistant", "content": previous_answers[i]})
+    messages.append({"role": "user", "content": query})
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+    answer = completion.choices[0].message.content
+    if len(query) and len(answer):
+        previous_questions.append(query)
+        previous_answers.append(answer)
     return answer
 
 def trigger():
@@ -49,6 +52,7 @@ def trigger():
     recorder.stop()
     SoundEffects.PlayOnDemand("resources/assistant_ok.wav", remove_file=False)
     with open("resources/query.wav", "rb") as query:
+        print("Transcribing")
         transcript = openai.Audio.transcribe("whisper-1", query)['text']
     query.close()
     print(transcript)
