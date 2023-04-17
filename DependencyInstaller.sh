@@ -22,6 +22,7 @@ sudo pip3 install telepota
 sudo pip3 install googletrans==3.1.0a0
 sudo pip3 install opencv-python
 sudo pip3 install picamera[array]
+sudo pip3 install scikit-learn
 sudo pip3 install pygame --upgrade
 sudo pip3 install pytube
 sudo pip3 install gTTS
