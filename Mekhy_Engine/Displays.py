@@ -210,6 +210,9 @@ def startThreads():
     composeEyesThread = threading.Thread(target=composeEyesThread)
     applyEyesThread = threading.Thread(target=applyEyesThread)
     rotateFrameThread = threading.Thread(target=rotateFrameThread)
+    composeEyesThread.priority = 3
+    applyEyesThread.priority = 3
+    rotateFrameThread.priority = 3
     composeEyesThread.start()
     applyEyesThread.start()
     rotateFrameThread.start()
