@@ -48,6 +48,8 @@ eyes = np.full((display_height, display_width, 3), eye_neutral[0, 0], dtype=np.u
 frame_template = np.full((display_height, display_width, 3), eye_neutral[0, 0], dtype=np.uint8)
 frame_with_eyes = np.full((display_height, display_width, 3), eye_neutral[0, 0], dtype=np.uint8)
 frame_rotated = np.full((display_height, display_width, 3), eye_neutral[0, 0], dtype=np.uint8)
+composeEyesSemaphore = threading.Semaphore(0)
+applyEyesSemaphore = threading.Semaphore(0)
 
 def rotate_image(image, angle):
     #image_center = tuple(np.array(image.shape[1::-1]) / 2)
@@ -180,22 +182,24 @@ def composeEyesThread():
         try:
             if not playingvideo:
                 composeEyes()
+                composeEyesSemaphore.release()
         except Exception as e:
             print(e)
 
 def applyEyesThread():
     while True:
         try:
-            if not playingvideo:
-                applyEyes()
+            composeEyesSemaphore.acquire()
+            applyEyes()
+            applyEyesSemaphore.release()
         except Exception as e:
             print(e)
 
 def rotateFrameThread():
     while True:
         try:
-            if not playingvideo:
-                rotateFrame()
+            applyEyesSemaphore.acquire()
+            rotateFrame()
         except Exception as e:
             print(e)
 
