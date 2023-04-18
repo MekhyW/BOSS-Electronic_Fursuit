@@ -41,12 +41,14 @@ def eye_tracking_thread():
                 MachineVision.displacement_eye = (0, 0)
                 MachineVision.left_eye_closed = False
                 MachineVision.right_eye_closed = False
+            MachineVision.facemeshRecognitionSemaphore.release()
         except Exception as e:
             print(e)
 
 def emotion_recognition_thread():
     while True:
         try:
+            MachineVision.facemeshRecognitionSemaphore.acquire()
             if not TelegramBot.manual_expression_mode:
                 MachineVision.predict_emotion()
         except Exception as e:

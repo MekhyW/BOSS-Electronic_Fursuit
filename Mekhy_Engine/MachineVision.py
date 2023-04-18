@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import mediapipe as mp
 import pickle
+import threading
 displacement_eye = (0,0)
 left_eye_closed = False
 right_eye_closed = False
@@ -12,6 +13,7 @@ drawSpec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
 face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
 mesh_points = None
 emotion_model = pickle.load(open('resources/emotion_model.pkl', 'rb'))
+facemeshRecognitionSemaphore = threading.Semaphore(0)
 try:
     from picamera.array import PiRGBArray
     from picamera import PiCamera
