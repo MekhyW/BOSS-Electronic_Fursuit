@@ -4,33 +4,10 @@ import Displays
 import SoundEffects
 import MachineVision
 import Assistant
+import Serial
 import cv2
-import serial, time
+import time
 import threading
-
-def convertExpressionStringToNumber(expression):
-    if expression == "Neutral":
-        return 0
-    elif expression == "Angry":
-        return 1
-    elif expression == "Disgusted":
-        return 2
-    elif expression == "Sad":
-        return 3
-    elif expression == "Happy":
-        return 4
-    elif expression == "Scared" or expression == "Shocked":
-        return 5
-    elif expression == "Heart":
-        return 6
-    elif expression == "Hypnotic":
-        return 7
-    elif expression == "Sexy":
-        return 8
-    elif expression == "Demonic":
-        return 9
-    else:
-        return 0
 
 def eye_tracking_thread():
     while True:
@@ -60,34 +37,37 @@ def display_thread():
         try:
             Displays.displacement_eye = MachineVision.displacement_eye
             if TelegramBot.manual_expression_mode:     
-                Displays.GraphicsRefresh(convertExpressionStringToNumber(TelegramBot.ManualExpression))
+                Displays.GraphicsRefresh(Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression))
             else:
-                Displays.GraphicsRefresh(convertExpressionStringToNumber(MachineVision.AutomaticExpression))
+                Displays.GraphicsRefresh(Serial.convertExpressionStringToNumber(MachineVision.AutomaticExpression))
         except Exception as e:
             print(e)
         finally:
             cv2.waitKey(1)
 
 def serial_thread():
-    try:
-        ser_actuators = serial.Serial('/dev/ttyACM0', 9600)
-        ser_leds = serial.Serial('/dev/ttyACM1', 9600)
-    except Exception as e:
-        print(e)
+    Serial.serialConnect()
     while True:
         try:
             if TelegramBot.manual_expression_mode:
-                expression = TelegramBot.ManualExpression
+                expression = Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression)
             else:
-                expression = MachineVision.AutomaticExpression
+                expression = Serial.convertExpressionStringToNumber(MachineVision.AutomaticExpression)
             if not TelegramBot.actuators_enabled:
-                ser_actuators.write(str.encode("99"))
+                Serial.serialSendActuators("99")
             else:
-                ser_actuators.write(str.encode(expression))
+                Serial.serialSendActuators(expression)
             if not TelegramBot.leds_enabled:
-                ser_leds.write(str.encode("99"))
+                Serial.serialSendLeds("99")
             else:
-                ser_leds.write(str.encode(expression))
+                telegrambot_status = Serial.convertStatuscodeStringToNumber(TelegramBot.statuscode)
+                assistant_status = Serial.convertStatuscodeStringToNumber(Assistant.statuscode)
+                if assistant_status:
+                    Serial.serialSendLeds(assistant_status)
+                elif telegrambot_status:
+                    Serial.serialSendLeds(telegrambot_status)
+                else:
+                    Serial.serialSendLeds(expression)
         except Exception as e:
             pass
         finally:

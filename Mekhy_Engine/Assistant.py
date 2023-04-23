@@ -13,6 +13,7 @@ porcupine = pvporcupine.create(access_key=porcupine_access_key, keyword_paths=ke
 recorder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
 previous_questions = ["Who won the world series in 2020?", "Você é fofo!"]
 previous_answers = ["The Los Angeles Dodgers", "Não, você que é fofo! UwU"]
+status_code = 'Ok'
 
 def record_query():
     wavfile = wave.open("resources/query.wav", "wb")
@@ -42,6 +43,8 @@ def assistant_query(query):
     return answer
 
 def trigger():
+    global status_code
+    status_code = 'Assistant listening'
     print("Triggered")
     recorder.stop()
     SoundEffects.PlayOnDemand("resources/assistant_listening.wav", remove_file=False)
@@ -50,6 +53,8 @@ def trigger():
     recorder.start()
     record_query()
     recorder.stop()
+    print("Processing")
+    status_code = 'Assistant processing'
     SoundEffects.PlayOnDemand("resources/assistant_ok.wav", remove_file=False)
     with open("resources/query.wav", "rb") as query:
         print("Transcribing")
@@ -57,12 +62,14 @@ def trigger():
     query.close()
     print(transcript)
     answer = assistant_query(transcript)
+    status_code = 'Assistant responding'
     if len(answer):
         print(answer)
         SoundEffects.TTS(answer)
     else:
         print("No answer")
         SoundEffects.TTS("I don't have an answer to that")
+    status_code = 'Ok'
     recorder.start()
 
 def start():

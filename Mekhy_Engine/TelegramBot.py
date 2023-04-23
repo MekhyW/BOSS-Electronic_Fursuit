@@ -21,6 +21,7 @@ ManualExpression = 'Neutral'
 sfx = ['AWOOO', '*racc sounds* 🦝', 'Woof! Bark!', 'Sad dog', 'Hungry growl', 'huff huff 👅', '*snif snif*', 'Zzz', 'FART']
 voices = ['Mekhy', 'Demon', 'Voice of Conscience', 'Baby', 'Chipmunk', 'Earrape', 'Radio', 'No Effects', 'Mute']
 expressions = ['Neutral', '😡', '😒', '😢', '😊', '😱', '😍', 'Hypno 🌈', '😏', '😈']
+status_code = 'Ok'
 
 def SFX(fursuitbot, chat_id, msg):
     if msg['text'] == 'AWOOO':
@@ -103,6 +104,8 @@ def toggleActuators(fursuitbot, chat_id, msg):
         fursuitbot.sendMessage(chat_id, '>>>Actuators Enabled (ON)')
 
 def PlaySongName(fursuitbot, chat_id, msg):
+    global status_code
+    status_code = 'Processing media'
     fursuitbot.sendMessage(chat_id, '>>>Finding song with query "{}"...'.format(msg['text']))
     topic = msg['text']
     count = 0
@@ -125,11 +128,15 @@ def PlaySongName(fursuitbot, chat_id, msg):
     SoundEffects.PlayOnDemand(new_filename)
 
 def TTS(fursuitbot, chat_id, msg):
+    global status_code
+    status_code = 'Processing media'
     fursuitbot.sendMessage(chat_id, '>>>Speaking...')
     msgToSpeak = msg['text'].replace('/speak ', '')
     SoundEffects.TTS(msgToSpeak)
 
 def PlayVideoFile(fursuitbot, chat_id, msg):
+    global status_code
+    status_code = 'Processing media'
     fursuitbot.sendMessage(chat_id, '>>>Visual Received!')
     if 'video' in msg:
         file_path = fursuitbot.getFile(msg['video']['file_id'])['file_path']
@@ -157,6 +164,8 @@ def PlayVideoFile(fursuitbot, chat_id, msg):
     fursuitbot.sendMessage(chat_id, ">>>Playing.....\n\nUse 'Stop Media' to make me stop òwó")
 
 def PlayAudioFile(fursuitbot, chat_id, msg):
+    global status_code
+    status_code = 'Processing media'
     fursuitbot.sendMessage(chat_id, '>>>Audio Received!')
     if 'audio' in msg:
         file_path = fursuitbot.getFile(msg['audio']['file_id'])['file_path']
@@ -179,8 +188,10 @@ def BashCommand(fursuitbot, chat_id, msg):
         fursuitbot.sendMessage(chat_id, e.output)
 
 def handle(msg):
+    global status_code
     try:
         content_type, chat_type, chat_id = telepot.glance(msg)
+        status_code = 'Message received'
         print(content_type, chat_type, chat_id)
         current_keyboard = 'Main'
         if content_type == 'text':
@@ -292,6 +303,8 @@ def handle(msg):
         if 'ConnectionResetError' not in traceback.format_exc():
             fursuitbot.sendMessage(mekhyID, traceback.format_exc())
             fursuitbot.sendMessage(mekhyID, str(msg))
+    finally:
+        status_code = 'Ok'
 
 def StartBot():
     global bot_online
