@@ -1,6 +1,6 @@
 #include <Adafruit_NeoPixel.h>
 #define LED_PIN 10
-#define LED_COUNT 41
+#define LED_COUNT 120
 Adafruit_NeoPixel GearsStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 int Color_Brightness = 25;
 uint32_t black = GearsStrip.Color(0, 0, 0);
@@ -13,7 +13,6 @@ uint32_t light_blue = GearsStrip.Color(0, 255, 255);
 uint32_t orange = GearsStrip.Color(255, 128, 0);
 uint32_t green = GearsStrip.Color(0, 255, 0);
 uint32_t purple = GearsStrip.Color(115, 0, 255);
-int ExpressionState = 0;
 int Effect = 1;
 uint32_t* activeColor = &white;
 String msg = "";
@@ -60,10 +59,6 @@ void colorTwinkle(uint32_t color) {
 void colorStrobe(uint32_t color){
   GearsStrip.setBrightness(Color_Brightness);
   for(int j = 0; j < 10; j++) {
-    int ExpressionStateLocal = ExpressionState;
-    if(ExpressionState != ExpressionStateLocal){
-      break;
-    }
     GearsStrip.fill(color, 0, GearsStrip.numPixels());
     GearsStrip.show();
     delay(50);
@@ -77,20 +72,12 @@ void colorStrobe(uint32_t color){
 void colorFade(uint32_t color){
     GearsStrip.setBrightness(Color_Brightness);
     for(int k = 0; k < Color_Brightness*2; k++) {
-      int ExpressionStateLocal = ExpressionState;
-      if(ExpressionState != ExpressionStateLocal){
-        break;
-      }
       GearsStrip.fill(color, 0, GearsStrip.numPixels());
       GearsStrip.setBrightness(k);
       GearsStrip.show();
       delay(25);
     }
     for(int k = Color_Brightness*2; k > 0; k--) {
-      int ExpressionStateLocal = ExpressionState;
-      if(ExpressionState != ExpressionStateLocal){
-        break;
-      }
       GearsStrip.fill(color, 0, GearsStrip.numPixels());
       GearsStrip.setBrightness(k);
       GearsStrip.show();
@@ -101,19 +88,11 @@ void colorFade(uint32_t color){
 void colorWipe(uint32_t color) {
   GearsStrip.setBrightness(Color_Brightness);
   for(uint16_t i=0; i<GearsStrip.numPixels(); i++) {
-    int ExpressionStateLocal = ExpressionState;
-    if(ExpressionState != ExpressionStateLocal){
-      break;
-    }
     GearsStrip.setPixelColor(i, color);
     GearsStrip.show();
     delay(100);
   }
   for(uint16_t i=0; i<GearsStrip.numPixels(); i++) {
-    int ExpressionStateLocal = ExpressionState;
-    if(ExpressionState != ExpressionStateLocal){
-      break;
-    }
     GearsStrip.setPixelColor(i, black);
     GearsStrip.show();
     delay(100);
@@ -129,10 +108,6 @@ void colorTheaterChase(uint32_t color) {
       for(int c=b; c<GearsStrip.numPixels(); c += 3) {
         GearsStrip.setPixelColor(c, color);
       }
-      int ExpressionStateLocal = ExpressionState;
-      if(ExpressionState != ExpressionStateLocal){
-        break;
-      }
       GearsStrip.show();
       delay(200);
     }
@@ -145,10 +120,6 @@ void Rainbow(int wait) {
     for(int i=0; i<GearsStrip.numPixels(); i++) {
       int pixelHue = firstPixelHue + (i * 65536L / GearsStrip.numPixels());
       GearsStrip.setPixelColor(i, GearsStrip.gamma32(GearsStrip.ColorHSV(pixelHue)));
-    }
-    int ExpressionStateLocal = ExpressionState;
-    if(ExpressionState != ExpressionStateLocal){
-      break;
     }
     GearsStrip.show();
     delay(wait);
@@ -164,10 +135,13 @@ void setup() {
   Serial.begin(9600);
   GearsStrip.begin();
   GearsStrip.show();
+  GearsStrip.setBrightness(Color_Brightness);
+  colorStatic(white);
 }
 
 void loop() {
   readSerialPort();
+  Serial.println(*activeColor);
   if (msg != msg_prev) {
     Effect = random(0, 8);
   }
