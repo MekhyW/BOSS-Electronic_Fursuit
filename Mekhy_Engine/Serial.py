@@ -56,7 +56,7 @@ def serialConnect():
             time.sleep(1)
 
 def serialSendActuators(expression):
-    ser_actuators.write(str(expression).encode('utf-8'))
+    ser_actuators.write(str(expression).encode() + b'\n')
 
 def serialSendLeds(expression):
-    ser_leds.write(str(expression).encode('utf-8'))
+    ser_leds.write(str(expression).encode() + b'\n')

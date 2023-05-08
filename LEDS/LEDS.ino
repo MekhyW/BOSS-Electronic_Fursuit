@@ -15,20 +15,8 @@ uint32_t green = GearsStrip.Color(0, 255, 0);
 uint32_t purple = GearsStrip.Color(115, 0, 255);
 int Effect = 1;
 uint32_t* activeColor = &white;
-String msg = "";
-String msg_prev = "";
-
-void readSerialPort() {
-  msg_prev = msg;
-  msg = "";
-  if (Serial.available()) {
-    delay(10);
-    while (Serial.available() > 0) {
-      msg += (char)Serial.read();
-    }
-    Serial.flush();
-  }
-}
+int receivedValue = 0;
+int receivedValue_prev = 0;
 
 void colorStatic(uint32_t color) {
   GearsStrip.setBrightness(Color_Brightness/2);
@@ -131,6 +119,14 @@ void Off() {
   GearsStrip.show();
 }
 
+void readSerialPort() {
+  if (Serial.available()) {
+    receivedValue_prev = receivedValue;
+    receivedValue = Serial.parseInt();
+    Serial.flush();
+  }
+}
+
 void setup() {
   Serial.begin(9600);
   GearsStrip.begin();
@@ -142,70 +138,64 @@ void setup() {
 void loop() {
   readSerialPort();
   Serial.println(*activeColor);
-  if (msg != msg_prev) {
+  if (receivedValue != receivedValue_prev) {
     Effect = random(0, 8);
   }
-  if (msg == "99") {
+  if (receivedValue == 99) {
     Off();
   }
   else {
-    if (msg == "0") {
-      //neutral
+    if (receivedValue == 0) {
       colorStatic(white);
     }
-    else if (msg == "7") {
-      //hypnotized
+    else if (receivedValue == 7) {
       Rainbow(10);
     }
     else {
-      //cannot use switch case because it´s a String
-      if (msg == "1" || msg == "8") {
-        //angry or demonic
-        activeColor = &red;
+      switch (receivedValue) {
+        case 1:
+        case 8:
+          activeColor = &red;
+          break;
+        case 2:
+          activeColor = &green;
+          break;
+        case 3:
+          activeColor = &deep_blue;
+          break;
+        case 4:
+          activeColor = &yellow;
+          break;
+        case 5:
+          activeColor = &purple;
+          break;
+        case 6:
+          activeColor = &pink;
+          break;
+        default:
+          activeColor = &black;
+          break;
       }
-      else if (msg == "2") {
-        //disgusted
-        activeColor = &green;
+      switch(Effect) {
+        case 1:
+          colorSparkle(*activeColor);
+          break;
+        case 2:
+          colorTwinkle(*activeColor);
+          break;
+        case 3:
+          colorStrobe(*activeColor);
+          break;
+        case 4:
+          colorFade(*activeColor);
+          break;
+        case 5:
+          colorWipe(*activeColor);
+          break;
+        case 6:
+          colorTheaterChase(*activeColor);
+          break;
       }
-      else if (msg == "3") {
-        //sad
-        activeColor = &deep_blue;
-      }
-      else if (msg == "4") {
-        //happy
-        activeColor = &yellow;
-      }
-      else if (msg == "5") {
-        //scared
-        activeColor = &purple;
-      }
-      else if (msg == "6") {
-        //in love
-        activeColor = &pink;
-      }
-      else {
-        activeColor = &black;
-      }
-      switch(Effect){
-          case 1:
-            colorSparkle(*activeColor);
-            break;
-          case 2:
-            colorTwinkle(*activeColor);
-            break;
-          case 3:
-            colorStrobe(*activeColor);
-            break;
-          case 4:
-            colorFade(*activeColor);
-            break;
-          case 5:
-            colorWipe(*activeColor);
-            break;
-          case 6:
-            colorTheaterChase(*activeColor);
-            break;
-        }
     }
   }
   delay(10);
