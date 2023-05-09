@@ -142,6 +142,7 @@ void loop() {
     Effect = random(0, 8);
   }
   if (receivedValue == 99) {
+    activeColor = &black;
     Off();
   }
   else {

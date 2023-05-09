@@ -5,7 +5,6 @@
 #define RightEyebrowDefault 90
 Servo LeftEyebrow;
 Servo RightEyebrow;
-int ExpressionState = 0;
 int LeftEyebrowPos = LeftEyebrowDefault;
 int RightEyebrowPos = RightEyebrowDefault;
 int receivedValue = 0;
@@ -70,6 +69,7 @@ void setup() {
 
 void loop() {
   readSerialPort();
+  Serial.println(receivedValue);
   if (receivedValue != 99) {
     Move(receivedValue);
   } 
