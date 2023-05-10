@@ -8,45 +8,60 @@ Servo RightEyebrow;
 int LeftEyebrowPos = LeftEyebrowDefault;
 int RightEyebrowPos = RightEyebrowDefault;
 int receivedValue = 0;
-int receivedValue_prev = 0;
 
 void Move(int receivedValue) {
   switch (receivedValue) {
     case 0:
+      //Neutral
       LeftEyebrowPos = LeftEyebrowDefault;
       RightEyebrowPos = RightEyebrowDefault;
       break;
     case 1:
+      //Angry
       LeftEyebrowPos = LeftEyebrowDefault;
       RightEyebrowPos = RightEyebrowDefault;
       break;
     case 2:
+      //Disgusted
       LeftEyebrowPos = LeftEyebrowDefault;
       RightEyebrowPos = RightEyebrowDefault;
       break;
     case 3:
+      //Sad
       LeftEyebrowPos = LeftEyebrowDefault;
       RightEyebrowPos = RightEyebrowDefault;
       break;
     case 4:
+      //Happy
       LeftEyebrowPos = LeftEyebrowDefault;
       RightEyebrowPos = RightEyebrowDefault;
       break;
     case 5:
+      //Scared
       LeftEyebrowPos = LeftEyebrowDefault;
       RightEyebrowPos = RightEyebrowDefault;
       break;
     case 6:
+      //Heart
       LeftEyebrowPos = LeftEyebrowDefault;
       RightEyebrowPos = RightEyebrowDefault;
       break;
     case 7:
+      //Hypnotic
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      break;
+    case 8:
+      //Sexy
+      LeftEyebrowPos = LeftEyebrowDefault;
+      RightEyebrowPos = RightEyebrowDefault;
+      break;
+    case 9:
+      //Demonic
       LeftEyebrowPos = LeftEyebrowDefault;
       RightEyebrowPos = RightEyebrowDefault;
       break;
     default:
-      LeftEyebrowPos = LeftEyebrowDefault;
-      RightEyebrowPos = RightEyebrowDefault;
       break;
   }
   LeftEyebrow.write(LeftEyebrowPos);
@@ -55,9 +70,11 @@ void Move(int receivedValue) {
 
 void readSerialPort() {
   if (Serial.available()) {
-    receivedValue_prev = receivedValue;
     receivedValue = Serial.parseInt();
     Serial.flush();
+  }
+  while (Serial.available()){
+    Serial.read();
   }
 }
 
