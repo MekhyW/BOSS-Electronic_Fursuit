@@ -62,8 +62,8 @@ def serial_thread():
             if not TelegramBot.leds_enabled:
                 Serial.serialSendLeds("99")
             else:
-                telegrambot_status = Serial.convertStatuscodeStringToNumber(TelegramBot.statuscode)
-                assistant_status = Serial.convertStatuscodeStringToNumber(Assistant.statuscode)
+                telegrambot_status = Serial.convertStatuscodeStringToNumber(TelegramBot.status_code)
+                assistant_status = Serial.convertStatuscodeStringToNumber(Assistant.status_code)
                 if assistant_status:
                     Serial.serialSendLeds(assistant_status)
                 elif telegrambot_status:
