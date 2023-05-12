@@ -47,9 +47,7 @@ def display_thread():
 
 def serial_thread():
     Serial.serialConnect()
-    print("Serial connected")
     while True:
-        print("Serial thread")
         try:
             if TelegramBot.manual_expression_mode:
                 expression = Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression)
@@ -72,6 +70,8 @@ def serial_thread():
                     Serial.serialSendLeds(expression)
         except Exception as e:
             print(e)
+        finally:
+            time.sleep(0.1)
             
 def assistant_thread():
     while True:

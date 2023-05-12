@@ -50,14 +50,18 @@ def serialConnect():
         try:
             ser_actuators = serial.Serial('/dev/ttyUSB0', 9600)
             ser_leds = serial.Serial('/dev/ttyACM0', 9600)
+            print("Serial connected")
             connected = True
         except Exception as e:
             print(e)
             time.sleep(1)
 
 def serialSendActuators(expression):
+    ser_actuators.clear_input_buffer()
+    ser_actuators.clear_output_buffer()
     ser_actuators.write(str(expression).encode() + b'\n')
 
 def serialSendLeds(expression):
+    ser_leds.clear_input_buffer()
+    ser_leds.clear_output_buffer()
     ser_leds.write(str(expression).encode() + b'\n')
-    print("Sent: " + str(expression) + '\n')
