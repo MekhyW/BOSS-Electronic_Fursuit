@@ -1,6 +1,6 @@
 #include <Servo.h>
-#define LeftEyebrowPin 2
-#define RightEyebrowPin 3
+#define LeftEyebrowPin 10
+#define RightEyebrowPin 11
 #define LeftEyebrowDefault 90
 #define RightEyebrowDefault 90
 Servo LeftEyebrow;
