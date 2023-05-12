@@ -73,7 +73,7 @@ def serial_thread():
         except Exception as e:
             print(e)
         finally:
-            time.sleep(0.1)
+            time.sleep(0.01)
             
 def assistant_thread():
     while True:

@@ -60,3 +60,4 @@ def serialSendActuators(expression):
 
 def serialSendLeds(expression):
     ser_leds.write(str(expression).encode() + b'\n')
+    print("Sent: " + str(expression).encode() + b'\n')
