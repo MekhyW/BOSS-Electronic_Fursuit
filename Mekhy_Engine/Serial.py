@@ -57,11 +57,11 @@ def serialConnect():
             time.sleep(1)
 
 def serialSendActuators(expression):
-    ser_actuators.clear_input_buffer()
-    ser_actuators.clear_output_buffer()
+    ser_actuators.reset_input_buffer()
+    ser_actuators.reset_output_buffer()
     ser_actuators.write(str(expression).encode() + b'\n')
 
 def serialSendLeds(expression):
-    ser_leds.clear_input_buffer()
-    ser_leds.clear_output_buffer()
+    ser_leds.reset_input_buffer()
+    ser_leds.reset_output_buffer()
     ser_leds.write(str(expression).encode() + b'\n')
