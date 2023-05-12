@@ -69,7 +69,7 @@ def serial_thread():
                 else:
                     Serial.serialSendLeds(expression)
         except Exception as e:
-            pass
+            print(e)
         finally:
             time.sleep(0.1)
             
