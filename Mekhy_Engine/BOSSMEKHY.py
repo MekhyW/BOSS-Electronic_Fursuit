@@ -89,11 +89,11 @@ if __name__ == '__main__':
     display_thread = threading.Thread(target=display_thread)
     serial_thread = threading.Thread(target=serial_thread)
     assistant_thread = threading.Thread(target=assistant_thread)
-    #eye_tracking_thread.priority = 3
-    #display_thread.priority = 3
-    #emotion_recognition_thread.priority = 2
-    #serial_thread.priority = 2
-    #assistant_thread.priority = 2
+    eye_tracking_thread.priority = 3
+    display_thread.priority = 3
+    emotion_recognition_thread.priority = 2
+    serial_thread.priority = 2
+    assistant_thread.priority = 2
     eye_tracking_thread.start()
     emotion_recognition_thread.start()
     display_thread.start()
