@@ -110,8 +110,8 @@ def ManageWindows():
             window.maximize()
             window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.X, 0, 0, display_width, display_height)
             window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.Y, 0, 0, display_width, display_height)
-        elif any([x in window_name for x in ["terminal", "sh", "play"]]):
-            window.minimize()
+        #elif any([x in window_name for x in ["terminal", "sh", "play"]]):
+        #    window.minimize()
 
 def PlayVideo(file_name, remove_file=True):
     global playingvideo
