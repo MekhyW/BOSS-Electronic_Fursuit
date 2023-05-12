@@ -48,8 +48,8 @@ def serialConnect():
     connected = False
     while not connected:
         try:
-            ser_actuators = serial.Serial('/dev/ttyACM0', 9600)
-            ser_leds = serial.Serial('/dev/ttyACM1', 9600)
+            ser_actuators = serial.Serial('/dev/ttyUSB0', 9600)
+            ser_leds = serial.Serial('/dev/ttyACM0', 9600)
             connected = True
         except Exception as e:
             print(e)

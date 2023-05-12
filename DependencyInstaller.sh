@@ -16,6 +16,7 @@ sudo apt install -y ffmpeg
 sudo apt install -y sox
 sudo apt install -y python3-gi gir1.2-wnck-3.0
 sudo apt install -y libsdl2-mixer-2.0-0
+sudo apt install -y arduino
 # PIP PACKAGES
 sudo pip3 install --upgrade pip
 sudo pip3 install telepota
