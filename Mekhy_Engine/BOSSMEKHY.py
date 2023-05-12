@@ -72,8 +72,6 @@ def serial_thread():
                     Serial.serialSendLeds(expression)
         except Exception as e:
             print(e)
-        finally:
-            time.sleep(0.01)
             
 def assistant_thread():
     while True:
