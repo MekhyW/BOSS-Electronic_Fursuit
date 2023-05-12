@@ -45,7 +45,8 @@ cd ..
 #OVERCLOCK
 sudo nano /boot/config.txt
 # Change the following lines:
-# over_voltage=6
+# over_voltage=2
+# arm_freq=1700
 cd ..
 # SETUP
 # - set auto login and password for pi user
