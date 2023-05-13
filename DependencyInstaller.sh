@@ -53,6 +53,7 @@ cd ..
 # - set auto login and password for pi user
 # - setup VNC connection for 4g hotspot (remember to use 5GHz!!, 2.4GHz is too slow to work)
 # - setup dual display scheme
+# - disbale screen blanking
 # - insert credentials into Mekhy_Engine/resources/credentials.json
 # - set app bar width to zero
 # - enable CSI camera
