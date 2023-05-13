@@ -44,6 +44,7 @@ def display_thread():
             print(e)
         finally:
             cv2.waitKey(1)
+            Displays.ManageWindows()
 
 def serial_thread():
     Serial.serialConnect()

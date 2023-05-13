@@ -206,7 +206,6 @@ def rotateFrameThread():
 def startThreads():
     global composeEyesThread, applyEyesThread, rotateFrameThread
     cv2.imshow('Eyes', frame_rotated)
-    ManageWindows()
     composeEyesThread = threading.Thread(target=composeEyesThread)
     applyEyesThread = threading.Thread(target=applyEyesThread)
     rotateFrameThread = threading.Thread(target=rotateFrameThread)
