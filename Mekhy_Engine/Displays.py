@@ -110,6 +110,7 @@ def ManageWindows():
             window.maximize()
             window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.X, 0, 0, display_width, display_height)
             window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.Y, 0, 0, display_width, display_height)
+            window.set_window_type_hint(Wnck.WindowTypeHint.DOCK)
         elif any([x in window_name for x in ["terminal", "sh", "play"]]):
             window.minimize()
 
