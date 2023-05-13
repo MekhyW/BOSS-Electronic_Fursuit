@@ -34,6 +34,7 @@ sudo pip3 install pvrecorder
 sudo pip3 install pyserial
 sudo pip3 uninstall protobuf
 sudo pip3 install protobuf==4.21.10
+sudo pip3 install python-xlib
 #EMOTION RECOG MODEL
 cd Mekhy_Engine/resources
 git lfs pull

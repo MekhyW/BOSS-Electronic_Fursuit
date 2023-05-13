@@ -1,6 +1,7 @@
 import gi
 gi.require_version('Wnck', '3.0')
 from gi.repository import Wnck
+from Xlib import X, display
 import MachineVision
 import numpy as np
 import cv2
@@ -110,7 +111,17 @@ def ManageWindows():
             window.maximize()
             window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.X, 0, 0, display_width, display_height)
             window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.Y, 0, 0, display_width, display_height)
-            window.set_window_type(Wnck.WindowType.DIALOG)
+            xid = window.get_xid()
+            d = display.Display()
+            root = d.screen().root
+            root.change_attributes(event_mask=X.PropertyChangeMask)
+            root.change_property(
+                d.intern_atom('_MOTIF_WM_HINTS'),
+                d.intern_atom('XA_CARDINAL'),
+                32,
+                [2, 0, 0, 0, 0]
+            )
+            d.sync()
         elif any([x in window_name for x in ["terminal", "sh", "play"]]):
             window.minimize()
 
@@ -137,7 +148,6 @@ def GraphicsRefresh(expression):
     if expression != cached_expression:
         if time.time() - cached_expression_time > 1:
             cached_expression = expression
-            ManageWindows()
     else:
         cached_expression_time = time.time()
     if cached_expression == 0:
@@ -176,7 +186,6 @@ def GraphicsRefresh(expression):
             cv2.imshow('Eyes', frame_rotated)
         else:
             mask.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            ManageWindows()
 
 def composeEyesThread():
     while True:
