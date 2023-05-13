@@ -108,7 +108,8 @@ def ManageWindows():
         window_name = window_name.lower()
         if "eyes" in window_name:
             window.maximize()
-            window.set_fullscreen(True)
+            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.X, 0, 0, display_width, display_height)
+            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.Y, 0, 0, display_width, display_height)
         elif any([x in window_name for x in ["terminal", "sh", "play"]]):
             window.minimize()
 
