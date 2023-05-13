@@ -108,9 +108,7 @@ def ManageWindows():
         window_name = window_name.lower()
         if "eyes" in window_name:
             window.maximize()
-            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.X, 0, 0, display_width, display_height)
-            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.Y, 0, 0, display_width, display_height)
-            window.set_window_type(Wnck.WindowType.DIALOG)
+            window.set_fullscreen(True)
         elif any([x in window_name for x in ["terminal", "sh", "play"]]):
             window.minimize()
 
@@ -137,7 +135,6 @@ def GraphicsRefresh(expression):
     if expression != cached_expression:
         if time.time() - cached_expression_time > 1:
             cached_expression = expression
-            ManageWindows()
     else:
         cached_expression_time = time.time()
     if cached_expression == 0:
@@ -176,7 +173,6 @@ def GraphicsRefresh(expression):
             cv2.imshow('Eyes', frame_rotated)
         else:
             mask.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            ManageWindows()
 
 def composeEyesThread():
     while True:
