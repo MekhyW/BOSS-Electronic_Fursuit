@@ -18,7 +18,8 @@ try:
     from picamera.array import PiRGBArray
     from picamera import PiCamera
     camera = PiCamera()
-    camera.resolution = (640,480)
+    camera.resolution = (320,240)
+    camera.framerate = 30
     rawCapture = PiRGBArray(camera, size = camera.resolution)
     camera.capture(rawCapture, format="bgr")
     image = rawCapture.array
