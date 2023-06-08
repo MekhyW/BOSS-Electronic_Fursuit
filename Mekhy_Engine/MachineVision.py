@@ -3,6 +3,9 @@ import cv2
 import mediapipe as mp
 import pickle
 import threading
+frame = None
+frame_facemesh = None
+mesh_points = None
 displacement_eye = (0,0)
 left_eye_closed = False
 right_eye_closed = False
@@ -11,8 +14,8 @@ mp_face_mesh = mp.solutions.face_mesh
 mp_drawing = mp.solutions.drawing_utils
 drawSpec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
 face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
-mesh_points = None
 emotion_model = pickle.load(open('resources/emotion_model.pkl', 'rb'))
+getFrameSemaphore = threading.Semaphore(0)
 facemeshRecognitionSemaphore = threading.Semaphore(0)
 try:
     from picamera.array import PiRGBArray
@@ -32,18 +35,18 @@ except Exception as e:
     cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
     using_csi = False
 
-RIGHT_EYE =[362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385,384, 398]
-LEFT_EYE=[33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161 , 246] 
+RIGHT_EYE = [362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385,384, 398]
+LEFT_EYE = [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161 , 246] 
 LEFT_IRIS = [468, 469, 470, 471, 472]
 RIGHT_IRIS = [473, 474, 475, 476, 477]
 LEFT_EYEBROW = [383, 300, 293, 334, 296, 336, 285, 417]
 RIGHT_EYEBROW = [156, 70, 63, 105, 66, 107, 55, 193]
 
-def inference_facemesh(image, drawing):
+def inference_facemesh(frame, drawing):
     global mesh_points
-    frame = image.copy()
-    H, W, _ = frame.shape
-    rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    frame_facemesh = frame.copy()
+    H, W, _ = frame_facemesh.shape
+    rgb_image = cv2.cvtColor(frame_facemesh, cv2.COLOR_BGR2RGB)
     results_mesh = face_mesh.process(rgb_image)
     if results_mesh.multi_face_landmarks:
         mesh_points=np.array([np.multiply([p.x, p.y], [W, H]).astype(int) for p in results_mesh.multi_face_landmarks[0].landmark])
@@ -66,33 +69,24 @@ def inference_facemesh(image, drawing):
             right_eye_closed = False
         if drawing:
             for faceLms in results_mesh.multi_face_landmarks:
-                mp_drawing.draw_landmarks(frame, faceLms, mp_face_mesh.FACEMESH_CONTOURS,drawSpec,drawSpec)
-            cv2.rectangle(frame, (lex1, ley1), (lex2, ley2), (0, 255, 0), 2)
-            cv2.rectangle(frame, (rex1, rey1), (rex2, rey2), (0, 255, 0), 2)
+                mp_drawing.draw_landmarks(frame_facemesh, faceLms, mp_face_mesh.FACEMESH_CONTOURS,drawSpec,drawSpec)
+            cv2.rectangle(frame_facemesh, (lex1, ley1), (lex2, ley2), (0, 255, 0), 2)
+            cv2.rectangle(frame_facemesh, (rex1, rey1), (rex2, rey2), (0, 255, 0), 2)
             center_left = np.array([l_cx, l_cy], dtype=np.int32)
             center_right = np.array([r_cx, r_cy], dtype=np.int32)
-            cv2.circle(frame, center_left, int(l_radius), (255,0,255), 1, cv2.LINE_AA)
-            cv2.circle(frame, center_right, int(r_radius), (255,0,255), 1, cv2.LINE_AA)
-        return frame, displacement_eye, left_eye_closed, right_eye_closed
-    return frame, None, True, True
-
-def getFrame():
-    if using_csi:
-        rawCapture.truncate(0)
-        camera.capture(rawCapture, resize=camera.resolution, format="bgr")
-        frame = rawCapture.array
-    else:
-        ret, frame = cap.read()
-    return frame
+            cv2.circle(frame_facemesh, center_left, int(l_radius), (255,0,255), 1, cv2.LINE_AA)
+            cv2.circle(frame_facemesh, center_right, int(r_radius), (255,0,255), 1, cv2.LINE_AA)
+        return frame_facemesh, displacement_eye, left_eye_closed, right_eye_closed
+    return frame_facemesh, None, True, True
 
 def FacemeshRecognition(drawing=False):
-    global displacement_eye, left_eye_closed, right_eye_closed
-    frame = getFrame()
-    frame, de, left_eye_closed, right_eye_closed = inference_facemesh(frame, drawing)
+    global frame, frame_facemesh, displacement_eye, left_eye_closed, right_eye_closed
+    if frame is None:
+        return None
+    frame_facemesh, de, left_eye_closed, right_eye_closed = inference_facemesh(frame, drawing)
     if de:
         displacement_eye = ((displacement_eye[0]*0.8)+(de[0]*0.2), (displacement_eye[1]*0.8)+(de[1]*0.2))
-    displacement_eye = (max(min(1, displacement_eye[0]), -1), max(min(0.3, displacement_eye[1]), -0.3))
-    return frame    
+    displacement_eye = (max(min(1, displacement_eye[0]), -1), max(min(0.3, displacement_eye[1]), -0.3))    
 
 def predict_emotion():
     global mesh_points, emotion_model, AutomaticExpression
@@ -107,10 +101,50 @@ def predict_emotion():
     pred = emotion_model.predict([landmarks_flat])
     AutomaticExpression = pred[0].capitalize()
 
-if __name__ == '__main__':
+def getFrameThread():
+    global frame, using_csi
     while True:
-        frame = FacemeshRecognition(drawing=True)
-        predict_emotion()
+        try:
+            if using_csi:
+                for captured in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+                    rawCapture.truncate(0)
+                    frame = captured.array
+                    getFrameSemaphore.release()
+            else:
+                ret, frame = cap.read()
+                getFrameSemaphore.release()
+        except Exception as e:
+            print(e)
+
+def facemeshRecognitionThread(drawing=False):
+    while True:
+        try:
+            getFrameSemaphore.acquire()
+            FacemeshRecognition(drawing)
+            facemeshRecognitionSemaphore.release()
+        except Exception as e:
+            print(e)
+
+def emotionRecognitionThread():
+    while True:
+        try:
+            facemeshRecognitionSemaphore.acquire()
+            predict_emotion()
+        except Exception as e:
+            print(e)
+
+def startThreads(drawing=False):
+    global getFrameThread, facemeshRecognitionThread, emotionRecognitionThread
+    getFrameThread = threading.Thread(target=getFrameThread)
+    facemeshRecognitionThread = threading.Thread(target=facemeshRecognitionThread, args=(drawing,))
+    emotionRecognitionThread = threading.Thread(target=emotionRecognitionThread)
+    getFrameThread.start()
+    facemeshRecognitionThread.start()
+    emotionRecognitionThread.start()
+
+if __name__ == '__main__':
+    startThreads(drawing=True)
+    while True:
         print(AutomaticExpression)
         if left_eye_closed and right_eye_closed:
             print('BOTH EYES CLOSED')
@@ -120,6 +154,7 @@ if __name__ == '__main__':
             print('RIGHT EYE CLOSED')
         else:
             print(displacement_eye)
-        cv2.imshow('Facemesh', frame)
+        if frame_facemesh is not None:
+            cv2.imshow('Facemesh', frame_facemesh)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

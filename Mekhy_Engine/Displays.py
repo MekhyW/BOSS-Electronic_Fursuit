@@ -1,7 +1,6 @@
 import gi
 gi.require_version('Wnck', '3.0')
 from gi.repository import Wnck
-import MachineVision
 import numpy as np
 import cv2
 import os
@@ -14,6 +13,8 @@ display_rotation = 30
 left_eye_center = (150, 97)
 right_eye_center = (552, 97)
 displacement_eye = (0, 0)
+left_eye_closed = False
+right_eye_closed = False
 eye_radius_horizontal = 150
 eye_radius_vertical = 180
 eye_closed = cv2.imread('../Eyes/eye_closed.png', cv2.COLOR_BGR2RGB)
@@ -69,11 +70,11 @@ def composeEyes():
     leftpos = (lefteye_center_x, lefteye_center_y)
     rightpos = (righteye_center_x, righteye_center_y)
     eyes_local = np.full((frame_template.shape[0], frame_template.shape[1], 3), eye[0, 0], dtype=np.uint8)
-    if MachineVision.left_eye_closed:
+    if left_eye_closed:
         eyes_local[0:frame_template.shape[0], 0:int(frame_template.shape[1]/2)] = eye_closed[0:frame_template.shape[0], 0:int(frame_template.shape[1]/2)]
     else:
         eyes_local[leftpos[1]:leftpos[1] + eye.shape[0], leftpos[0]:leftpos[0] + eye.shape[1]] = eye
-    if MachineVision.right_eye_closed:
+    if right_eye_closed:
         eyes_local[0:frame_template.shape[0], int(frame_template.shape[1]/2):frame_template.shape[1]] = eye_closed[0:frame_template.shape[0], int(frame_template.shape[1]/2):frame_template.shape[1]]
     else:
         eyes_local[rightpos[1]:rightpos[1] + eye.shape[0], rightpos[0]:rightpos[0] + eye.shape[1]] = eye
@@ -207,9 +208,6 @@ def startThreads():
     composeEyesThread = threading.Thread(target=composeEyesThread)
     applyEyesThread = threading.Thread(target=applyEyesThread)
     rotateFrameThread = threading.Thread(target=rotateFrameThread)
-    composeEyesThread.priority = 3
-    applyEyesThread.priority = 3
-    rotateFrameThread.priority = 3
     composeEyesThread.start()
     applyEyesThread.start()
     rotateFrameThread.start()

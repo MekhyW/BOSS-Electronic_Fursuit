@@ -9,33 +9,18 @@ import cv2
 import time
 import threading
 
-def eye_tracking_thread():
-    while True:
-        try:
-            if TelegramBot.eye_tracking_mode:
-                MachineVision.FacemeshRecognition()
-            else:
-                MachineVision.displacement_eye = (0, 0)
-                MachineVision.left_eye_closed = False
-                MachineVision.right_eye_closed = False
-            MachineVision.facemeshRecognitionSemaphore.release()
-        except Exception as e:
-            print(e)
-
-def emotion_recognition_thread():
-    while True:
-        try:
-            MachineVision.facemeshRecognitionSemaphore.acquire()
-            if not TelegramBot.manual_expression_mode:
-                MachineVision.predict_emotion()
-        except Exception as e:
-            print(e)
-
 def display_thread():
     Displays.startThreads()
     while True:
         try:
-            Displays.displacement_eye = MachineVision.displacement_eye
+            if TelegramBot.eye_tracking_mode:
+                Displays.displacement_eye = MachineVision.displacement_eye
+                Displays.left_eye_closed = MachineVision.left_eye_closed
+                Displays.right_eye_closed = MachineVision.right_eye_closed
+            else:
+                Displays.displacement_eye = (0, 0)
+                Displays.left_eye_closed = False
+                Displays.right_eye_closed = False
             if TelegramBot.manual_expression_mode:     
                 Displays.GraphicsRefresh(Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression))
             else:
@@ -85,18 +70,10 @@ if __name__ == '__main__':
     SoundEffects.PlayBootSound()
     VoiceChanger.SetVoice("Mekhy")
     Assistant.start()
-    eye_tracking_thread = threading.Thread(target=eye_tracking_thread)
-    emotion_recognition_thread = threading.Thread(target=emotion_recognition_thread)
+    MachineVision.startThreads()
     display_thread = threading.Thread(target=display_thread)
     serial_thread = threading.Thread(target=serial_thread)
     assistant_thread = threading.Thread(target=assistant_thread)
-    eye_tracking_thread.priority = 3
-    display_thread.priority = 3
-    emotion_recognition_thread.priority = 2
-    serial_thread.priority = 2
-    assistant_thread.priority = 2
-    eye_tracking_thread.start()
-    emotion_recognition_thread.start()
     display_thread.start()
     serial_thread.start()
     assistant_thread.start()
