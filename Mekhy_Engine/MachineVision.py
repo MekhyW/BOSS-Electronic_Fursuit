@@ -24,8 +24,6 @@ try:
     camera.resolution = (320,240)
     camera.framerate = 30
     rawCapture = PiRGBArray(camera, size = camera.resolution)
-    camera.capture(rawCapture, format="bgr")
-    image = rawCapture.array
     using_csi = True
 except Exception as e:
     print(e)
