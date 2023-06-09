@@ -83,7 +83,7 @@ def FacemeshRecognition(drawing=False):
         return None
     frame_facemesh, de, left_eye_closed, right_eye_closed = inference_facemesh(frame, drawing)
     if de:
-        displacement_eye = ((displacement_eye[0]*0.2)+(de[0]*0.8), (displacement_eye[1]*0.2)+(de[1]*0.8))
+        displacement_eye = ((displacement_eye[0]*0.5)+(de[0]*0.5), (displacement_eye[1]*0.5)+(de[1]*0.5))
     displacement_eye = (max(min(1, displacement_eye[0]), -1), max(min(0.3, displacement_eye[1]), -0.3))    
 
 def predict_emotion():
