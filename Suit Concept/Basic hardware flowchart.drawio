@@ -40,11 +40,11 @@
                         <mxPoint x="27.680000000000007" y="677.63" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="Ozhnao1Kgd7wMi6BiEIW-4" value="Digitigrade Bodysuit structure (DOUBLE-SIZED LIMBS+PAWS, dropped crotch)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="259.75" y="922.25" width="128" height="65" as="geometry"/>
+                <mxCell id="Ozhnao1Kgd7wMi6BiEIW-4" value="Digitigrade Bodysuit structure (DOUBLE-SIZED LIMBS+PAWS)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="259.38" y="862" width="128" height="65" as="geometry"/>
                 </mxCell>
                 <mxCell id="DGbpkix3uCbMqAGdI3nw-13" value="Lab Coat Prop" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="267.38" y="858" width="112.73" height="47.25" as="geometry"/>
+                    <mxGeometry x="622.6700000000001" y="680.75" width="112.73" height="47.25" as="geometry"/>
                 </mxCell>
                 <mxCell id="Nwgi6No1Y5rALYJXFBc9-3" value="WS28112b LED Circuit" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000066;" parent="1" vertex="1">
                     <mxGeometry x="493" y="682" width="99.5" height="44" as="geometry"/>
@@ -53,7 +53,7 @@
                     <mxGeometry x="533.7" y="50.000000000000014" width="95.11" height="43" as="geometry"/>
                 </mxCell>
                 <mxCell id="G8CKnrLTyZzQH0mxdqqO-1" value="Big Foam Tail" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="264.75" y="1003.25" width="117.75" height="49" as="geometry"/>
+                    <mxGeometry x="264.38" y="943" width="117.75" height="49" as="geometry"/>
                 </mxCell>
                 <mxCell id="mjT4M5Ip4WEiN_Ukw4vy-4" value="Big Resin Pickable Nose" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
                     <mxGeometry x="532.7" y="104.00000000000001" width="97.11" height="44.69" as="geometry"/>
@@ -182,7 +182,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="58" value="Long fur" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="153" y="935" width="104" height="44" as="geometry"/>
+                    <mxGeometry x="152.63" y="874.75" width="104" height="44" as="geometry"/>
                 </mxCell>
                 <mxCell id="60" value="Airbrushed head details" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
                     <mxGeometry x="418.31000000000006" y="161" width="101.63" height="51.63" as="geometry"/>
@@ -191,7 +191,7 @@
                     <mxGeometry x="9.01" y="1071" width="216" height="88" as="geometry"/>
                 </mxCell>
                 <mxCell id="72" value="Butt padding" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="155.75" y="1003.25" width="104" height="44" as="geometry"/>
+                    <mxGeometry x="155.38" y="943" width="104" height="44" as="geometry"/>
                 </mxCell>
                 <mxCell id="73" value="USB Hub" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
                     <mxGeometry x="222" y="412.68" width="96" height="48.64" as="geometry"/>
@@ -217,25 +217,31 @@
                 <mxCell id="80" value="10000mAh USB-C PowerBank" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" parent="1" vertex="1">
                     <mxGeometry x="88" y="471" width="102" height="39.43" as="geometry"/>
                 </mxCell>
-                <mxCell id="81" value="Arduino Uno" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
+                <mxCell id="81" value="Arduino Uno" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
                     <mxGeometry x="224.5" y="575.0000000000001" width="91" height="38.85" as="geometry"/>
                 </mxCell>
-                <mxCell id="82" value="" style="endArrow=none;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="sJYIKFFBBBpRVcEcnY1A-2" target="81">
+                <mxCell id="82" value="" style="endArrow=none;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="sJYIKFFBBBpRVcEcnY1A-2" target="81" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="357" y="584" as="sourcePoint"/>
                         <mxPoint x="455" y="650" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="83" value="" style="endArrow=none;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="sJYIKFFBBBpRVcEcnY1A-2" target="MiqG1OLB_oiA9NUDDggW-1">
+                <mxCell id="83" value="" style="endArrow=none;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="sJYIKFFBBBpRVcEcnY1A-2" target="MiqG1OLB_oiA9NUDDggW-1" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="357" y="584" as="sourcePoint"/>
                         <mxPoint x="407" y="534" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="84" value="" style="endArrow=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="81" target="Nwgi6No1Y5rALYJXFBc9-3">
+                <mxCell id="84" value="" style="endArrow=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="81" target="Nwgi6No1Y5rALYJXFBc9-3" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="357" y="667" as="sourcePoint"/>
                         <mxPoint x="407" y="617" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="85" value="" style="endArrow=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Nwgi6No1Y5rALYJXFBc9-3" target="DGbpkix3uCbMqAGdI3nw-13">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="325.5" y="604.4250000000002" as="sourcePoint"/>
+                        <mxPoint x="503" y="714" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
             </root>
