@@ -209,7 +209,7 @@ def handle(msg):
                 current_keyboard = 'none'
             elif 'reply_to_message' in msg and msg['reply_to_message']['text'] == '>>>Reply to THIS message with the command you want me to execute':
                 BashCommand(fursuitbot, chat_id, msg)
-            elif msg['text'] in ['Bash Command', 'Reboot', 'Turn me off']:
+            elif msg['text'] in ['Bash Command', 'Reboot', 'Turn me off', 'Exit process']:
                 if chat_id != mekhyID:
                     fursuitbot.sendMessage(chat_id, 'This command can only be used by myself!')
                 elif msg['text'] == 'Bash Command':
@@ -220,6 +220,9 @@ def handle(msg):
                 elif msg['text'] == 'Turn me off':
                     fursuitbot.sendMessage(chat_id, '>>>System Shutdown initiated.....')
                     os.system("systemctl poweroff -i")
+                elif msg['text'] == 'Exit process':
+                    fursuitbot.sendMessage(chat_id, '>>>Terminating process.....')
+                    os._exit(0)
                 current_keyboard = 'none'
             elif msg['text'] == 'Benchmark Statistics':
                 answer = f"CPU Usage: {psutil.cpu_percent()}%\nRAM Usage: {psutil.virtual_memory().percent}%\nDisk Usage: {psutil.disk_usage('/').percent}%\n\n"
@@ -276,7 +279,7 @@ def handle(msg):
                 [KeyboardButton(text="Toggle Actuators"), KeyboardButton(text="Toggle LEDs")],
                 [KeyboardButton(text="Benchmark Statistics")],
                 [KeyboardButton(text="Refsheet / Sticker Pack")],
-                [KeyboardButton(text="Bash Command")],
+                [KeyboardButton(text="Bash Command"), KeyboardButton(text="Exit process")],
                 [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]
             ], resize_keyboard=True)
             fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
