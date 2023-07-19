@@ -105,10 +105,16 @@ def toggleActuators(fursuitbot, chat_id, msg):
 def PlaySongName(fursuitbot, chat_id, msg):
     global status_code
     status_code = 'Processing media'
+    for file in os.listdir('.'):
+        if file.endswith('.mp3'):
+            os.remove(file)
     fursuitbot.sendMessage(chat_id, '>>>Downloading song with query "{}"...'.format(msg['text']))
     command = 'spotdl "{}"'.format(msg['text'])
-    output = os.popen(command).read()
-    file_name = output.split('"')[1] + '.mp3'
+    os.system(command)
+    for file in os.listdir('.'):
+        if file.endswith('.mp3'):
+            file_name = file
+            break
     fursuitbot.sendMessage(chat_id, 'Done!\n>>>Playing now')
     SoundEffects.PlayOnDemand(file_name, True)
 
