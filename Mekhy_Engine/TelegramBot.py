@@ -284,7 +284,7 @@ def handle(msg):
                 [KeyboardButton(text="Bash Command"), KeyboardButton(text="Exit process")],
                 [KeyboardButton(text="Reboot"), KeyboardButton(text="Turn me off")]
             ], resize_keyboard=True)
-            fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio- or -Link-', reply_markup=command_keyboard)
+            fursuitbot.sendMessage(chat_id, '>>>Awaiting -Command- or -Audio-', reply_markup=command_keyboard)
         elif current_keyboard == 'Choose Sound Effect':
             keyboard = [[KeyboardButton(text="⬅️(Back to commands)")]]
             for sound in sfx:
