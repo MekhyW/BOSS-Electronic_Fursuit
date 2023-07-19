@@ -130,9 +130,10 @@ def PlaySongName(fursuitbot, chat_id, msg):
 def TTS(fursuitbot, chat_id, msg):
     global status_code
     status_code = 'Processing media'
-    fursuitbot.sendMessage(chat_id, '>>>Speaking...')
+    fursuitbot.sendMessage(chat_id, '>>>Loading text-to-speech...')
     msgToSpeak = msg['text'].replace('/speak ', '')
     SoundEffects.TTS(msgToSpeak)
+    fursuitbot.sendMessage(chat_id, '>>>Speaking...')
 
 def PlayVideoFile(fursuitbot, chat_id, msg):
     global status_code
@@ -266,7 +267,8 @@ def handle(msg):
         elif content_type in ['audio', 'voice']:
             PlayAudioFile(fursuitbot, chat_id, msg)
         elif content_type in ['video', 'photo']:
-            PlayVideoFile(fursuitbot, chat_id, msg)
+            #PlayVideoFile(fursuitbot, chat_id, msg)
+            fursuitbot.sendMessage(chat_id, 'Video playback is currently disabled due to performance issues.')
         elif content_type in ['document', 'sticker', 'video_note', 'location', 'contact', 'venue', 'game', 'poll', 'invoice', 'successful_payment', 'passport_data', 'web_page']:
             fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret that kind of input.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
