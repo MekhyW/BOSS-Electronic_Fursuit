@@ -25,7 +25,8 @@ sudo pip3 install opencv-python
 sudo pip3 install picamera[array]
 sudo pip3 install scikit-learn
 sudo pip3 install pygame --upgrade
-sudo pip3 install pytube
+sudo pip3 install spotdl
+pip3 install --upgrade typing_extensions
 sudo pip3 install gTTS
 sudo pip3 install mediapipe-rpi4
 sudo pip3 install openai

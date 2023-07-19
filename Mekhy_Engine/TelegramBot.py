@@ -106,26 +106,12 @@ def toggleActuators(fursuitbot, chat_id, msg):
 def PlaySongName(fursuitbot, chat_id, msg):
     global status_code
     status_code = 'Processing media'
-    fursuitbot.sendMessage(chat_id, '>>>Finding song with query "{}"...'.format(msg['text']))
-    topic = msg['text']
-    count = 0
-    lst = str(requests.get('https://www.youtube.com/results?q=' + topic).content).split('"')
-    for i in lst:
-        count+=1
-        if i == 'WEB_PAGE_TYPE_WATCH':
-            break
-    if lst[count-5] == "/results":
-        raise Exception("No video found.")
-    fursuitbot.sendMessage(chat_id, '>>>Song found!')
-    fursuitbot.sendMessage(chat_id, '>>>Downloading...')
-    video = YouTube("https://www.youtube.com"+lst[count-5]).streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
-    video.download()
-    fursuitbot.sendMessage(chat_id, '>>>Conversion process...')
-    default_filename = video.default_filename
-    new_filename = default_filename.split(".")[0] + ".mp3"
-    subprocess.call(["ffmpeg", "-i", default_filename, new_filename])
+    fursuitbot.sendMessage(chat_id, '>>>Downloading song with query "{}"...'.format(msg['text']))
+    command = 'spotdl "{}"'.format(msg['text'])
+    output = os.popen(command).read()
+    file_name = output.split('"')[1] + '.mp3'
     fursuitbot.sendMessage(chat_id, 'Done!\n>>>Playing now')
-    SoundEffects.PlayOnDemand(new_filename)
+    SoundEffects.PlayOnDemand(file_name, True)
 
 def TTS(fursuitbot, chat_id, msg):
     global status_code
