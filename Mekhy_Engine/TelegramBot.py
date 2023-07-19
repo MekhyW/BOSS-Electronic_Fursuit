@@ -106,13 +106,13 @@ def PlaySongName(fursuitbot, chat_id, msg):
     global status_code
     status_code = 'Processing media'
     for file in os.listdir('.'):
-        if file.endswith('.mp3'):
+        if file.endswith('.wav'):
             os.remove(file)
     fursuitbot.sendMessage(chat_id, '>>>Downloading song with query "{}"...'.format(msg['text']))
-    command = 'spotdl "{}"'.format(msg['text'])
+    command = 'spotdl "{}" --format wav'.format(msg['text'])
     os.system(command)
     for file in os.listdir('.'):
-        if file.endswith('.mp3'):
+        if file.endswith('.wav'):
             file_name = file
             break
     fursuitbot.sendMessage(chat_id, 'Done!\n>>>Playing now')
