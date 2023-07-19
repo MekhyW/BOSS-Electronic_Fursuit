@@ -9,19 +9,19 @@ def sox_thread(voice):
     os.system("killall play")
     print("Setting new voice")
     if voice == 'Mekhy':
-        os.system("lxterminal -e play '|rec --buffer 128 -d pitch -300 vol 50 band 0.1k 5k'")
+        os.system("lxterminal -e play '|rec --buffer 128 -d pitch -300 vol 25 band 0.1k 5k'")
     elif voice == 'Demon':
-        os.system("lxterminal -e play '|rec --buffer 128 -d pitch -600 bass 30 reverb vol 50 band 0.1k 5k'")
+        os.system("lxterminal -e play '|rec --buffer 128 -d pitch -600 bass 30 reverb vol 25 band 0.1k 5k'")
     elif voice == 'Voice of Conscience':
-        os.system("lxterminal -e play '|rec --buffer 128 -d echo 0.8 0.9 200 0.3 bass 30 reverb vol 50 band 0.1k 5k'")
+        os.system("lxterminal -e play '|rec --buffer 128 -d echo 0.8 0.9 200 0.3 bass 30 reverb vol 25 band 0.1k 5k'")
     elif voice == 'Baby':
-        os.system("lxterminal -e play '|rec --buffer 128 -d pitch 400 bass 20 vol 50 band 0.1k 5k'")
+        os.system("lxterminal -e play '|rec --buffer 128 -d pitch 400 bass 20 vol 25 band 0.1k 5k'")
     elif voice == 'Chipmunk':
-        os.system("lxterminal -e play '|rec --buffer 128 -d pitch 800 vol 50 band 0.1k 5k'")
+        os.system("lxterminal -e play '|rec --buffer 128 -d pitch 800 vol 25 band 0.1k 5k'")
     elif voice == 'Radio':
-        os.system("lxterminal -e play '|rec --buffer 128 -d downsample 10 vol 50 band 0.1k 5k'")
+        os.system("lxterminal -e play '|rec --buffer 128 -d downsample 10 vol 25 band 0.1k 5k'")
     elif voice == 'No Effects':
-        os.system("lxterminal -e play '|rec --buffer 512 -d vol 50 band 0.1k 5k'")
+        os.system("lxterminal -e play '|rec --buffer 512 -d vol 25 band 0.1k 5k'")
     elif voice == 'Mute':
         os.system("lxterminal -e play '|rec --buffer 512 -d vol 0'")
 
