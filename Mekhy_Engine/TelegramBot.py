@@ -109,7 +109,7 @@ def PlaySongName(fursuitbot, chat_id, msg):
         if file.endswith('.wav'):
             os.remove(file)
     fursuitbot.sendMessage(chat_id, '>>>Downloading song with query "{}"...'.format(msg['text']))
-    command = 'spotdl "{}" --format wav'.format(msg['text'])
+    command = 'spotdl "{}" --format wav --preload --no-cache'.format(msg['text'])
     os.system(command)
     for file in os.listdir('.'):
         if file.endswith('.wav'):
