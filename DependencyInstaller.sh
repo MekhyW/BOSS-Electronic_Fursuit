@@ -38,12 +38,6 @@ chmod 755 launcher.sh
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 # Add the following line before @xscreensaver: @lxterminal -e sh /home/pi/BOSS-Electronic_Fursuit/Mekhy_Engine/launcher.sh >/home/pi/BOSS-Electronic_Fursuit/Mekhy_Engine/logs/cronlog 2>&1
 cd ..
-#OVERCLOCK
-sudo nano /boot/config.txt
-# Change the following lines:
-# over_voltage=2
-# arm_freq=1700
-cd ..
 # SETUP
 # - set auto login and password for pi user
 # - setup VNC connection for 4g hotspot (remember to use 5GHz!!, 2.4GHz is too slow to work)
