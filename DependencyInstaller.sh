@@ -10,7 +10,6 @@
 # -----------------------------------------------------------------------------
 sudo apt-get update
 sudo apt-get install -y git-all
-sudo apt-get install -y git-lfs
 sudo apt-get install -y python3-pip
 sudo apt install -y ffmpeg
 sudo apt install -y sox
@@ -23,7 +22,6 @@ sudo pip3 install telepota
 sudo pip3 install googletrans==3.1.0a0
 sudo pip3 install opencv-python
 sudo pip3 install picamera[array]
-sudo pip3 install scikit-learn
 sudo pip3 install pygame --upgrade
 sudo pip3 install spotdl
 pip3 install --upgrade typing_extensions
@@ -35,10 +33,6 @@ sudo pip3 install pvrecorder
 sudo pip3 install pyserial
 sudo pip3 uninstall protobuf
 sudo pip3 install protobuf==4.21.10
-#EMOTION RECOG MODEL
-cd Mekhy_Engine/resources
-git lfs pull
-cd ..
 # AUTOSTART
 chmod 755 launcher.sh
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
@@ -54,7 +48,7 @@ cd ..
 # - set auto login and password for pi user
 # - setup VNC connection for 4g hotspot (remember to use 5GHz!!, 2.4GHz is too slow to work)
 # - setup dual display scheme
-# - disbale screen blanking
+# - disable screen blanking
 # - insert credentials into Mekhy_Engine/resources/credentials.json
 # - set app bar width to zero
 # - enable CSI camera

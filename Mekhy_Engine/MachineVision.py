@@ -1,7 +1,6 @@
 import numpy as np
 import cv2
 import mediapipe as mp
-import pickle
 import threading
 frame = None
 frame_facemesh = None
@@ -9,14 +8,11 @@ mesh_points = None
 displacement_eye = (0,0)
 left_eye_closed = False
 right_eye_closed = False
-AutomaticExpression = 'Neutral'
 mp_face_mesh = mp.solutions.face_mesh
 mp_drawing = mp.solutions.drawing_utils
 drawSpec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
 face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
-emotion_model = pickle.load(open('resources/emotion_model.pkl', 'rb'))
 getFrameSemaphore = threading.Semaphore(0)
-facemeshRecognitionSemaphore = threading.Semaphore(0)
 try:
     from picamera.array import PiRGBArray
     from picamera import PiCamera
@@ -86,19 +82,6 @@ def FacemeshRecognition(drawing=False):
         displacement_eye = ((displacement_eye[0]*0.5)+(de[0]*0.5), (displacement_eye[1]*0.5)+(de[1]*0.5))
     displacement_eye = (max(min(1, displacement_eye[0]), -1), max(min(0.3, displacement_eye[1]), -0.3))    
 
-def predict_emotion():
-    global mesh_points, emotion_model, AutomaticExpression
-    if mesh_points is None:
-        return None
-    nose_tip = mesh_points[4]
-    chin_tip = mesh_points[152]
-    mesh_norm = mesh_points - nose_tip
-    scale_factor = np.linalg.norm(chin_tip - nose_tip)
-    mesh_norm = np.divide(mesh_norm, scale_factor)
-    landmarks_flat = mesh_norm.flatten()
-    pred = emotion_model.predict([landmarks_flat])
-    AutomaticExpression = pred[0].capitalize()
-
 def getFrameThread():
     global frame, using_csi
     while True:
@@ -119,15 +102,6 @@ def facemeshRecognitionThread(drawing=False):
         try:
             getFrameSemaphore.acquire()
             FacemeshRecognition(drawing)
-            facemeshRecognitionSemaphore.release()
-        except Exception as e:
-            print(e)
-
-def emotionRecognitionThread():
-    while True:
-        try:
-            facemeshRecognitionSemaphore.acquire()
-            predict_emotion()
         except Exception as e:
             print(e)
 
@@ -135,15 +109,12 @@ def startThreads(drawing=False):
     global getFrameThread, facemeshRecognitionThread, emotionRecognitionThread
     getFrameThread = threading.Thread(target=getFrameThread)
     facemeshRecognitionThread = threading.Thread(target=facemeshRecognitionThread, args=(drawing,))
-    emotionRecognitionThread = threading.Thread(target=emotionRecognitionThread)
     getFrameThread.start()
     facemeshRecognitionThread.start()
-    emotionRecognitionThread.start()
 
 if __name__ == '__main__':
     startThreads(drawing=True)
     while True:
-        print(AutomaticExpression)
         if left_eye_closed and right_eye_closed:
             print('BOTH EYES CLOSED')
         elif left_eye_closed:

@@ -12,7 +12,6 @@ Token = json.load(open('resources/credentials.json'))['fursuitbot_token']
 fursuitbot = telepot.Bot(Token)
 mekhyID = 780875868
 start_time = time.time()
-manual_expression_mode = False
 eye_tracking_mode = True
 actuators_enabled = 1
 leds_enabled = 1
@@ -44,8 +43,7 @@ def SFX(fursuitbot, chat_id, msg):
     fursuitbot.sendMessage(chat_id, '>>>Playing: {}'.format(msg['text']))
 
 def SetExpression(fursuitbot, chat_id, msg):
-    global ManualExpression, manual_expression_mode
-    manual_expression_mode = True
+    global ManualExpression
     if msg['text'] == 'Neutral':
         ManualExpression = 0
     elif msg['text'] == '😡':
@@ -67,14 +65,6 @@ def SetExpression(fursuitbot, chat_id, msg):
     elif msg['text'] == '😈':
         ManualExpression = 'Demonic'
     fursuitbot.sendMessage(chat_id, '>>>Mood Set to: {}'.format(msg['text']))
-
-def toggleAutoMood(fursuitbot, chat_id, msg):
-    global manual_expression_mode
-    manual_expression_mode = not manual_expression_mode
-    if not manual_expression_mode:
-        fursuitbot.sendMessage(chat_id, '>>>Automatic Mood Enabled (ON)')
-    else:
-        fursuitbot.sendMessage(chat_id, '>>>Automatic Mood Disabled (OFF)')
 
 def toggleEyeTracking(fursuitbot, chat_id, msg):
     global eye_tracking_mode
@@ -232,8 +222,6 @@ def handle(msg):
                 current_keyboard = 'Choose Sound Effect'
             elif msg['text'] == 'Set Mood':
                 current_keyboard = 'Choose Mood'
-            elif msg['text'] == 'Toggle Automatic Mood':
-                toggleAutoMood(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Toggle Eye Tracking':
                 toggleEyeTracking(fursuitbot, chat_id, msg)
             elif msg['text'] == 'Toggle LEDs':
@@ -264,7 +252,7 @@ def handle(msg):
             fursuitbot.sendMessage(chat_id, 'Sorry, I still cannot interpret that kind of input.\nPlease forward to @MekhyW')
         if current_keyboard == 'Main':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[
-                [KeyboardButton(text="Set Mood"), KeyboardButton(text="Toggle Automatic Mood")],
+                [KeyboardButton(text="Set Mood")],
                 [KeyboardButton(text="Toggle Eye Tracking")],
                 [KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")],  
                 [KeyboardButton(text="Sound Effect"), KeyboardButton(text="Speak")],

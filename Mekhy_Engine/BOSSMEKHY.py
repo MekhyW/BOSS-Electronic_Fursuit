@@ -21,10 +21,7 @@ def display_thread():
                 Displays.displacement_eye = (0, 0)
                 Displays.left_eye_closed = False
                 Displays.right_eye_closed = False
-            if TelegramBot.manual_expression_mode:     
-                Displays.GraphicsRefresh(Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression))
-            else:
-                Displays.GraphicsRefresh(Serial.convertExpressionStringToNumber(MachineVision.AutomaticExpression))
+            Displays.GraphicsRefresh(Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression))
         except Exception as e:
             print(e)
         finally:
