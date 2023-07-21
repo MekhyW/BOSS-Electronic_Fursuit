@@ -8,7 +8,7 @@ import time
 import json
 openai.api_key = json.load(open("resources/credentials.json"))["openai_key"]
 porcupine_access_key = json.load(open("resources/credentials.json"))["porcupine_key"]
-keyword_paths = ["resources/Cookie-Bot_en_raspberry-pi_v2_1_0.ppn"]
+keyword_paths = ["resources/Cookie-bot_en_raspberry-pi_v2_2_0.ppn"]
 porcupine = pvporcupine.create(access_key=porcupine_access_key, keyword_paths=keyword_paths)
 recorder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
 previous_questions = ["Who won the world series in 2020?", "Você é fofo!"]
