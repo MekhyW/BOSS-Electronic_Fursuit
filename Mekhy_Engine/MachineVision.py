@@ -25,7 +25,6 @@ except Exception as e:
     print(e)
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 3)
-    cap.set(cv2.CAP_PROP_AUTO_WB, 1)
     cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
     using_csi = False
 
