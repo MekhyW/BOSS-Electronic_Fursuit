@@ -32,10 +32,7 @@ def serial_thread():
     Serial.serialConnect()
     while True:
         try:
-            if TelegramBot.manual_expression_mode:
-                expression = Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression)
-            else:
-                expression = Serial.convertExpressionStringToNumber(MachineVision.AutomaticExpression)
+            expression = Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression)
             if not TelegramBot.actuators_enabled:
                 Serial.serialSendActuators("99")
             else:
