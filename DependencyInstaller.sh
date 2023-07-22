@@ -5,7 +5,7 @@
 # Usage:
 # ./DependencyInstaller.sh
 #
-# This is made for Raspberry Pi 4 running Raspbian Buster.
+# This is made for Raspberry Pi 4 running Raspbian Buster (Raspberry Pi OS Legacy, 05/03/2023 build).
 #
 # -----------------------------------------------------------------------------
 sudo apt-get update
@@ -34,11 +34,15 @@ pip3 install --upgrade typing_extensions
 sudo pip3 install gTTS
 sudo pip3 install mediapipe-rpi4
 sudo pip3 install openai
-sudo pip3 install pvporcupine
-sudo pip3 install pvrecorder
+sudo pip3 install pvporcupine==2.1.4
+sudo pip3 install pvrecorder==1.1.1
 sudo pip3 install pyserial
 sudo pip3 uninstall protobuf
 sudo pip3 install protobuf==4.21.10
+#32-BIT KERNEL
+sudo nano /boot/config.txt
+# Add the following line at the end of the file: arm_64bit=0
+reboot
 # AUTOSTART
 chmod 755 launcher.sh
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
