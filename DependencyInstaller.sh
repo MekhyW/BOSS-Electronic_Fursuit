@@ -23,20 +23,20 @@ sudo apt-get install -y libgtk2.0-dev
 sudo apt-get install -y libatlas-base-dev gfortran
 # PIP PACKAGES
 sudo pip3 install --upgrade pip
-sudo pip3 install telepota
+sudo pip3 install telepota==1.0
 sudo pip3 install googletrans==3.1.0a0
-sudo pip3 install numpy
+sudo pip3 install numpy==1.21.6
 sudo apt install -y python3-opencv 
-sudo pip3 install picamera[array]
+sudo pip3 install picamera[array]==1.13
 sudo pip3 install pygame --upgrade
-sudo pip3 install spotdl
+sudo pip3 install spotdl==4.2.0
 pip3 install --upgrade typing_extensions
-sudo pip3 install gTTS
-sudo pip3 install mediapipe-rpi4
-sudo pip3 install openai
+sudo pip3 install gTTS==2.3.2
+sudo pip3 install mediapipe-rpi4==0.8.8
+sudo pip3 install openai==0.27.8
 sudo pip3 install pvporcupine==2.1.4
 sudo pip3 install pvrecorder==1.1.1
-sudo pip3 install pyserial
+sudo pip3 install pyserial==3.4
 sudo pip3 uninstall protobuf
 sudo pip3 install protobuf==4.21.10
 #32-BIT KERNEL
