@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/usr/local/lib/python3.7/site-packages')
 import numpy as np
 import cv2
 import mediapipe as mp

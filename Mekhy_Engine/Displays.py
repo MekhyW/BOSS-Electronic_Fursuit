@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/usr/local/lib/python3.7/site-packages')
 import gi
 gi.require_version('Wnck', '3.0')
 from gi.repository import Wnck
