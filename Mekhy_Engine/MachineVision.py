@@ -112,6 +112,8 @@ def startThreads(drawing=False):
     facemeshRecognitionThread.start()
 
 if __name__ == '__main__':
+    import sys
+    sys.path.append('/usr/local/lib/python3.7/site-packages')
     startThreads(drawing=True)
     while True:
         if left_eye_closed and right_eye_closed:

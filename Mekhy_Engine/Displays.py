@@ -213,6 +213,8 @@ def startThreads():
     rotateFrameThread.start()
 
 if __name__ == '__main__':
+    import sys
+    sys.path.append('/usr/local/lib/python3.7/site-packages')
     startThreads()
     PlayVideo('resources/small.mp4', False)
     for exp in range(10):
