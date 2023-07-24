@@ -52,79 +52,6 @@ frame_rotated = np.full((display_height, display_width, 3), eye_neutral[0, 0], d
 composeEyesSemaphore = threading.Semaphore(0)
 applyEyesSemaphore = threading.Semaphore(0)
 
-frameCounter = 0
-mask_neutral_frames = []
-mask_sad_frames = []
-mask_happy_frames = []
-mask_scared_frames = []
-mask_angry_frames = []
-mask_disgusted_frames = []
-mask_heart_frames = []
-mask_hypnotic_frames = []
-mask_sexy_frames = []
-mask_demonic_frames = []
-while True:
-    ret, frame = mask_neutral.read()
-    if ret:
-        mask_neutral_frames.append(frame)
-    else:
-        break
-while True:
-    ret, frame = mask_sad.read()
-    if ret:
-        mask_sad_frames.append(frame)
-    else:
-        break
-while True:
-    ret, frame = mask_happy.read()
-    if ret:
-        mask_happy_frames.append(frame)
-    else:
-        break
-while True:
-    ret, frame = mask_scared.read()
-    if ret:
-        mask_scared_frames.append(frame)
-    else:
-        break
-while True:
-    ret, frame = mask_angry.read()
-    if ret:
-        mask_angry_frames.append(frame)
-    else:
-        break
-while True:
-    ret, frame = mask_disgusted.read()
-    if ret:
-        mask_disgusted_frames.append(frame)
-    else:
-        break
-while True:
-    ret, frame = mask_heart.read()
-    if ret:
-        mask_heart_frames.append(frame)
-    else:
-        break
-while True:
-    ret, frame = mask_hypnotic.read()
-    if ret:
-        mask_hypnotic_frames.append(frame)
-    else:
-        break
-while True:
-    ret, frame = mask_sexy.read()
-    if ret:
-        mask_sexy_frames.append(frame)
-    else:
-        break
-while True:
-    ret, frame = mask_demonic.read()
-    if ret:
-        mask_demonic_frames.append(frame)
-    else:
-        break
-
-
 def rotate_image(image, angle):
     #image_center = tuple(np.array(image.shape[1::-1]) / 2)
     if angle == display_rotation:
@@ -206,7 +133,7 @@ def PlayVideo(file_name, remove_file=True):
     ManageWindows()
 
 def GraphicsRefresh(expression):
-    global cached_expression, cached_expression_time, frame_template, frame_rotated, eye, mask, frameCounter
+    global cached_expression, cached_expression_time, frame_template, frame_rotated, eye, mask
     if expression != cached_expression:
         if time.time() - cached_expression_time > 1:
             cached_expression = expression
@@ -214,40 +141,40 @@ def GraphicsRefresh(expression):
         cached_expression_time = time.time()
     if cached_expression == 0:
         eye = eye_neutral
-        mask_frames = mask_neutral_frames
+        mask = mask_neutral
     elif cached_expression == 1:
         eye = eye_angry
-        mask_frames = mask_angry_frames
+        mask = mask_angry
     elif cached_expression == 2:
         eye = eye_disgusted
-        mask_frames = mask_disgusted_frames
+        mask = mask_disgusted
     elif cached_expression == 3:
         eye = eye_sad
-        mask_frames = mask_sad_frames
+        mask = mask_sad
     elif cached_expression == 4:
         eye = eye_happy
-        mask_frames = mask_happy_frames
+        mask = mask_happy
     elif cached_expression == 5:
         eye = eye_scared
-        mask_frames = mask_scared_frames
+        mask = mask_scared
     elif cached_expression == 6:
         eye = eye_heart
-        mask_frames = mask_heart_frames
+        mask = mask_heart
     elif cached_expression == 7:
         eye = eye_hypnotic
-        mask_frames = mask_hypnotic_frames
+        mask = mask_hypnotic
     elif cached_expression == 8:
         eye = eye_sexy
-        mask_frames = mask_sexy_frames
+        mask = mask_sexy
     elif cached_expression == 9:
         eye = eye_demonic
-        mask_frames = mask_demonic_frames
+        mask = mask_demonic
     if not playingvideo:
-        frameCounter += 1
-        if frameCounter >= len(mask_frames):
-            frameCounter = 0
-        frame_template = mask_frames[frameCounter]
-        cv2.imshow('Eyes', frame_rotated)
+        ret, frame_template = mask.read()
+        if ret:
+            cv2.imshow('Eyes', frame_rotated)
+        else:
+            mask.set(cv2.CAP_PROP_POS_FRAMES, 0)
 
 def composeEyesThread():
     while True:
