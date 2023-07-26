@@ -1,5 +1,6 @@
 import sys
 sys.path.append('/usr/local/lib/python3.7/site-packages')
+import pyautogui
 import gi
 gi.require_version('Wnck', '3.0')
 from gi.repository import Wnck
@@ -104,6 +105,8 @@ def rotateFrame():
     frame_rotated = np.concatenate((firstHalf, secondHalf), axis = 1)
 
 def ManageWindows():
+    pyautogui.FAILSAFE = False
+    pyautogui.moveTo(0, 0)
     screen = Wnck.Screen.get_default()
     screen.force_update()
     for window in screen.get_windows():
@@ -111,8 +114,8 @@ def ManageWindows():
         window_name = window_name.lower()
         if "eyes" in window_name:
             window.maximize()
-            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.X, 0, 0, display_width, display_height)
-            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.Y, 0, 0, display_width, display_height)
+            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.X, 0, 0, display_width, display_height - screen.get_height())
+            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.Y, 0, 0, display_width, display_height - screen.get_height())
         elif any([x in window_name for x in ["terminal", "sh", "play"]]):
             window.minimize()
 

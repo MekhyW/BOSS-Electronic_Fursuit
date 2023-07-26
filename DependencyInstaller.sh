@@ -45,6 +45,7 @@ sudo pip3 install pvrecorder==1.1.1
 sudo pip3 install pyserial==3.4
 sudo pip3 uninstall protobuf
 sudo pip3 install protobuf==4.21.10
+sudo pip3 install pyautogui==0.9.54
 
 #32-BIT KERNEL
 sudo nano /boot/config.txt
@@ -96,5 +97,4 @@ cd ..
 # - setup dual display scheme
 # - disable screen blanking
 # - insert credentials into Mekhy_Engine/resources/credentials.json
-# - set app bar to hide when unused (with hidden size of 0)
 # - enable CSI camera
