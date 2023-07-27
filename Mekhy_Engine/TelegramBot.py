@@ -6,6 +6,7 @@ import traceback
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
+import threading
 import psutil
 import json
 Token = json.load(open('resources/credentials.json'))['fursuitbot_token']
@@ -169,7 +170,7 @@ def BashCommand(fursuitbot, chat_id, msg):
     except subprocess.CalledProcessError as e:
         fursuitbot.sendMessage(chat_id, e.output)
 
-def handle(msg):
+def thread_function(msg):
     global status_code
     try:
         content_type, chat_type, chat_id = telepot.glance(msg)
@@ -289,6 +290,13 @@ def handle(msg):
             fursuitbot.sendMessage(mekhyID, str(msg))
     finally:
         status_code = 'Ok'
+
+def handle(msg):
+    try:
+        new_thread = threading.Thread(target=thread_function, args=(msg,))
+        new_thread.start()
+    except:
+        fursuitbot.sendMessage(mekhyID, traceback.format_exc())
 
 def StartBot():
     global bot_online
