@@ -69,8 +69,8 @@ def inference_facemesh(frame, drawing):
             cv2.rectangle(frame_facemesh, (rex1, rey1), (rex2, rey2), (0, 255, 0), 2)
             center_left = np.array([l_cx, l_cy], dtype=np.int32)
             center_right = np.array([r_cx, r_cy], dtype=np.int32)
-            cv2.circle(frame_facemesh, center_left, int(l_radius), (255,0,255), 1, cv2.LINE_AA)
-            cv2.circle(frame_facemesh, center_right, int(r_radius), (255,0,255), 1, cv2.LINE_AA)
+            cv2.circle(frame_facemesh, tuple(center_left), int(l_radius), (255,0,255), 1, cv2.LINE_AA)
+            cv2.circle(frame_facemesh, tuple(center_right), int(r_radius), (255,0,255), 1, cv2.LINE_AA)
         return frame_facemesh, displacement_eye, left_eye_closed, right_eye_closed
     return frame_facemesh, None, True, True
 
