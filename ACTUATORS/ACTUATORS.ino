@@ -2,7 +2,7 @@
 #define LeftEyebrowPin 11
 #define RightEyebrowPin 10
 #define LeftEyebrowDefault 90
-#define RightEyebrowDefault 95
+#define RightEyebrowDefault 85
 Servo LeftEyebrow;
 Servo RightEyebrow;
 int LeftEyebrowPos = LeftEyebrowDefault;
@@ -20,8 +20,8 @@ void Move(int receivedValue) {
       break;
     case 1:
       //Angry
-      LeftEyebrowPos = LeftEyebrowDefault-50;
-      RightEyebrowPos = RightEyebrowDefault+60;
+      LeftEyebrowPos = LeftEyebrowDefault-40;
+      RightEyebrowPos = RightEyebrowDefault+45;
       break;
     case 2:
       //Disgusted
@@ -35,8 +35,8 @@ void Move(int receivedValue) {
       break;
     case 4:
       //Happy
-      LeftEyebrowPos = LeftEyebrowDefault+30;
-      RightEyebrowPos = RightEyebrowDefault-30;
+      LeftEyebrowPos = LeftEyebrowDefault+25;
+      RightEyebrowPos = RightEyebrowDefault-25;
       break;
     case 5:
       //Scared
@@ -45,8 +45,8 @@ void Move(int receivedValue) {
       break;
     case 6:
       //Heart
-      LeftEyebrowPos = LeftEyebrowDefault+30;
-      RightEyebrowPos = RightEyebrowDefault-30;
+      LeftEyebrowPos = LeftEyebrowDefault+25;
+      RightEyebrowPos = RightEyebrowDefault-25;
       break;
     case 7:
       //Hypnotic
@@ -60,8 +60,8 @@ void Move(int receivedValue) {
       break;
     case 9:
       //Demonic
-      LeftEyebrowPos = LeftEyebrowDefault-50;
-      RightEyebrowPos = RightEyebrowDefault+60;
+      LeftEyebrowPos = LeftEyebrowDefault-40;
+      RightEyebrowPos = RightEyebrowDefault+45;
       break;
     default:
       return;
