@@ -65,4 +65,4 @@ if __name__ == '__main__':
     serial_thread.start()
     assistant_thread.start()
     while not TelegramBot.StartBot():
-        pass
+        time.sleep(1)
