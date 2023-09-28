@@ -2,6 +2,7 @@ import TelegramBot
 import VoiceChanger
 import Displays
 import SoundEffects
+import MachineVision
 import Assistant
 import Serial
 import cv2
@@ -12,9 +13,14 @@ def display_thread():
     Displays.startThreads()
     while True:
         try:
-            Displays.displacement_eye = (0, 0)
-            Displays.left_eye_closed = False
-            Displays.right_eye_closed = False
+            if TelegramBot.eye_tracking_mode:
+                Displays.displacement_eye = MachineVision.displacement_eye
+                Displays.left_eye_closed = MachineVision.left_eye_closed
+                Displays.right_eye_closed = MachineVision.right_eye_closed
+            else:
+                Displays.displacement_eye = (0, 0)
+                Displays.left_eye_closed = False
+                Displays.right_eye_closed = False
             Displays.GraphicsRefresh(Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression))
         except Exception as e:
             print(e)
@@ -58,6 +64,7 @@ if __name__ == '__main__':
     SoundEffects.PlayBootSound()
     VoiceChanger.SetVoice("Mekhy")
     Assistant.start()
+    MachineVision.startThreads()
     display_thread = threading.Thread(target=display_thread)
     serial_thread = threading.Thread(target=serial_thread)
     assistant_thread = threading.Thread(target=assistant_thread)
