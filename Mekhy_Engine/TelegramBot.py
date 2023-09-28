@@ -13,9 +13,9 @@ Token = json.load(open('resources/credentials.json'))['fursuitbot_token']
 fursuitbot = telepot.Bot(Token)
 mekhyID = 780875868
 start_time = time.time()
-eye_tracking_mode = True
+eye_tracking_mode = False
 actuators_enabled = 1
-leds_enabled = 1
+leds_enabled = 0
 ManualExpression = 'Neutral'
 sfx = ['AWOOO', '*racc sounds* 🦝', 'Woof! Bark!', 'Sad dog', 'Hungry growl', 'huff huff 👅', '*snif snif*', 'Zzz', 'FART']
 voices = ['Mekhy', 'Demon', 'Voice of Conscience', 'Baby', 'Chipmunk', 'Radio', 'No Effects', 'Mute']
@@ -254,11 +254,10 @@ def thread_function(msg):
         if current_keyboard == 'Main':
             command_keyboard = ReplyKeyboardMarkup(keyboard=[
                 [KeyboardButton(text="Set Mood")],
-                [KeyboardButton(text="Toggle Eye Tracking")],
                 [KeyboardButton(text="Play Song"), KeyboardButton(text="Stop Media")],  
                 [KeyboardButton(text="Sound Effect"), KeyboardButton(text="Speak")],
                 [KeyboardButton(text="Change Voice")],  
-                [KeyboardButton(text="Toggle Actuators"), KeyboardButton(text="Toggle LEDs")],
+                [KeyboardButton(text="Toggle Actuators")],
                 [KeyboardButton(text="Benchmark Statistics")],
                 [KeyboardButton(text="Refsheet / Sticker Pack")],
                 [KeyboardButton(text="Bash Command"), KeyboardButton(text="Exit process")],
