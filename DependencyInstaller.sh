@@ -93,7 +93,7 @@ cd ..
 
 # SETUP
 # - set auto login and password for pi user
-# - setup VNC connection for 4g hotspot (always tether by USB)
+# - setup VNC connection for 4g hotspot (always tether by USB. When running, if the bot fails to connect to the internet, close and reopen the usb tether connection)
 # - setup dual display scheme
 # - disable screen blanking
 # - insert credentials into Mekhy_Engine/resources/credentials.json
