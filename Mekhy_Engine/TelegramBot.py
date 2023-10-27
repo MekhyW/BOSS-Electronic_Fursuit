@@ -300,7 +300,7 @@ def handle(msg):
 def StartBot():
     global bot_online
     try:
-        updates = fursuitbot.getUpdates()
+        updates = fursuitbot.getUpdates(timeout=-29)
         if updates:
             last_update_id = updates[-1]['update_id']
             fursuitbot.getUpdates(offset=last_update_id+1)
