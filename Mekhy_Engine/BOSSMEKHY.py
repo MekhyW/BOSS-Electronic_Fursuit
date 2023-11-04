@@ -8,7 +8,6 @@ import time
 import threading
 
 def display_thread():
-    Displays.startThreads()
     while True:
         try:
             Displays.GraphicsRefresh(Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression))

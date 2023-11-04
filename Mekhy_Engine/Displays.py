@@ -19,7 +19,7 @@ mask_hypnotic = vlc_instance.media_new('../Eyes/mask_hipnotic.mp4')
 mask_sexy = vlc_instance.media_new('../Eyes/mask_sexy.mp4')
 mask_demonic = vlc_instance.media_new('../Eyes/mask_demonic.mp4')
 current_mask = mask_neutral
-cached_expression = 0
+cached_expression = 99
 playingvideo = False
 
 def ManageWindows():
