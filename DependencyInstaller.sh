@@ -54,7 +54,8 @@ cd ..
 # SETUP
 # - set auto login and password for pi user
 # - setup VNC connection for 4g hotspot (always tether by USB. When running, if the bot fails to connect to the internet, close and reopen the usb tether connection)
-# - setup dual display scheme
+# - setup dual display scheme, make sure that the left display is the primary display (so that the eyes are extended to the right display)
+# - set taskbar to autohide
 # - disable screen blanking
 # - insert credentials into Mekhy_Engine/resources/credentials.json
 # - enable CSI camera
