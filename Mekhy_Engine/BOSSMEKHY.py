@@ -4,7 +4,6 @@ import Displays
 import SoundEffects
 import Assistant
 import Serial
-import cv2
 import time
 import threading
 
@@ -12,14 +11,10 @@ def display_thread():
     Displays.startThreads()
     while True:
         try:
-            Displays.displacement_eye = (0, 0)
-            Displays.left_eye_closed = False
-            Displays.right_eye_closed = False
             Displays.GraphicsRefresh(Serial.convertExpressionStringToNumber(TelegramBot.ManualExpression))
         except Exception as e:
             print(e)
         finally:
-            cv2.waitKey(1)
             Displays.ManageWindows()
 
 def serial_thread():

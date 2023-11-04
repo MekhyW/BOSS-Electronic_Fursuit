@@ -24,9 +24,6 @@ sudo apt-get install libxvidcore-dev libx264-dev
 sudo apt-get install libfontconfig1-dev libcairo2-dev
 sudo apt-get install libgdk-pixbuf2.0-dev libpango1.0-dev
 sudo apt-get install libgtk2.0-dev libgtk-3-dev
-sudo apt-get install libatlas-base-dev gfortran
-sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-103
-sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
 
 # PIP PACKAGES
 sudo pip3 install --upgrade pip
@@ -46,44 +43,7 @@ sudo pip3 install pyserial==3.4
 sudo pip3 uninstall protobuf
 sudo pip3 install protobuf==4.21.10
 sudo pip3 install pyautogui==0.9.54
-
-#32-BIT KERNEL
-sudo nano /boot/config.txt
-# Add the following line at the end of the file: arm_64bit=0
-reboot
-
-# OPENCV
-cd ~
-wget -O opencv.zip https://github.com/opencv/opencv/archive/4.1.1.zip
-wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.1.1.zip
-unzip opencv.zip
-unzip opencv_contrib.zip
-mv opencv-4.1.1 opencv
-mv opencv_contrib-4.1.1 opencv_contrib
-sudo nano /etc/dphys-swapfile
-# Change CONF_SWAPSIZE=100 to CONF_SWAPSIZE=2048
-sudo /etc/init.d/dphys-swapfile stop
-sudo /etc/init.d/dphys-swapfile start
-cd ~/opencv
-mkdir build
-cd build
-cmake -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
-    -D ENABLE_NEON=ON \
-    -D ENABLE_VFPV3=ON \
-    -D BUILD_TESTS=OFF \
-    -D INSTALL_PYTHON_EXAMPLES=OFF \
-    -D OPENCV_ENABLE_NONFREE=ON \
-    -D CMAKE_SHARED_LINKER_FLAGS=-latomic \
-    -D BUILD_EXAMPLES=OFF ..
-make -j4
-sudo make install
-sudo ldconfig
-sudo nano /etc/dphys-swapfile
-# Change CONF_SWAPSIZE=2048 to CONF_SWAPSIZE=100
-sudo /etc/init.d/dphys-swapfile stop
-sudo /etc/init.d/dphys-swapfile start
+sudo pip3 install python-vlc
 
 # AUTOSTART
 chmod 755 launcher.sh
