@@ -52,6 +52,7 @@ def PlayVideo(file_name, remove_file=True):
 
 def GraphicsRefresh(expression):
     global cached_expression, current_mask, playingvideo
+    ManageWindows()
     if expression != cached_expression:
         cached_expression = expression
         if cached_expression == 0:
