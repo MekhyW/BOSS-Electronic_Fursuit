@@ -24,6 +24,7 @@ sudo apt-get install libxvidcore-dev libx264-dev
 sudo apt-get install libfontconfig1-dev libcairo2-dev
 sudo apt-get install libgdk-pixbuf2.0-dev libpango1.0-dev
 sudo apt-get install libgtk2.0-dev libgtk-3-dev
+sudo apt-get install xdotool
 
 # PIP PACKAGES
 sudo pip3 install --upgrade pip
