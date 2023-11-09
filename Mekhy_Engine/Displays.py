@@ -30,11 +30,7 @@ def ManageWindows():
     for window in screen.get_windows():
         window_name = window.get_name()
         window_name = window_name.lower()
-        if any([x in window_name for x in ["eyes", "vlc", "VLC"]]):
-            window.maximize()
-            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.X, 0, 0, display_width, display_height - screen.get_height())
-            window.set_geometry(Wnck.WindowGravity.STATIC, Wnck.WindowMoveResizeMask.Y, 0, 0, display_width, display_height - screen.get_height())
-        elif any([x in window_name for x in ["terminal", "sh", "play"]]):
+        if any([x in window_name for x in ["terminal", "sh", "play"]]):
             window.minimize()
 
 def PlayVideo(file_name, remove_file=True):
