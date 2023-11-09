@@ -50,7 +50,6 @@ def assistant_thread():
 
 if __name__ == '__main__':
     SoundEffects.PlayBootSound()
-    VoiceChanger.SetVoice("Mekhy")
     Assistant.start()
     display_thread = threading.Thread(target=display_thread)
     serial_thread = threading.Thread(target=serial_thread)
@@ -58,5 +57,7 @@ if __name__ == '__main__':
     display_thread.start()
     serial_thread.start()
     assistant_thread.start()
+    time.sleep(3)
+    VoiceChanger.SetVoice("Mekhy")
     while not TelegramBot.StartBot():
         time.sleep(1)
